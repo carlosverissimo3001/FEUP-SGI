@@ -1,5 +1,9 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
+import { MyCylinder } from './MyCylinder.js';
+/* import { MyTriangle } from './MyTriangle.js';
+import { MySphere } from './MySphere.js'
+import { MyTorus } from './MyTorus.js'; */
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -231,7 +235,8 @@ export class MySceneGraph {
      */
     parseView(viewsNode) {
         this.onXMLMinorError("To do: Parse views and create cameras.");
-
+        
+        
         return null;
     }
 
@@ -562,6 +567,27 @@ export class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
+            else if (primitiveType == 'triangle'){
+                // x1
+                var x1 = this.reader.getFloat(grandChildren[0], 'x1');
+                if (!(x1 != null && !isNaN(x1)))
+                    return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
+
+                // x2
+                var x2 = this.reader.getFloat(grandChildren[0], 'x2');
+                if (!(x2 != null && !isNaN(x2)))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                // x3
+                var x3 = this.reader.getFloat(grandChildren[0], 'x3');
+                if (!(x3 != null && !isNaN(13)))
+                    return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
+                
+                var trian = new MyTriangle(this.scene, )
+
+
+            }
+            
             else {
                 console.warn("To do: Parse other primitives.");
             }

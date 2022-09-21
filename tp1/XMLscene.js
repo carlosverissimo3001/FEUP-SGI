@@ -31,6 +31,8 @@ export class XMLscene extends CGFscene {
 
         this.enableTextures(true);
 
+        this.displayAxis = true;
+
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
@@ -124,7 +126,9 @@ export class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        this.axis.display();
+        
+        if (this.displayAxis) 
+            this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);

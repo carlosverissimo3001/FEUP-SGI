@@ -1,10 +1,10 @@
 # SGI 2022/2023
 
-## Group T0xG0y
+## Group T03G10
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201801010 | ...                |
-| Jane Doe         | 201801011 | ...                |
+| Carlos Veríssimo | 201907716 | up201907716@up.pt |
+| Miguel Amorim    | 201907756 | 201907756@up.pt |
 
 ----
 
