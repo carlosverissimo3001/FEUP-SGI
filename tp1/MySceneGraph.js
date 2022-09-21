@@ -1,7 +1,7 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
-import { MyCylinder } from './MyCylinder.js';
-/* import { MyTriangle } from './MyTriangle.js';
+/* import { MyCylinder } from './MyCylinder.js';
+import { MyTriangle } from './MyTriangle.js';
 import { MySphere } from './MySphere.js'
 import { MyTorus } from './MyTorus.js'; */
 
@@ -41,7 +41,7 @@ export class MySceneGraph {
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
 
-        // File reading 
+        // File reading
         this.reader = new CGFXMLreader();
 
         /*
@@ -205,7 +205,7 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <scene> block. 
+     * Parses the <scene> block.
      * @param {scene block element} sceneNode
      */
     parseScene(sceneNode) {
@@ -217,7 +217,7 @@ export class MySceneGraph {
 
         this.idRoot = root;
 
-        // Get axis length        
+        // Get axis length
         var axis_length = this.reader.getFloat(sceneNode, 'axis_length');
         if (axis_length == null)
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
@@ -235,8 +235,8 @@ export class MySceneGraph {
      */
     parseView(viewsNode) {
         this.onXMLMinorError("To do: Parse views and create cameras.");
-        
-        
+
+
         return null;
     }
 
@@ -395,7 +395,7 @@ export class MySceneGraph {
     }
 
     /**
-     * Parses the <textures> block. 
+     * Parses the <textures> block.
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
@@ -484,7 +484,7 @@ export class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':                        
+                    case 'scale':
                         this.onXMLMinorError("To do: Parse scale transformations.");
                         break;
                     case 'rotate':
@@ -573,21 +573,114 @@ export class MySceneGraph {
                 if (!(x1 != null && !isNaN(x1)))
                     return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
 
+                // y1
+                var y1 = this.reader.getFloat(grandChildren[0], 'y1');
+                if (!(y1 != null && !isNaN(y1)))
+                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
                 // x2
                 var x2 = this.reader.getFloat(grandChildren[0], 'x2');
                 if (!(x2 != null && !isNaN(x2)))
                     return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
 
+                // y2
+                var y2 = this.reader.getFloat(grandChildren[0], 'y2');
+                if (!(y2 != null && !isNaN(y2) && y2 > y1))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
                 // x3
                 var x3 = this.reader.getFloat(grandChildren[0], 'x3');
-                if (!(x3 != null && !isNaN(13)))
+                if (!(x3 != null && !isNaN(x3)))
                     return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
-                
-                var trian = new MyTriangle(this.scene, )
 
+                // y3
+                var y3 = this.reader.getFloat(grandChildren[0], 'y3');
+                if (!(y3 != null && !isNaN(u3)))
+                    return "unable to parse y3 of the primitive coordinates for ID = " + primitiveId;
 
+                var trian = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3);
+
+                this.primitives[primitiveId] = trian;
             }
-            
+
+            else if (primitiveType == 'cylinder'){
+                // base_radius
+                var base_radius = this.reader.getFloat(grandChildren[0], 'base_radius');
+                if (!(base_radius != null && !isNaN(base_radius)))
+                    return "unable to parse base_radius of the primitive attributes for ID = " + primitiveId;
+
+                // top_radius
+                var top_radius = this.reader.getFloat(grandChildren[0], 'top_radius');
+                if (!(top_radius != null && !isNaN(top_radius)))
+                    return "unable to parse top_radius of the primitive attributes for ID = " + primitiveId;
+
+                // height
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive attributes for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive attributes for ID = " + primitiveId;
+
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive attributes for ID = " + primitiveId;
+
+                var cylin = new MyCylinder(this.scene, primitiveId, base_radius, top_radius, height, slices, stacks);
+
+                this.primitives[primitiveId] = cylin;
+            }
+
+            else if (primitiveType == 'sphere'){
+                // radius
+                var radius = this.reader.getFloat(grandChildren[0], 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive attributes for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive attributes for ID = " + primitiveId;
+
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive attributes for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
+
+                this.primitives[primitiveId] = sphere;
+            }
+
+            else if (primitiveType == 'torus'){
+                // inner_radius
+                var inner_radius = this.reader.getFloat(grandChildren[0], 'inner_radius');
+                if (!(inner_radius != null && !isNaN(inner_radius)))
+                    return "unable to parse inner_radius of the primitive attributes for ID = " + primitiveId;
+
+                // outer_radius
+                var outer_radius = this.reader.getFloat(grandChildren[0], 'outer_radius');
+                if (!(outer_radius != null && !isNaN(outer_radius)))
+                    return "unable to parse outer_radius of the primitive attributes for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive attributes for ID = " + primitiveId;
+
+                // loops
+                var loops = this.reader.getFloat(grandChildren[0], 'loops');
+                if (!(loops != null && !isNaN(loops)))
+                    return "unable to parse loops of the primitive attributes for ID = " + primitiveId;
+
+                var torus = new MySphere(this.scene, primitiveId, inner_radius, outer_radius, slices, loops);
+
+                this.primitives[primitiveId] = torus;
+            }
+
             else {
                 console.warn("To do: Parse other primitives.");
             }
