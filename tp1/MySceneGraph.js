@@ -1,6 +1,6 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
-/* import { MyCylinder } from './MyCylinder.js';
+import { MyCylinder } from './MyCylinder.js';
 import { MyTriangle } from './MyTriangle.js';
 import { MySphere } from './MySphere.js'
 import { MyTorus } from './MyTorus.js'; */
@@ -567,6 +567,7 @@ export class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
+
             else if (primitiveType == 'triangle'){
                 // x1
                 var x1 = this.reader.getFloat(grandChildren[0], 'x1');
@@ -605,14 +606,14 @@ export class MySceneGraph {
 
             else if (primitiveType == 'cylinder'){
                 // base_radius
-                var base_radius = this.reader.getFloat(grandChildren[0], 'base_radius');
-                if (!(base_radius != null && !isNaN(base_radius)))
-                    return "unable to parse base_radius of the primitive attributes for ID = " + primitiveId;
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base of the primitive attributes for ID = " + primitiveId;
 
                 // top_radius
-                var top_radius = this.reader.getFloat(grandChildren[0], 'top_radius');
-                if (!(top_radius != null && !isNaN(top_radius)))
-                    return "unable to parse top_radius of the primitive attributes for ID = " + primitiveId;
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the primitive attributes for ID = " + primitiveId;
 
                 // height
                 var height = this.reader.getFloat(grandChildren[0], 'height');
@@ -629,7 +630,7 @@ export class MySceneGraph {
                 if (!(stacks != null && !isNaN(stacks)))
                     return "unable to parse stacks of the primitive attributes for ID = " + primitiveId;
 
-                var cylin = new MyCylinder(this.scene, primitiveId, base_radius, top_radius, height, slices, stacks);
+                var cylin = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
 
                 this.primitives[primitiveId] = cylin;
             }
@@ -656,15 +657,15 @@ export class MySceneGraph {
             }
 
             else if (primitiveType == 'torus'){
-                // inner_radius
-                var inner_radius = this.reader.getFloat(grandChildren[0], 'inner_radius');
-                if (!(inner_radius != null && !isNaN(inner_radius)))
-                    return "unable to parse inner_radius of the primitive attributes for ID = " + primitiveId;
+                // inner
+                var inner = this.reader.getFloat(grandChildren[0], 'inner');
+                if (!(inner != null && !isNaN(inner)))
+                    return "unable to parse inner of the primitive attributes for ID = " + primitiveId;
 
-                // outer_radius
-                var outer_radius = this.reader.getFloat(grandChildren[0], 'outer_radius');
-                if (!(outer_radius != null && !isNaN(outer_radius)))
-                    return "unable to parse outer_radius of the primitive attributes for ID = " + primitiveId;
+                // outer
+                var outer = this.reader.getFloat(grandChildren[0], 'outer');
+                if (!(outer != null && !isNaN(outer)))
+                    return "unable to parse outer of the primitive attributes for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(grandChildren[0], 'slices');
@@ -676,7 +677,7 @@ export class MySceneGraph {
                 if (!(loops != null && !isNaN(loops)))
                     return "unable to parse loops of the primitive attributes for ID = " + primitiveId;
 
-                var torus = new MySphere(this.scene, primitiveId, inner_radius, outer_radius, slices, loops);
+                var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
 
                 this.primitives[primitiveId] = torus;
             }
