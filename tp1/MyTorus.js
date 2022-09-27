@@ -1,7 +1,7 @@
 import { CGFobject } from '../lib/CGF.js';
 
 /**
- * MySphere
+ * MyTorus
  * @method constructor
  * @param scene - MyScene object
  * @param inner_radius
@@ -27,37 +27,32 @@ export class MyTorus extends CGFobject{
       this.normals = [];
       this.texCoords = [];
       
-      var theta = 0;
-      var thetaInc = Math.PI * 2 / this.loops;
+      var angle = 0;
+      var angleStep = Math.PI * 2 / this.loops;
       var phi = 0;
-      var phiInc = Math.PI * 2 / this.slices;
+      var phiStep = Math.PI * 2 / this.slices;
 
       for (var loop = 0; loop <= this.loops; loop++) {
-          var cosTheta = Math.cos(theta);
-          var sinTheta = Math.sin(theta);
+          var cosAngle = Math.cos(angle);
+          var sinAngle = Math.sin(angle);
 
           for (var slice = 0; slice <= this.slices; slice++) {
               var cosPhi = Math.cos(phi);
               var sinPhi = Math.sin(phi);
 
-              var x = (this.outerRadius + this.innerRadius * cosPhi) * cosTheta;
-              var y = (this.outerRadius + this.innerRadius * cosPhi) * sinTheta;
-              var z = this.innerRadius * Math.sin(phi);
-              this.vertices.push(x, y, z);
+              this.vertices.push((this.outerRadius + this.innerRadius * cosPhi) * cosAngle, (this.outerRadius + this.innerRadius * cosPhi) * sinAngle, this.innerRadius * Math.sin(phi));
 
-              const u = 1 - (slice / this.slices);
-              const v = 1 - (loop / this.loops);
-              this.texCoords.push(u, v);
+              this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
 
-              var normalx = x - cosTheta*this.outerRadius;
-              var normaly = y - sinTheta*this.outerRadius;
-              var normalz = z;
-              var magn = Math.sqrt(Math.pow(normalx, 2) + Math.pow(normaly,2) + Math.pow(normalz,2));
-              this.normals.push(normalx/magn, normaly/magn, normalz/magn);
+              var n_x = (this.outerRadius + this.innerRadius * cosPhi) * cosAngle - cosAngle*this.outerRadius;
+              var n_y = (this.outerRadius + this.innerRadius * cosPhi) * sinAngle - sinAngle*this.outerRadius;
+              var n_z = this.innerRadius * Math.sin(phi);
+              var magn = Math.sqrt(Math.pow(n_x, 2) + Math.pow(n_y,2) + Math.pow(n_z,2));
+              this.normals.push(n_x/magn, n_y/magn, n_z/magn);
 
-              phi += phiInc;
+              phi += phiStep;
           }
-          theta += thetaInc;
+          angle += angleStep;
       }
 
       var loopVerts = this.slices + 1;        
