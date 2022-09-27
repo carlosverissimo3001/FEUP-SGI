@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="demoRoot" axis_length="5"/>
+    <scene root="poolRoot" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -24,6 +24,8 @@
 
     <textures>
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="waterTexture" file="scenes/images/waterTex.jpg" />
+        <texture id="grassTexture" file="scenes/images/grassTex.jpg" />
     </textures>
 
     <materials>
@@ -44,13 +46,38 @@
     </transformations>
 
     <primitives>
-        <primitive id="demoRectangle">
-            <triangle x1="-0.5" y1="0" x2="0.5" y2="0" x3="0" y3="1" />
+        <primitive id="grass">
+            <rectangle x1="0.0" y1="0.0" x2="15.0" y2="15.0" />
         </primitive>
+
+        <primitive id="pool">
+            <rectangle x1="5.0" y1="5.0" x2="8.5" y2="11.0" />
+        </primitive>
+
+        <primitive id="table_leg">
+            <cylinder base="5.0" top="5.0" height="7.0" slices="8" stacks="8" />
+        </primitive>
+
+        <primitive id="chair_leg">
+            <cylinder base="5.0" top="5.0" height="5.0" slices="8" stacks="8" />
+        </primitive>
+
+        <primitive id="pool_chair_leg">
+            <cylinder base="5.0" top="5.0" height="3.0" slices="8" stacks="8" />
+        </primitive>
+
+        <primitive id="ball">
+            <sphere radius="5.0" slices="6" stacks="6" />
+        </primitive>
+
+        <primitives id="lifebuoy">
+            <torus inner="2.0" outer="5.0" loops="3.0" />
+        </primitive>
+
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="table">
             <transformation>
                 <translate x="0" y="0" z="1" />
                 <scale x="2" y="1" z="1" />
@@ -60,7 +87,7 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="demoRectangle" />
+                <primitiveref id="table_leg" />
             </children>
         </component>
     </components>
