@@ -45,7 +45,7 @@
 
     <primitives>
         <primitive id="demoRectangle">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+            <triangle x1="-0.5" y1="0" x2="0.5" y2="0" x3="0" y3="1" />
         </primitive>
     </primitives>
 
