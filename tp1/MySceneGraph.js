@@ -3,7 +3,7 @@ import { MyRectangle } from './MyRectangle.js';
 import { MyCylinder } from './MyCylinder.js';
 import { MyTriangle } from './MyTriangle.js';
 import { MySphere } from './MySphere.js'
-import { MyTorus } from './MyTorus.js'; */
+import { MyTorus } from './MyTorus.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -399,9 +399,53 @@ export class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
+        var children = texturesNode.children;
 
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        this.textures = [];
+        var numTextures = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++){
+
+            // Storing texture information
+            var global = [];
+
+            if (children[i].nodeName != "texture"){
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture
+            var textureID = this.reader.getString(children[i], 'id');
+            if (textureID == null)
+                return "no ID defined for texture";
+
+            // Checks for repeated IDs
+            if (this.textures[textureID] != null){
+                return "ID must be unique for each texture (conflict: ID = " + textureID + ")";
+            }
+
+            // Texture filepath
+            var textureFilepath = this.reader.getString(children[i], 'file');
+            if (textureFilepath == null)
+                return "no filepath specified for the texture"
+
+            // Add filepath to texture info
+            global.push(textureFilepath);
+
+            this.textures[textureID] = global;
+            numTextures++;
+
+            // Continue here
+            //this.onXMLMinorError("To do: Parse textures.");
+        }
+
+        //this.log("Parsed textures");
+        /* if (numTextures == 0)
+            return "at least one texture must be defined" */
+
         return null;
     }
 
@@ -413,6 +457,7 @@ export class MySceneGraph {
         var children = materialsNode.children;
 
         this.materials = [];
+        var numMaterials = 0;
 
         var grandChildren = [];
         var nodeNames = [];
@@ -420,9 +465,19 @@ export class MySceneGraph {
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
 
+            // Storing material information
+            var global = [];
+            var attributeNames = [];
+            var attributeTypes = [];
+
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
+            }
+
+            else{
+                attributeNames.push(...["emission", "ambient", "diffuse", "specular"]);
+                attributeTypes.push(...["color", "color", "color", "color"]);
             }
 
             // Get id of the current material.
@@ -432,13 +487,51 @@ export class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+                return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            // Material Shininess
+            var shininess = this.reader.getFloat(children[i], 'shininess');
+            if(!isNan(shininess) || shininess == null)
+                this.onXMLMinorError("unable to parse value component of the 'shininess' field for ID = " + materialID);
+
+            // Add shininess to material info
+            global.push(shininess);
+
+            grandChildren = children[i].children;
+            // Specifications for the current material.
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++){
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            for (var j = 0; j < attributeNames.length; j++){
+                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+
+                if (attributeIndex != -1){
+                    //if (attributeTypes[j] == "color")
+                    var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + "material specifications for ID" + materialID);
+
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    global.push(aux);
+                }
+                else
+                    return "material " + attributeNames[i] + "undefined for ID" + materialID;
+            }
+
+            this.materials[materialID] = global;
+            numMaterials++;
+
         }
 
-        //this.log("Parsed materials");
+        if (numMaterials == 0)
+            return "at least one material must be defined";
+        /* else if (numMaterials > 8)
+            this.onXMLMinorError("too many textures defined; WebGL imposes a limit of 8 Materials"); */
+
+        this.log("Parsed materials");
         return null;
     }
 
