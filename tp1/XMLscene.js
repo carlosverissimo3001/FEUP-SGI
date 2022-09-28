@@ -31,7 +31,7 @@ export class XMLscene extends CGFscene {
 
         this.enableTextures(true);
 
-        this.displayAxis = true;
+        this.displayAxis = false;
         this.displayNormals = true;
 
         this.gl.clearDepth(100.0);

@@ -741,7 +741,7 @@ export class MySceneGraph {
                 if (!(stacks != null && !isNaN(stacks)))
                     return "unable to parse stacks of the primitive attributes for ID = " + primitiveId;
 
-                var cylin = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
+                var cylin = new MyCylinder(this.scene, primitiveId, height, top, base, stacks, slices);
 
                 this.primitives[primitiveId] = cylin;
             }
@@ -974,6 +974,7 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoTriangle'].display();
+        //this.primitives['demoTriangle'].display();
+        this.primitives['demoCylinder'].display();
     }
 }

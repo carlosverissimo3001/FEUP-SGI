@@ -11,7 +11,7 @@ import { CGFobject } from '../lib/CGF.js';
  * @param slices - number of divisions around axis
  */
 export class MyCylinder extends CGFobject {
-	constructor(scene, height, topRadius, bottomRadius, stacks, slices) { 
+	constructor(scene, id, height, topRadius, bottomRadius, stacks, slices) { 
         super(scene);	
         this.bottomRadius = bottomRadius;
         this.topRadius = topRadius;
@@ -36,29 +36,39 @@ export class MyCylinder extends CGFobject {
 
         for (let x = 0; x <= this.slices; x++){
             for (let y = 0; y <= this.stacks; y++) {
+                let cur_height = y*heightStep;
+                console.log(cur_height);
+                let cur_radius = y*radiusStep + this.bottomRadius;
+                let cos_angle = Math.cos(angle);
+                let sin_angle = Math.sin(angle);
 
-                        let cur_height = y*heightStep;
-                        let cur_radius = x*radiusStep + this.bottomRadius;
-                        let cos_angle = Math.cos(angle);
-                        let sin_angle = Math.sin(angle);
+                this.vertices.push(cur_radius*cos_angle,cur_radius*sin_angle,cur_height);
+                this.normals.push(cos_angle, sin_angle);
+                this.textCoords.push(x/this.slices,y/this.stacks);
 
-                        this.vertices.push(cur_radius*cos_angle,cur_radius*sin_angle,cur_height);
-                        this.normals.push(cos_angle, sin_angle);
-                        this.textCoords.push(x/this.slices,y/this.stacks);
+                /* if (x < this.slices && y < this.stacks) {
+                    let now = x + (this.stacks+1) + y;
+                    let next = now+(this.stacks+1);
 
-                        if (x < this.slices && y < this.stacks) {
-                            
-                            let now = x*(this.stacks+1)*y;
-                            let next = now+(this.stacks+1);
-
-                            this.indices.push(now + 1, now, next);
-                            this.indices.push(now + 1, next, next+1);
-                        }
-
-                }
-            angle += angleStep;
+                    this.indices.push(now + 1, now, next);
+                    this.indices.push(now + 1, next, next+1);
+                } */
             }
+            angle += angleStep;
+        }
+        console.log(this.vertices);
+        for(let x = 0; x < this.slices - 2; x++) {
+            for (let y = 0; y < this.stacks - 1; y++){
+                let next = (x+1) * this.stacks + y;
+                let now =  x * this.stacks + y;
+                
+                this.indices.push(now, next, now+1);  
+                //this.indices.push(next, now + 1, next + 1);
+            }
+        }
 
+            
+            this.enableNormalViz();
             this.primitiveType = this.scene.gl.TRIANGLES;
 		    this.initGLBuffers();
         }
