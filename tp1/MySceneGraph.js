@@ -491,7 +491,7 @@ export class MySceneGraph {
 
             // Material Shininess
             var shininess = this.reader.getFloat(children[i], 'shininess');
-            if(!isNan(shininess) || shininess == null)
+            if(!isNaN(shininess) || shininess == null)
                 this.onXMLMinorError("unable to parse value component of the 'shininess' field for ID = " + materialID);
 
             // Add shininess to material info
@@ -666,33 +666,51 @@ export class MySceneGraph {
                 var x1 = this.reader.getFloat(grandChildren[0], 'x1');
                 if (!(x1 != null && !isNaN(x1)))
                     return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
-
-                // y1
-                var y1 = this.reader.getFloat(grandChildren[0], 'y1');
-                if (!(y1 != null && !isNaN(y1)))
-                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
-
+                
                 // x2
                 var x2 = this.reader.getFloat(grandChildren[0], 'x2');
                 if (!(x2 != null && !isNaN(x2)))
                     return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
 
-                // y2
-                var y2 = this.reader.getFloat(grandChildren[0], 'y2');
-                if (!(y2 != null && !isNaN(y2) && y2 > y1))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
-
                 // x3
                 var x3 = this.reader.getFloat(grandChildren[0], 'x3');
                 if (!(x3 != null && !isNaN(x3)))
                     return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
+                
+                // y1
+                var y1 = this.reader.getFloat(grandChildren[0], 'y1');
+                if (!(y1 != null && !isNaN(y1)))
+                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
+                // y2
+                var y2 = this.reader.getFloat(grandChildren[0], 'y2');
+                if (!(y2 != null && !isNaN(y2)))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
 
                 // y3
                 var y3 = this.reader.getFloat(grandChildren[0], 'y3');
-                if (!(y3 != null && !isNaN(u3)))
+                if (!(y3 != null && !isNaN(y3)))
                     return "unable to parse y3 of the primitive coordinates for ID = " + primitiveId;
 
-                var trian = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3);
+                // z1
+                var z1 = this.reader.getFloat(grandChildren[0], 'z1');
+                if (!(z1 != null && !isNaN(z1)))
+                    return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
+
+                // z2
+                var z2 = this.reader.getFloat(grandChildren[0], 'z2');
+                if (!(z2 != null && !isNaN(z2)))
+                    return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
+
+                // z3
+                var z3 = this.reader.getFloat(grandChildren[0], 'z3');
+                if (!(z3 != null && !isNaN(z3)))
+                    return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
+
+
+                var trian = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+
+                console.log(x1);
 
                 this.primitives[primitiveId] = trian;
             }
@@ -956,6 +974,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle'].display();
+        this.primitives['demoTriangle'].display();
     }
 }
