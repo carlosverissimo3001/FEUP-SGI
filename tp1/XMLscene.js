@@ -31,8 +31,14 @@ export class XMLscene extends CGFscene {
 
         this.enableTextures(true);
 
-        this.displayAxis = false;
-        this.displayNormals = true;
+        this.displayAxis = true;
+        this.displayTriangle = false;
+        this.displayRectangle = false;
+        this.displaySphere = false;
+        this.displayCylinder = false;
+        this.displayTorus = false;
+
+        this.displayNormals = false;
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -141,8 +147,22 @@ export class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
+
+            if (this.displayRectangle) 
+                this.graph.primitives['demoRectangle'].display();
+            if (this.displayTorus) 
+                this.graph.primitives['demoTorus'].display();
+            if (this.displaySphere) 
+                this.graph.primitives['demoSphere'].display();
+            if (this.displayTriangle) 
+                this.graph.primitives['demoTriangle'].display();
+            if (this.displayCylinder) 
+                this.graph.primitives['demoCylinder'].display();
             this.graph.displayScene();
         }
+
+        if (this.displayAxis) 
+            this.axis.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

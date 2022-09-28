@@ -86,6 +86,7 @@ export class MySphere extends CGFobject{
       lat = lat + latIncrement; // increments lat value inside the correspondent for loop
     }
 
+    this.enableNormalViz();
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
   }
