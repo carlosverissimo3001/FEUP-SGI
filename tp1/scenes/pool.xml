@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="poolRoot" axis_length="5"/>
+    <scene root="poolRoot" axis_length="30"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -47,11 +47,11 @@
 
     <primitives>
         <primitive id="grass">
-            <rectangle x1="0.0" y1="0.0" x2="15.0" y2="15.0" />
+            <rectangle x1="0.0" y1="0.0" x2="30.0" y2="30.0" />
         </primitive>
 
         <primitive id="pool">
-            <rectangle x1="5.0" y1="5.0" x2="8.5" y2="11.0" />
+            <rectangle x1="10.0" y1="6.0" x2="20.0" y2="24.0" />
         </primitive>
 
         <primitive id="table_leg">
@@ -67,11 +67,11 @@
         </primitive>
 
         <primitive id="ball">
-            <sphere radius="5.0" slices="6" stacks="6" />
+            <sphere radius="1.0" slices="15" stacks="15" />
         </primitive>
 
-        <primitives id="lifebuoy">
-            <torus inner="2.0" outer="5.0" loops="3.0" />
+        <primitive id="lifebuoy">
+            <torus inner="0.6" outer="1.4" slices="20" loops="300" />
         </primitive>
 
     </primitives>
@@ -88,6 +88,12 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="table_leg" />
+                <primitiveref id="lifebuoy" />
+                <primitiveref id="ball" />
+                <primitiveref id ="chair_leg" />
+                <primitiveref id ="grass"/>
+                <primitiveref id ="pool" />
+                <primitiveref id ="pool_chair_leg" />
             </children>
         </component>
     </components>

@@ -10,7 +10,7 @@ var DEGREE_TO_RAD = Math.PI / 180;
 export class XMLscene extends CGFscene {
     /**
      * @constructor
-     * @param {MyInterface} myinterface 
+     * @param {MyInterface} myinterface
      */
     constructor(myinterface) {
         super();
@@ -27,9 +27,9 @@ export class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
 
         this.enableTextures(true);
+        this.initCameras();
 
         this.displayAxis = true;
         this.displayTriangle = false;
@@ -38,7 +38,10 @@ export class XMLscene extends CGFscene {
         this.displayCylinder = false;
         this.displayTorus = false;
 
-        this.displayNormals = false;
+        this.displayPool = false;
+        this.displayBalls = false;
+        this.displayGrass = false;
+        this.displayLifebuoy = false;
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -53,7 +56,16 @@ export class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(60, 60, 60), vec3.fromValues(0, 0, 0));
+        var i = 0;
+        // Cameras index
+
+        // Reads the cameras from the scene graph
+        /* for (var key in this.graph.cameras){
+            var camera = this.graph.cameras[key];
+
+            this.cameras[i] = new CGFcamera(0, camera[0], camera[1], camera[3], camera[4])
+        } */
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -100,7 +112,7 @@ export class XMLscene extends CGFscene {
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
-    /** Handler called when the graph is finally loaded. 
+    /** Handler called when the graph is finally loaded.
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
@@ -133,8 +145,8 @@ export class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        
-        if (this.displayAxis) 
+
+        if (this.displayAxis)
             this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
@@ -148,20 +160,32 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
 
-            if (this.displayRectangle) 
+            /* if (this.displayRectangle)
                 this.graph.primitives['demoRectangle'].display();
-            if (this.displayTorus) 
+            if (this.displayTorus)
                 this.graph.primitives['demoTorus'].display();
-            if (this.displaySphere) 
+            if (this.displaySphere)
                 this.graph.primitives['demoSphere'].display();
-            if (this.displayTriangle) 
+            if (this.displayTriangle)
                 this.graph.primitives['demoTriangle'].display();
-            if (this.displayCylinder) 
-                this.graph.primitives['demoCylinder'].display();
+            if (this.displayCylinder)
+                this.graph.primitives['demoCylinder'].display(); */
+            if (this.displayBalls)
+                this.graph.primitives['ball'].display();
+
+            if (this.displayPool)
+                this.graph.primitives['pool'].display();
+
+            if (this.displayGrass)
+                this.graph.primitives['grass'].display();
+
+            if(this.displayLifebuoy)
+                this.graph.primitives['lifebuoy'].display();
+
             this.graph.displayScene();
         }
 
-        if (this.displayAxis) 
+        if (this.displayAxis)
             this.axis.display();
 
         this.popMatrix();

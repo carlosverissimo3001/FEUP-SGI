@@ -359,7 +359,7 @@ export class MySceneGraph {
 
         if (numCameras == 0)
             return "at least one view must be defined"
-
+        this.log(this.cameras[cameraId][1])
         this.log("Parsed views");
         return null;
     }
@@ -615,7 +615,7 @@ export class MySceneGraph {
 
             // Material Shininess
             var shininess = this.reader.getFloat(children[i], 'shininess');
-            if(!isNaN(shininess) || shininess == null)
+            if(!isNaN(shininess) && !(shininess != null))
                 this.onXMLMinorError("unable to parse value component of the 'shininess' field for ID = " + materialID);
 
             // Add shininess to material info
