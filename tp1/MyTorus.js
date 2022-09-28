@@ -10,7 +10,7 @@ import { CGFobject } from '../lib/CGF.js';
  * @param loops
  */
 export class MyTorus extends CGFobject{
-  constructor(scene, innerRadius, outerRadius, slices, loops) {
+  constructor(scene, id, innerRadius, outerRadius, slices, loops) {
     super(scene);
     this.innerRadius = innerRadius;
     this.outerRadius = outerRadius;
@@ -66,6 +66,7 @@ export class MyTorus extends CGFobject{
         }
       }
 
+    this.enableNormalViz();
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
 }
