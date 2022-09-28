@@ -11,8 +11,8 @@ import { CGFobject } from '../lib/CGF.js';
  * @param slices - number of divisions around axis
  */
 export class MyCylinder extends CGFobject {
-	constructor(scene, id, height, topRadius, bottomRadius, stacks, slices) { 
-        super(scene);	
+	constructor(scene, id, height, topRadius, bottomRadius, stacks, slices) {
+        super(scene);
         this.bottomRadius = bottomRadius;
         this.topRadius = topRadius;
         this.height = height;
@@ -23,7 +23,7 @@ export class MyCylinder extends CGFobject {
     }
 
     initBuffers() {
-        
+
         this.vertices = [];
         this.indices = [];
         this.normals = [];
@@ -41,7 +41,7 @@ export class MyCylinder extends CGFobject {
             let sin_angle = Math.sin(angle);
             for (let y = 0; y <= this.stacks; y++) {
 
-                
+
                 this.vertices.push(cur_radius*cos_angle,cur_radius*sin_angle,cur_height);
                 this.normals.push(cos_angle, sin_angle,0);
                 this.textCoords.push(x/this.slices, 1 - (y * 1/this.stacks));
@@ -51,12 +51,12 @@ export class MyCylinder extends CGFobject {
             }
             angle += angleStep;
         }
-        console.log(this.vertices);
+        //console.log(this.vertices);
         for(let i = 0; i < this.slices; i++) {
             for (let j = 0; j < this.stacks; j++){
                 let next = (i+1) * (this.stacks+1) + j;
                 let now =  i * (this.stacks+1) + j;
-                
+
                 this.indices.push(
 					next, now+1, now,
 					now+1, next, next+1,

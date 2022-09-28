@@ -234,9 +234,133 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        //this.onXMLMinorError("To do: Parse views and create cameras.");
+        var children = viewsNode.children;
 
+        this.cameras = [];
+        var numCameras = 0;
 
+        var grandChildren = [];
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++) {
+
+            // Storing camera information
+            var global = [];
+            var attributeNames = [];
+            var attributeTypes = [];
+
+            // Check type of camera
+            if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            else{
+                attributeNames.push(...["from", "to"]);
+                attributeTypes.push(...["position", "position"]);
+            }
+
+            // Get id of current camera
+            var cameraId = this.reader.getString(children[i], 'id');
+            if (cameraId == null)
+                return "no ID defined for camera";
+
+            // Check for repeated IDs.
+            if (this.cameras[cameraId] != null)
+                return "ID must be unique for each camera (conflict: ID = " + cameraId + ")";
+
+            // Camera near and far
+            var near = this.reader.getFloat(children[i], 'near');
+            var far = this.reader.getFloat(children[i], 'far');
+
+            if (!(near != null && !isNaN(near)))
+                this.onXMLMinorError("unable to parse value component of the 'near' field for ID = " + cameraId);
+
+            if (!(far != null && !isNaN(far)))
+                this.onXMLMinorError("unable to parse value component of the 'far' field for ID = " + cameraId)
+
+            // Add near, far components and type name to camera info
+            global.push(near);
+            global.push(far);
+            global.push(children[i].nodeName);
+
+            grandChildren = children[i].children;
+            // Specifications for the current camera
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            for (var j = 0; j < attributeNames.length; j++){
+                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+
+                if (attributeIndex != -1){
+                    if (attributeTypes[j] == "position")
+                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "camera position for ID = " + cameraId)
+
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    global.push(aux);
+                }
+                else
+                    return "camera " + attributeTypes[j] + " undefined for ID = " + cameraId;
+            }
+
+            // Gets the additional attributtes of the perspective camera
+            if (children[i].nodeName == "perspective"){
+                var angle = this.reader.getFloat(children[i], 'angle');
+                if (!(angle != null && !isNaN(angle)))
+                    return "unable to parse angle of the camera for ID = " + cameraId;
+
+                global.push(...[angle])
+            }
+
+            // Gets the additional attributtes of the orthographic camera
+            if (children[i].nodeName == "ortho"){
+                var left = this.reader.getFloat(children[i], 'left');
+                if (!(left != null && !isNaN(left)))
+                    return"unable to parse left component of the camera for ID = " + cameraId;
+
+                var right = this.reader.getFloat(children[i], 'right');
+                if(!(right != null && !isNaN(right)))
+                    return "unable to parse right component of the camera for ID = " + cameraId;
+
+                var top = this.reader.getFloat(children[i], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top component of the camera for ID = " + cameraId;
+
+                var bottom = this.reader.getFloat(children[i], 'bottom');
+                if (!(bottom != null && !isNaN(bottom)))
+                    return "unable to parse bottom component of the camera for ID = " + cameraId;
+
+                var upIndex = nodeNames.indexOf("up");
+
+                // Retrives the ortho camera up values
+                var upCamera = [];
+                if (upIndex != -1){
+                    var aux = this.parseCoordinates3D(grandChildren[upIndex], "up values for ID " + cameraId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    upCamera = aux;
+                }
+                else
+                    return "camera up values undefined for ID = " + cameraId;
+
+                global.push(...[left, right, top, bottom, upCamera]);
+            }
+
+            this.cameras[cameraId] = global;
+            numCameras++;
+        }
+
+        if (numCameras == 0)
+            return "at least one view must be defined"
+
+        this.log("Parsed views");
         return null;
     }
 
@@ -543,6 +667,7 @@ export class MySceneGraph {
         var children = transformationsNode.children;
 
         this.transformations = [];
+        var numTransformations = 0;
 
         var grandChildren = [];
 
@@ -578,16 +703,30 @@ export class MySceneGraph {
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                        var coordinates = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID);
+                        if(!Array.isArray(coordinates))
+                            return coordinates;
+
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'rotate':
-                        // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        var axis = this.reader.getString(grandChildren[j], "axis");
+                        if (axis != 'x' && axis != 'y' && axis != 'z')
+                            this.onXMLError("Invalid axis for transformation for ID " + transformationID);
+
+                        var angle = this.reader.getInteger(grandChildren[j], "angle")
+                        if (!(angle != null && !isNaN(angle)))
+                            return "unable to parse angle of the rotation transformation for ID = " + transformationID;
+
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis);
                         break;
                 }
             }
             this.transformations[transformationID] = transfMatrix;
+            numTransformations++;
         }
+        if (numTransformations == 0)
+            return "at leat one transformation must be defined";
 
         this.log("Parsed transformations");
         return null;
@@ -666,7 +805,7 @@ export class MySceneGraph {
                 var x1 = this.reader.getFloat(grandChildren[0], 'x1');
                 if (!(x1 != null && !isNaN(x1)))
                     return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
-                
+
                 // x2
                 var x2 = this.reader.getFloat(grandChildren[0], 'x2');
                 if (!(x2 != null && !isNaN(x2)))
@@ -676,7 +815,7 @@ export class MySceneGraph {
                 var x3 = this.reader.getFloat(grandChildren[0], 'x3');
                 if (!(x3 != null && !isNaN(x3)))
                     return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
-                
+
                 // y1
                 var y1 = this.reader.getFloat(grandChildren[0], 'y1');
                 if (!(y1 != null && !isNaN(y1)))
@@ -708,9 +847,7 @@ export class MySceneGraph {
                     return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
 
 
-                var trian = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
-
-                console.log(x1);
+                var trian = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3)
 
                 this.primitives[primitiveId] = trian;
             }
