@@ -1,9 +1,11 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFXMLreader, CGFtexture, CGFcamera, CGFcameraOrtho } from '../lib/CGF.js';
+
 import { MyRectangle } from './MyRectangle.js';
 import { MyCylinder } from './MyCylinder.js';
 import { MyTriangle } from './MyTriangle.js';
 import { MySphere } from './MySphere.js'
 import { MyTorus } from './MyTorus.js';
+import { MyComponent} from './MyComponent.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -553,8 +555,6 @@ export class MySceneGraph {
 
             // Texture filepath
             var textureFilepath = this.reader.getString(children[i], 'file');
-            if (textureFilepath == null)
-                return "no filepath specified for the texture"
 
             // Add filepath to texture info
             global.push(textureFilepath);

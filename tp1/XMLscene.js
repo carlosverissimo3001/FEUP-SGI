@@ -31,7 +31,7 @@ export class XMLscene extends CGFscene {
 
         this.displayAxis = true;
         this.displayTriangle = false;
-        this.displayRectangle = false;
+        this.displayRectangle = true;
         this.displaySphere = false;
         this.displayCylinder = false;
         this.displayTorus = false;
@@ -150,8 +150,14 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
 
-            if (this.displayRectangle)
+            if (this.displayRectangle){
+                this.pushMatrix();
+                this.rotate(-Math.PI/2, 1, 0, 0)
+                this.translate(0.5, -1, 0);
+                this.scale(5, 5, 1);
                 this.graph.primitives['demoRectangle'].display();
+                this.popMatrix();
+            }
             if (this.displayTorus)
                 this.graph.primitives['demoTorus'].display();
             if (this.displaySphere)
