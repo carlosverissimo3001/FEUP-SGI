@@ -718,7 +718,7 @@ export class MySceneGraph {
                         if (!(angle != null && !isNaN(angle)))
                             return "unable to parse angle of the rotation transformation for ID = " + transformationID;
 
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axis);
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, axis);
                         break;
                 }
             }
@@ -982,7 +982,9 @@ export class MySceneGraph {
             var childrenIndex = nodeNames.indexOf("children");
 
             this.onXMLMinorError("To do: Parse components.");
+
             // Transformations
+            var transfMatrix = mat4.create();
 
             // Materials
 

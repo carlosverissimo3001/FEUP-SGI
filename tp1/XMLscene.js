@@ -1,7 +1,6 @@
 import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 
-
 var DEGREE_TO_RAD = Math.PI / 180;
 
 /**
@@ -26,7 +25,6 @@ export class XMLscene extends CGFscene {
         super.init(application);
 
         this.sceneInited = false;
-
 
         this.enableTextures(true);
         this.initCameras();
@@ -56,17 +54,9 @@ export class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(60, 60, 60), vec3.fromValues(0, 0, 0));
-        var i = 0;
-        // Cameras index
-
-        // Reads the cameras from the scene graph
-        /* for (var key in this.graph.cameras){
-            var camera = this.graph.cameras[key];
-
-            this.cameras[i] = new CGFcamera(0, camera[0], camera[1], camera[3], camera[4])
-        } */
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
@@ -118,9 +108,9 @@ export class XMLscene extends CGFscene {
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
-        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+        this.gl.clearColor(...this.graph.background);
 
-        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+        this.setGlobalAmbientLight(...this.graph.ambient);
 
         this.initLights();
 
@@ -160,7 +150,7 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
 
-            /* if (this.displayRectangle)
+            if (this.displayRectangle)
                 this.graph.primitives['demoRectangle'].display();
             if (this.displayTorus)
                 this.graph.primitives['demoTorus'].display();
@@ -169,8 +159,9 @@ export class XMLscene extends CGFscene {
             if (this.displayTriangle)
                 this.graph.primitives['demoTriangle'].display();
             if (this.displayCylinder)
-                this.graph.primitives['demoCylinder'].display(); */
-            if (this.displayBalls)
+                this.graph.primitives['demoCylinder'].display();
+
+            /* if (this.displayBalls)
                 this.graph.primitives['ball'].display();
 
             if (this.displayPool)
@@ -180,7 +171,7 @@ export class XMLscene extends CGFscene {
                 this.graph.primitives['grass'].display();
 
             if(this.displayLifebuoy)
-                this.graph.primitives['lifebuoy'].display();
+                this.graph.primitives['lifebuoy'].display(); */
 
             this.graph.displayScene();
         }
