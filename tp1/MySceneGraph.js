@@ -642,11 +642,12 @@ export class MySceneGraph {
                         if (axis != 'x' && axis != 'y' && axis != 'z')
                             this.onXMLError("Invalid axis for transformation for ID " + transformationID);
 
-                        var angle = this.reader.getInteger(grandChildren[j], "angle");
+                        var angle = this.reader.getFloat(grandChildren[j], "angle");
                         if (!(angle != null && !isNaN(angle)))
                             return "unable to parse angle of the rotation transformation for ID = " + transformationID;
 
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, axis);
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
+
                         break;
                 }
             }
@@ -943,6 +944,7 @@ export class MySceneGraph {
                             if(!Array.isArray(coordinates))
                                 return coordinates;
 
+                            //console.log(coordinates);
                             transf = mat4.scale(transf, transf, coordinates);
                             break;
 
@@ -952,11 +954,13 @@ export class MySceneGraph {
                             if (axis != 'x' && axis != 'y' && axis != 'z')
                                 this.onXMLError("Invalid axis for transformation on component node")
 
-                            var angle = this.reader.getInteger(transfNode[j], "angle");
+                            var angle = this.reader.getFloat(transfNode[j], "angle");
                             if (!(angle != null && !isNaN(angle)))
                                 return "unable to parse angle of the rotation transformation on component node";
 
-                            transf = mat4.rotate(transf, transf, angle * DEGREE_TO_RAD, axis);
+                            transf = mat4.rotate(transf, transf, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
+
+                            console.table(transf);
                             break;
                     }
                 }
@@ -988,7 +992,7 @@ export class MySceneGraph {
                     this.onXMLMinorError("unknown tag");
                 }
             }
-            var component = new MyComponent(this.scene, componentID, transf, "demoMaterial", "demoTexture", childs, primitives, 1 , 1);
+            var component = new MyComponent(this.scene, componentID, transf, "demoMaterial", "none", childs, primitives, 1 , 1);
             this.components[componentID] = component;
         }
         this.log("Parsed components")
@@ -1110,7 +1114,9 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
      displayScene() {
+        //this.scene.pushMatrix();
         this.displayComponent(this.idRoot, null, null, 1 , 1);
+        //this.scene.popMatrix();
 	}
 
     /**
@@ -1120,9 +1126,10 @@ export class MySceneGraph {
         let i;
 
         if(this.components[componentID] == null)
-            this.onXMLError("Error - No component with ID " + componentID);
+        this.onXMLError("Error - No component with ID " + componentID);
 
         let component = this.components[componentID];
+
 
         this.scene.pushMatrix();
         this.scene.multMatrix(component.transf); // como vou buscar o current transformation?
@@ -1144,21 +1151,25 @@ export class MySceneGraph {
 
         material.apply();
 
-        /* for (i in component.primitives) {
-            if(component.length_s == null  && component.length_t == null)
+        for (i in component.primitives) {
+            /* if(component.length_s == null  && component.length_t == null)
                 this.primitives[component.primitives[i]].updateTexCoords(1,1);
             else if(component.length_s == null)
                 this.primitives[component.primitives[i]].updateTexCoords(1,component.length_t);
             else if(component.length_t == null)
                 this.primitives[component.primitives[i]].updateTexCoords(component.length_s, 1);
             else
-                this.primitives[component.primitives[i]].updateTexCoords(component.length_s, component.length_t);
+                this.primitives[component.primitives[i]].updateTexCoords(component.length_s, component.length_t); */
+            let primitive = this.primitives[component.primitives[i]];
+            primitive.display();
+            //this.primitives[component.primitives[i]].display();
+        }
 
-        } */
-
-        for (i in component.children)
+        for (i in component.children){
+            //this.scene.pushMatrix()
             this.displayComponent(component.children[i], material, texture, s, t);
-
+            //this.scene.popMatrix();
+        }
         this.scene.popMatrix();
     }
 

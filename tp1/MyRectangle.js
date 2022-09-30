@@ -16,7 +16,7 @@ export class MyRectangle extends CGFobject {
 
 		this.initBuffers();
 	}
-	
+
 	initBuffers() {
 		this.vertices = [
 			this.x1, this.y1, 0,	//0
@@ -38,7 +38,7 @@ export class MyRectangle extends CGFobject {
 			0, 0, 1,
 			0, 0, 1
 		];
-		
+
 		/*
 		Texture coords (s,t)
 		+----------> s
@@ -68,5 +68,6 @@ export class MyRectangle extends CGFobject {
 		this.texCoords = [...coords];
 		this.updateTexCoordsGLBuffers();
 	}
+
 }
 
