@@ -92,6 +92,13 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
+        <material id="water" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.4" b="0.56" a="1.0" />
+            <diffuse r="0.15" g="0.4" b="0.56" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
     </materials>
 
     <transformations>
@@ -99,17 +106,17 @@
             <scale x="1" y="1" z="1" />
         </transformation>
 
-        <!-- <transformation id="grassTransform">
-            <rotate axis="y" angle="90" />
-            <scale x="3" y="3" z="1" />
-             <translate x="0" y="0" z="0" />
+        <transformation id="grassTransform">
+                <rotate axis="x" angle="-90" />
+                <scale x="17" y="8.5" z="1" />
+                <translate x="0.5" y="-1" z="0" />
         </transformation>
 
         <transformation id="poolTransform">
             <rotate axis="x" angle="-90" />
-            <scale x="3" y="3" z="1" />
-            <translate x="0.5" y="-1" z="0" />
-        </transformation> -->
+            <scale x="9" y="3.25" z="1" />
+            <translate x="1" y="-2.7" z="0.1" />
+        </transformation>
     </transformations>
 
     <primitives>
@@ -140,45 +147,40 @@
     <components>
         <component id="grass">
             <transformation>
-                <!-- <scale x="5" y="1" z="5" /> -->
-                <rotate axis="x" angle="-45"/>
-                <scale x="1" y="1" z="1" />
+                <transformationref id="grassTransform" />
             </transformation>
             <texture id="none"/>
             <materials>
-                <material id="none" />
+                <material id="grass" />
             </materials>
             <children>
-                <primitiveref id="demoCylinder"/>
+                <primitiveref id="demoRectangle"/>
             </children>
         </component>
 
-        <component id="lifebuoy">
-            <transformation>
-                <scale x="1" y="1" z="1" />
-                <!-- <scale x="5" y="1" z="1" /> -->
-                <!-- <rotate axis="y" angle="23" /> -->
-                <!-- <translate x="0" y="0" z="0" /> -->
-            </transformation>
-            <texture id="none"/>
-            <materials>
-                <material id="none" />
-            </materials>
-            <children>
-                <primitiveref id="demoTorus"/>
-            </children>
-        </component>
-
-        <!-- <component id="pool">
+        <component id="pool">
             <transformation>
                 <transformationref id="poolTransform" />
             </transformation>
             <texture id="none"/>
             <materials>
-                <material id="none" />
+                <material id="water" />
             </materials>
             <children>
                 <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <!-- <component id="lifebuoy">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="red" />
+            </materials>
+            <children>
+                <primitiveref id="demoTorus"/>
             </children>
         </component>
 
@@ -207,24 +209,6 @@
                 <primitiveref id="demoSphere" />
             </children>
         </component> -->
-
-        <component id="demoRoot">
-            <transformation>
-				<translate x="0" y="0" z="0" />
-				<scale x="1" y="1" z="1" />
-			</transformation>
-			<materials>
-				<material id="none" />
-			</materials>
-			<texture id="none" />
-			<children>
-				<componentref id="grass" />
-                <!-- <componentref id="lifebuoy" /> -->
-				<!-- <componentref id="pool" /> -->
-                <!-- <componentref id="ball_1" /> -->
-                <!-- <componentref id="ball_2" /> -->
-			</children>
-        </component>
 
         <!-- <component id="tabletop">
             <transformation>
@@ -368,9 +352,25 @@
                 <primitiveref id="demoCylinder"/>
             </children>
         </component>
-
-
         -->
+
+       <component id="demoRoot">
+            <transformation>
+				<translate x="0" y="0" z="0" />
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="grass" />
+				<componentref id="pool" />
+                <!-- <componentref id="lifebuoy" /> -->
+                <!-- <componentref id="ball_1" /> -->
+                <!-- <componentref id="ball_2" /> -->
+			</children>
+        </component>
 
 
 

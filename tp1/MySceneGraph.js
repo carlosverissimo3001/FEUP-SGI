@@ -877,7 +877,7 @@ export class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
-        var transf = mat4.create();
+        var transf = [];
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
@@ -916,18 +916,22 @@ export class MySceneGraph {
             // Transformations
             var transfNode = grandChildren[transformationIndex].children;
 
+            if(transfNode.length == 0)
+                transf = mat4.create();
+
             // This is the case in which the transformation is being mentioned, not created
-            if (transfNode[0].nodeName == "transformationref"){
+            else if (transfNode[0].nodeName == "transformationref"){
                 var transnfID = this.reader.getString(transfNode[0], "id")
 
                 if (this.transformations[transnfID] != null)
                     transf = this.transformations[transnfID];
-                else
+
+                    else
                     this.onXMLMinorError("Undefined transformation with the id: " + transnfID);
             }
 
             else {
-                for (var j = 0; j < transfNode.length; j++){
+               /*  for (var j = 0; j < transfNode.length; j++){
                     switch (transfNode[j].nodeName) {
                         // translate transformation
                         case 'translate':
@@ -960,12 +964,21 @@ export class MySceneGraph {
 
                             transf = mat4.rotate(transf, transf, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
 
-                            console.table(transf);
                             break;
                     }
-                }
+                } */
+                transf = this.parseTransformationsAux(transfNode);
             }
             // Materials
+            var materialID = [];
+
+			for (var x = 0; x < grandChildren[materialsIndex].children.length; x++) {
+				materialID[x] = this.reader.getString(grandChildren[materialsIndex].children[x], "id");
+
+				if (materialID[x] != "inherit" && this.materials[materialID[x]] == null) {
+					this.onXMLMinorError("No material for ID : " + materialID[x]);
+				}
+			}
 
             // Texture
 
@@ -992,12 +1005,53 @@ export class MySceneGraph {
                     this.onXMLMinorError("unknown tag");
                 }
             }
-            var component = new MyComponent(this.scene, componentID, transf, "demoMaterial", "none", childs, primitives, 1 , 1);
+            var component = new MyComponent(this.scene, componentID, transf, materialID, "none", childs, primitives, 1 , 1);
             this.components[componentID] = component;
         }
         this.log("Parsed components")
     }
 
+    parseTransformationsAux(transfNode){
+        var transf = mat4.create();
+
+        for (var j = 0; j < transfNode.length; j++){
+            switch (transfNode[j].nodeName) {
+                // translate transformation
+                case 'translate':
+                    var coordinates = this.parseCoordinates3D(transfNode[j], "translate transformation on component node");
+                    if (!Array.isArray(coordinates))
+                        return coordinates;
+
+                    transf = mat4.translate(transf, transf, coordinates);
+                    break;
+
+                // scale transformation
+                case 'scale':
+                    var coordinates = this.parseCoordinates3D(transfNode[j], "scale transformation on component node");
+                    if(!Array.isArray(coordinates))
+                        return coordinates;
+
+                    //console.log(coordinates);
+                    transf = mat4.scale(transf, transf, coordinates);
+                    break;
+
+                // rotate transformation
+                case 'rotate':
+                    var axis = this.reader.getString(transfNode[j], "axis");
+                    if (axis != 'x' && axis != 'y' && axis != 'z')
+                        this.onXMLError("Invalid axis for transformation on component node")
+
+                    var angle = this.reader.getFloat(transfNode[j], "angle");
+                    if (!(angle != null && !isNaN(angle)))
+                        return "unable to parse angle of the rotation transformation on component node";
+
+                    transf = mat4.rotate(transf, transf, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
+
+                    break;
+            }
+        }
+        return transf;
+    }
 
     /**
      * Parse the coordinates from a node with ID = id
@@ -1134,10 +1188,10 @@ export class MySceneGraph {
         this.scene.pushMatrix();
         this.scene.multMatrix(component.transf); // como vou buscar o current transformation?
 
-        if(component.material != "inherited")
+        if(component.material != "inherit")
             material = this.materials[component.material];
 
-        if(component.texture == "inherited") {
+        /* if(component.texture == "inherit) {
             material.setTexture(this.textures[texture]);
             component.length_s = s;
             component.length_t = t;
@@ -1147,7 +1201,7 @@ export class MySceneGraph {
         else {
             texture = component.texture;
             material.setTexture(this.textures[texture]);
-        }
+        } */
 
         material.apply();
 
