@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="demoRoot" axis_length="17"/>
+    <scene root="sgi_tp1_T03_G10_v01" axis_length="17"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -132,83 +132,83 @@
         </transformation>
 
         <transformation id="torusTransform">
-            <scale x="1" y="1" z="1" />            
+            <scale x="1" y="1" z="1" />
             <translate x="9.0" y="6.0" z="0.7" />
         </transformation>
 
         <transformation id="ball1Transform">
-            <scale x="1" y="1" z="1" />            
+            <scale x="1" y="1" z="1" />
             <translate x="2.0" y="0.9" z="14.0" />
         </transformation>
 
         <transformation id="ball2Transform">
-            <scale x="1" y="1" z="1" />            
+            <scale x="1" y="1" z="1" />
             <translate x="14.0" y="0.9" z="2.0" />
         </transformation>
 
         <transformation id="tableLeg1Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.3" y="0.3" z="0.5" />            
+            <scale x="0.3" y="0.3" z="0.5" />
             <translate x="10.0" y="-0.8" z="0" />
         </transformation>
 
         <transformation id="tableLeg2Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.3" y="0.3" z="0.5" />            
+            <scale x="0.3" y="0.3" z="0.5" />
             <translate x="20.0" y="-0.8" z="0" />
         </transformation>
 
         <transformation id="tableLeg3Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.3" y="0.3" z="0.5" />            
+            <scale x="0.3" y="0.3" z="0.5" />
             <translate x="10.0" y="-10.8" z="0" />
         </transformation>
 
         <transformation id="tableLeg4Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.3" y="0.3" z="0.5" />            
+            <scale x="0.3" y="0.3" z="0.5" />
             <translate x="20.0" y="-10.8" z="0" />
         </transformation>
 
         <transformation id="tableTopTransform">
             <rotate axis="x" angle="-90" />
-            <scale x="4.0" y="2.0" z="6.0" />            
+            <scale x="4.0" y="2.0" z="6.0" />
             <translate x="1.1" y="-0.8" z="0.25" />
         </transformation>
 
         <transformation id="chairLeg1Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.2" y="0.2" z="0.4" />            
+            <scale x="0.2" y="0.2" z="0.4" />
             <translate x="25.0" y="-70" z="-0.1" />
         </transformation>
 
         <transformation id="chairLeg2Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.2" y="0.2" z="0.4" />            
+            <scale x="0.2" y="0.2" z="0.4" />
             <translate x="30.0" y="-70" z="-0.1" />
         </transformation>
 
         <transformation id="chairLeg3Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.2" y="0.2" z="0.4" />            
+            <scale x="0.2" y="0.2" z="0.4" />
             <translate x="25.0" y="-75" z="-0.1" />
         </transformation>
 
         <transformation id="chairLeg4Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="0.2" y="0.2" z="0.4" />            
+            <scale x="0.2" y="0.2" z="0.4" />
             <translate x="30.0" y="-75" z="-0.1" />
         </transformation>
 
         <transformation id="chairTopTransform">
             <rotate axis="y" angle="180" />
-            <scale x="2.0" y="1.0" z="2.0" />            
+            <scale x="2.0" y="1.0" z="2.0" />
             <translate x="-2.7" y="2.0" z="-7.7" />
         </transformation>
 
         <transformation id="chairBaseTransform">
             <rotate axis="x" angle="-90" />
-            <scale x="2.0" y="1.0" z="3.0" />            
+            <scale x="2.0" y="1.0" z="3.0" />
             <translate x="2.7" y="-14.4" z="0.40" />
         </transformation>
 
@@ -316,7 +316,7 @@
             <children>
                 <primitiveref id="demoSphere" />
             </children>
-        </component> 
+        </component>
 
         <component id="tabletop">
             <transformation>
@@ -461,7 +461,7 @@
             </children>
         </component>
 
-       <component id="demoRoot">
+       <component id="sgi_tp1_T03_G10_v01">
             <transformation>
 				<translate x="0" y="0" z="0" />
 				<scale x="1" y="1" z="1" />
