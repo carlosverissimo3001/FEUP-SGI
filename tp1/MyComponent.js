@@ -10,7 +10,7 @@ import { CGFobject } from "../lib/CGF.js";
  */
 
 export class MyComponent extends CGFobject{
-    constructor(scene, componentID, transf, material, texture, children, primtives) {
+    constructor(scene, componentID, transf, material, texture, children, primtives, lenght_s, length_t) {
         super(scene);
 
         this.componentID = componentID;
@@ -19,5 +19,47 @@ export class MyComponent extends CGFobject{
         this.texture = texture;
         this.children = children;
         this.primitives = primtives;
+        this.lenght_s = lenght_s;
+        this.lenght_t = length_t;
+    }
+
+    setTransformation(transf) {
+        this.transf = transf;
+    }
+    
+    setMaterial(material) {
+        this.material = material;
+    }
+
+    setTexture(texture) {
+        this.texture = texture;
+    }
+
+    setChildren(children) {
+        this.children = children;
+    }
+
+    setPrimitives(primitives) {
+        this.primitives = primitives;
+    }
+
+    getTransformation() {
+        return this.transf;
+    }
+    
+    getMaterial() {
+        return this.material;
+    }
+
+    getTexture() {
+        return this.texture;
+    }
+
+    getChildren() {
+        return this.children;
+    }
+
+    getPrimitives() {
+        return this.primitives;
     }
 }

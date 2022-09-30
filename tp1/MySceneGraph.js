@@ -990,7 +990,7 @@ export class MySceneGraph {
                     this.onXMLMinorError("unknown tag");
                 }
             }
-            var component = new MyComponent(this.scene, componentID, transf, "inherit", "inherit", childs, primitives);
+            var component = new MyComponent(this.scene, componentID, transf, "inherit", "inherit", childs, primitives, 1 , 1);
             this.components[componentID] = component;
         }
         this.log("Parsed components")
@@ -1112,13 +1112,13 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
      displayScene() {
-        this.displayComponent(this.idRoot, null, null, 1, 1);
+        this.displayComponent(this.idRoot, null, null, 1 , 1);
 	}
 
     /**
      * Display each node, receives the root node
      */
-    displayComponent(componentID, material, texture, s, t) {
+    displayComponent(componentID, material, texture, s , t) {
         let i;
 
         if(this.components[componentID] == null)
@@ -1127,10 +1127,41 @@ export class MySceneGraph {
         let component = this.components[componentID];
 
         this.scene.pushMatrix();
-        this.scene.multMatrix(component.transfMatrix);
+        this.scene.multMatrix(component.transf); // como vou buscar o current transformation?
 
-        if(component.materialID != "inherited")
-            material = this.materials[component.materialID];
+        if(component.material != "inherited")
+            material = this.materials[component.material];
+
+        if(component.texture == "inherited") {
+            material.setTexture(this.textures[texture]);
+            component.length_s = s;
+            component.length_t = t;
+        }
+        else if(component.texture == "none")
+            material.setTexture(null);
+        else {
+            texture = component.texture;
+            material.setTexture(this.textures[texture]);
+        }
+
+        material.apply();
+
+        for (i in component.primitives) {
+            if(component.length_s == null  && component.length_t == null)
+                this.primitives[component.primitives[i]].updateTexCoords(1,1);
+            else if(component.length_s == null)
+                this.primitives[component.primitives[i]].updateTexCoords(1,component.length_t);
+            else if(component.length_t == null)
+                this.primitives[component.primitives[i]].updateTexCoords(component.length_s, 1);
+            else
+                this.primitives[component.primitives[i]].updateTexCoords(component.length_s, component.length_t);
+
+        }
+
+        for (i in component.children)
+            this.displayComponent(component.children[i], material, texture, s, t);
+
+        
 
     }
 
