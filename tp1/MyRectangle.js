@@ -16,7 +16,7 @@ export class MyRectangle extends CGFobject {
 
 		this.initBuffers();
 	}
-	
+
 	initBuffers() {
 		this.vertices = [
 			this.x1, this.y1, 0,	//0
@@ -28,7 +28,10 @@ export class MyRectangle extends CGFobject {
 		//Counter-clockwise reference of vertices
 		this.indices = [
 			0, 1, 2,
-			1, 3, 2
+			1, 3, 2,
+
+			1, 0, 2,
+			3, 1, 2
 		];
 
 		//Facing Z positive
@@ -38,7 +41,7 @@ export class MyRectangle extends CGFobject {
 			0, 0, 1,
 			0, 0, 1
 		];
-		
+
 		/*
 		Texture coords (s,t)
 		+----------> s
@@ -68,5 +71,6 @@ export class MyRectangle extends CGFobject {
 		this.texCoords = [...coords];
 		this.updateTexCoordsGLBuffers();
 	}
+
 }
 
