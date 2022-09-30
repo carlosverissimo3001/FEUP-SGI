@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="sgi-t03-g10-v1" axis_length="5"/>
+    <scene root="demoRoot" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -10,7 +10,8 @@
 
     <ambient>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <background r="0.53" g="0.81" b="0.92" a="1.0" />
+        <!-- <background r="0.53" g="0.81" b="0.92" a="1.0" /> -->
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
     </ambient>
 
     <lights>
@@ -29,6 +30,13 @@
     </textures>
 
     <materials>
+        <material id="demoMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+
         <material id="light_cyan" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.88" g="1.0" b="1.0" a="1.0" />
@@ -145,7 +153,7 @@
 
         <primitive id="demoTorus">
             <torus inner="0.6" outer="1.4" slices="20" loops="300" />
-        </primitive> -->
+        </primitive>
 
         <primitive id="demoSphere">
             <sphere radius="1.0" slices="15" stacks="15" />
@@ -163,7 +171,7 @@
                 <material id="grass" />
             </materials>
             <children>
-                <primitive id="demoRectangle"/>
+                <primitiveref id="demoRectangle"/>
             </children>
         </component>
 
@@ -176,8 +184,23 @@
                 <material id="light_cyan" />
             </materials>
             <children>
-                <primitive id="demoRectangle"/>
+                <primitiveref id="demoRectangle"/>
             </children>
+        </component>
+
+        <component id="demoRoot">
+            <transformation>
+				<translate x="0" y="0" z="0" />
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="grass" />
+				<componentref id="pool" />
+			</children>
         </component>
 
         <!-- <component id="tabletop">
@@ -247,7 +270,7 @@
 
         <component id="pool_chair_base">
             <transformation>
-            
+
             </transformation>
             <texture id="demoTexture"/>
             <materials>

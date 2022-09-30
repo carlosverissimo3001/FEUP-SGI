@@ -30,16 +30,6 @@ export class XMLscene extends CGFscene {
         this.initCameras();
 
         this.displayAxis = true;
-        this.displayTriangle = false;
-        this.displayRectangle = true;
-        this.displaySphere = false;
-        this.displayCylinder = false;
-        this.displayTorus = false;
-
-        this.displayPool = false;
-        this.displayBalls = false;
-        this.displayGrass = false;
-        this.displayLifebuoy = false;
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -144,46 +134,17 @@ export class XMLscene extends CGFscene {
             this.lights[i].enable();
         }
 
+        if (this.displayAxis)
+            this.axis.display();
+
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
-
-            /* if (this.displayRectangle){
-                this.pushMatrix();
-                this.rotate(-Math.PI/2, 1, 0, 0)
-                this.translate(0.5, -1, 0);
-                this.scale(5, 5, 1);
-                this.graph.primitives['demoRectangle'].display();
-                this.popMatrix();
-            }
-            if (this.displayTorus)
-                this.graph.primitives['demoTorus'].display();
-            if (this.displaySphere)
-                this.graph.primitives['demoSphere'].display();
-            if (this.displayTriangle)
-                this.graph.primitives['demoTriangle'].display();
-            if (this.displayCylinder)
-                this.graph.primitives['demoCylinder'].display();
- */
-            /* if (this.displayBalls)
-                this.graph.primitives['ball'].display();
-
-            if (this.displayPool)
-                this.graph.primitives['pool'].display();
-
-            if (this.displayGrass)
-                this.graph.primitives['grass'].display();
-
-            if(this.displayLifebuoy)
-                this.graph.primitives['lifebuoy'].display(); */
-
             this.graph.displayScene();
         }
 
-        if (this.displayAxis)
-            this.axis.display();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

@@ -907,8 +907,6 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            this.onXMLMinorError("To do: Parse components.");
-
             /* // Assess correct order first
             if (transformationsIndex != 0 || materialsIndex != 1 || textureIndex != 2 || childrenIndex != 3){
                 this.onXMLError("Incorrect order");
@@ -990,7 +988,7 @@ export class MySceneGraph {
                     this.onXMLMinorError("unknown tag");
                 }
             }
-            var component = new MyComponent(this.scene, componentID, transf, "inherit", "inherit", childs, primitives, 1 , 1);
+            var component = new MyComponent(this.scene, componentID, transf, "demoMaterial", "demoTexture", childs, primitives, 1 , 1);
             this.components[componentID] = component;
         }
         this.log("Parsed components")
@@ -1123,7 +1121,7 @@ export class MySceneGraph {
 
         if(this.components[componentID] == null)
             this.onXMLError("Error - No component with ID " + componentID);
-    
+
         let component = this.components[componentID];
 
         this.scene.pushMatrix();
@@ -1146,7 +1144,7 @@ export class MySceneGraph {
 
         material.apply();
 
-        for (i in component.primitives) {
+        /* for (i in component.primitives) {
             if(component.length_s == null  && component.length_t == null)
                 this.primitives[component.primitives[i]].updateTexCoords(1,1);
             else if(component.length_s == null)
@@ -1156,13 +1154,13 @@ export class MySceneGraph {
             else
                 this.primitives[component.primitives[i]].updateTexCoords(component.length_s, component.length_t);
 
-        }
+        } */
 
         for (i in component.children)
             this.displayComponent(component.children[i], material, texture, s, t);
 
-        
-
+        this.scene.popMatrix();
     }
+
 
 }
