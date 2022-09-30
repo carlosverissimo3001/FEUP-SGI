@@ -26,6 +26,7 @@
         <texture id="demoTexture" file="scenes/images/vidral.jpg" />
         <texture id="waterTexture" file="scenes/images/waterTex.jpg" />
         <texture id="grassTexture" file="scenes/images/grassTex.jpg" />
+        <texture id="torusTexture" file="scenes/images/torus.jpg" />
     </textures>
 
     <materials>
@@ -99,6 +100,13 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
+        <material id="red_white" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.4" b="0.56" a="1.0" />
+            <diffuse r="0.15" g="0.4" b="0.56" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
     </materials>
 
     <transformations>
@@ -107,9 +115,14 @@
         </transformation>
 
         <transformation id="grassTransform">
-                <rotate axis="x" angle="-90" />
-                <scale x="17" y="8.5" z="1" />
-                <translate x="0.5" y="-1" z="0" />
+            <rotate axis="x" angle="-90" />
+            <scale x="17" y="8.5" z="1" />
+            <translate x="0.5" y="-1" z="0" />
+        </transformation>
+
+        <transformation id="wallTransform">
+            <scale x="17" y="5.0" z="1" />
+            <translate x="0.5" y="1" z="0" />
         </transformation>
 
         <transformation id="poolTransform">
@@ -117,6 +130,88 @@
             <scale x="9" y="3.25" z="1" />
             <translate x="1" y="-2.7" z="0.1" />
         </transformation>
+
+        <transformation id="torusTransform">
+            <scale x="1" y="1" z="1" />            
+            <translate x="9.0" y="6.0" z="0.7" />
+        </transformation>
+
+        <transformation id="ball1Transform">
+            <scale x="1" y="1" z="1" />            
+            <translate x="2.0" y="0.9" z="14.0" />
+        </transformation>
+
+        <transformation id="ball2Transform">
+            <scale x="1" y="1" z="1" />            
+            <translate x="14.0" y="0.9" z="2.0" />
+        </transformation>
+
+        <transformation id="tableLeg1Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />            
+            <translate x="10.0" y="-0.8" z="0" />
+        </transformation>
+
+        <transformation id="tableLeg2Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />            
+            <translate x="20.0" y="-0.8" z="0" />
+        </transformation>
+
+        <transformation id="tableLeg3Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />            
+            <translate x="10.0" y="-10.8" z="0" />
+        </transformation>
+
+        <transformation id="tableLeg4Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />            
+            <translate x="20.0" y="-10.8" z="0" />
+        </transformation>
+
+        <transformation id="tableTopTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="4.0" y="2.0" z="6.0" />            
+            <translate x="1.1" y="-0.8" z="0.25" />
+        </transformation>
+
+        <transformation id="chairLeg1Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />            
+            <translate x="25.0" y="-70" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairLeg2Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />            
+            <translate x="30.0" y="-70" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairLeg3Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />            
+            <translate x="25.0" y="-75" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairLeg4Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />            
+            <translate x="30.0" y="-75" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairTopTransform">
+            <rotate axis="y" angle="180" />
+            <scale x="2.0" y="1.0" z="2.0" />            
+            <translate x="-2.7" y="2.0" z="-7.7" />
+        </transformation>
+
+        <transformation id="chairBaseTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="2.0" y="1.0" z="3.0" />            
+            <translate x="2.7" y="-14.4" z="0.40" />
+        </transformation>
+
     </transformations>
 
     <primitives>
@@ -171,9 +266,22 @@
             </children>
         </component>
 
-        <!-- <component id="lifebuoy">
+        <component id="wall">
             <transformation>
-                <scale x="1" y="1" z="1" />
+                <transformationref id="wallTransform" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="light_gray" />
+            </materials>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="lifebuoy">
+            <transformation>
+                <transformationref id="torusTransform" />
             </transformation>
             <texture id="none"/>
             <materials>
@@ -186,11 +294,11 @@
 
         <component id="ball_1">
             <transformation>
-                <scale x="1" y="1" z="1" />
+                <transformationref id="ball1Transform" />
             </transformation>
             <texture id="none" />
             <materials>
-                <material id="none" />
+                <material id="red" />
             </materials>
             <children>
                 <primitiveref id="demoSphere" />
@@ -199,20 +307,20 @@
 
         <component id="ball_2">
             <transformation>
-                <scale x="1" y="1" z="1" />
+                <transformationref id="ball2Transform" />
             </transformation>
             <texture id="none" />
             <materials>
-                <material id="none" />
+                <material id="blue" />
             </materials>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
-        </component> -->
+        </component> 
 
-        <!-- <component id="tabletop">
+        <component id="tabletop">
             <transformation>
-
+                <transformationref id="tableTopTransform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -225,11 +333,11 @@
 
         <component id="table_leg_1" >
             <transformation>
-
+                <transformationref id="tableLeg1Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
-                <material id="lightGray" />
+                <material id="light_gray" />
             </materials>
             <children>
                 <primitiveref id="demoCylinder"/>
@@ -238,11 +346,11 @@
 
         <component id="table_leg_2" >
             <transformation>
-
+                <transformationref id="tableLeg2Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
-                <material id="lightGray" />
+                <material id="light_gray" />
             </materials>
             <children>
                 <primitiveref id="demoCylinder"/>
@@ -251,11 +359,11 @@
 
         <component id="table_leg_3" >
             <transformation>
-
+                <transformationref id="tableLeg3Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
-                <material id="lightGray" />
+                <material id="light_gray" />
             </materials>
             <children>
                 <primitiveref id="demoCylinder"/>
@@ -264,11 +372,11 @@
 
         <component id="table_leg_4" >
             <transformation>
-
+                <transformationref id="tableLeg4Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
-                <material id="lightGray" />
+                <material id="light_gray" />
             </materials>
             <children>
                 <primitiveref id="demoCylinder"/>
@@ -277,7 +385,7 @@
 
         <component id="pool_chair_base">
             <transformation>
-
+                <transformationref id="chairBaseTransform" />
             </transformation>
             <texture id="demoTexture"/>
             <materials>
@@ -290,7 +398,7 @@
 
         <component id="pool_chair_top" >
             <transformation>
-
+                <transformationref id="chairTopTransform" />
             </transformation>
             <texture id="demoTexture"/>
             <materials>
@@ -303,7 +411,7 @@
 
         <component id="pool_chair_leg_1" >
             <transformation>
-
+                <transformationref id="chairLeg1Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -316,7 +424,7 @@
 
         <component id="pool_chair_leg_2" >
             <transformation>
-
+                <transformationref id="chairLeg2Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -329,7 +437,7 @@
 
         <component id="pool_chair_leg_3" >
             <transformation>
-
+                <transformationref id="chairLeg3Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -342,7 +450,7 @@
 
         <component id="pool_chair_leg_4" >
             <transformation>
-
+                <transformationref id="chairLeg4Transform" />
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -352,7 +460,6 @@
                 <primitiveref id="demoCylinder"/>
             </children>
         </component>
-        -->
 
        <component id="demoRoot">
             <transformation>
@@ -366,9 +473,21 @@
 			<children>
 				<componentref id="grass" />
 				<componentref id="pool" />
-                <!-- <componentref id="lifebuoy" /> -->
-                <!-- <componentref id="ball_1" /> -->
-                <!-- <componentref id="ball_2" /> -->
+                <componentref id="wall" />
+                <componentref id="lifebuoy" />
+                <componentref id="ball_1" />
+                <componentref id="ball_2" />
+                <componentref id="tabletop" />
+                <componentref id="table_leg_1" />
+                <componentref id="table_leg_2" />
+                <componentref id="table_leg_3" />
+                <componentref id="table_leg_4" />
+                <componentref id="pool_chair_base" />
+                <componentref id="pool_chair_top" />
+                <componentref id="pool_chair_leg_1" />
+                <componentref id="pool_chair_leg_2" />
+                <componentref id="pool_chair_leg_3" />
+                <componentref id="pool_chair_leg_4" />
 			</children>
         </component>
 
