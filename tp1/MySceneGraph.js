@@ -1112,7 +1112,26 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
      displayScene() {
-
+        this.displayComponent(this.idRoot, null, null, 1, 1);
 	}
+
+    /**
+     * Display each node, receives the root node
+     */
+    displayComponent(componentID, material, texture, s, t) {
+        let i;
+
+        if(this.components[componentID] == null)
+            this.onXMLError("Error - No component with ID " + componentID);
+    
+        let component = this.components[componentID];
+
+        this.scene.pushMatrix();
+        this.scene.multMatrix(component.transfMatrix);
+
+        if(component.materialID != "inherited")
+            material = this.materials[component.materialID];
+
+    }
 
 }
