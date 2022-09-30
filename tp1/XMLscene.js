@@ -1,6 +1,5 @@
 import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis,CGFcamera } from '../lib/CGF.js';
-
+import { CGFaxis, CGFcamera } from '../lib/CGF.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -10,7 +9,7 @@ var DEGREE_TO_RAD = Math.PI / 180;
 export class XMLscene extends CGFscene {
     /**
      * @constructor
-     * @param {MyInterface} myinterface 
+     * @param {MyInterface} myinterface
      */
     constructor(myinterface) {
         super();
@@ -27,18 +26,20 @@ export class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
-
         this.enableTextures(true);
+        this.initCameras();
 
         this.displayAxis = true;
         this.displayTriangle = false;
-        this.displayRectangle = false;
+        this.displayRectangle = true;
         this.displaySphere = false;
         this.displayCylinder = false;
         this.displayTorus = false;
 
-        this.displayNormals = false;
+        this.displayPool = false;
+        this.displayBalls = false;
+        this.displayGrass = false;
+        this.displayLifebuoy = false;
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -55,6 +56,7 @@ export class XMLscene extends CGFscene {
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
@@ -100,15 +102,15 @@ export class XMLscene extends CGFscene {
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
-    /** Handler called when the graph is finally loaded. 
+    /** Handler called when the graph is finally loaded.
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
-        this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+        this.gl.clearColor(...this.graph.background);
 
-        this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+        this.setGlobalAmbientLight(...this.graph.ambient);
 
         this.initLights();
 
@@ -133,8 +135,8 @@ export class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        
-        if (this.displayAxis) 
+
+        if (this.displayAxis)
             this.axis.display();
 
         for (var i = 0; i < this.lights.length; i++) {
@@ -148,20 +150,39 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
 
-            if (this.displayRectangle) 
+            /* if (this.displayRectangle){
+                this.pushMatrix();
+                this.rotate(-Math.PI/2, 1, 0, 0)
+                this.translate(0.5, -1, 0);
+                this.scale(5, 5, 1);
                 this.graph.primitives['demoRectangle'].display();
-            if (this.displayTorus) 
+                this.popMatrix();
+            }
+            if (this.displayTorus)
                 this.graph.primitives['demoTorus'].display();
-            if (this.displaySphere) 
+            if (this.displaySphere)
                 this.graph.primitives['demoSphere'].display();
-            if (this.displayTriangle) 
+            if (this.displayTriangle)
                 this.graph.primitives['demoTriangle'].display();
-            if (this.displayCylinder) 
+            if (this.displayCylinder)
                 this.graph.primitives['demoCylinder'].display();
+ */
+            /* if (this.displayBalls)
+                this.graph.primitives['ball'].display();
+
+            if (this.displayPool)
+                this.graph.primitives['pool'].display();
+
+            if (this.displayGrass)
+                this.graph.primitives['grass'].display();
+
+            if(this.displayLifebuoy)
+                this.graph.primitives['lifebuoy'].display(); */
+
             this.graph.displayScene();
         }
 
-        if (this.displayAxis) 
+        if (this.displayAxis)
             this.axis.display();
 
         this.popMatrix();

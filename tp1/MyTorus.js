@@ -26,7 +26,7 @@ export class MyTorus extends CGFobject{
       this.indices = [];
       this.normals = [];
       this.texCoords = [];
-      
+
       var angle = 0;
       var angleStep = Math.PI * 2 / this.loops;
       var phi = 0;
@@ -55,18 +55,18 @@ export class MyTorus extends CGFobject{
           angle += angleStep;
       }
 
-      var loopVerts = this.slices + 1;        
+      var loopVerts = this.slices + 1;
       for (let loop = 0; loop < this.loops; loop++) {
         for(let slice = 0; slice < this.slices; slice++) {
                   const first = loop * loopVerts + slice;
                   const second = first + loopVerts;
 
                   this.indices.push(first, second, first+1);
-                  this.indices.push(second, second+1, first+1);    
+                  this.indices.push(second, second+1, first+1);
         }
       }
 
-    this.enableNormalViz();
+    //this.enableNormalViz();
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
 }
