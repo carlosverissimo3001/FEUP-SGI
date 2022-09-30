@@ -246,16 +246,23 @@ export class MySceneGraph {
         if (children.length == 0)
             this.onXMLError("No views defined");
 
+        // For any number of cameras
         for (var i = 0; i < children.length; i++) {
             var curr_view = children[i];
             var curr_view_type = children[i].nodeName;
 
+            // Check if view type is valid
             if (curr_view_type != "perspective" && curr_view_type != "ortho") {
                 this.onXMLMinorError("unknown tag <" + curr_view_type + ">");
                 continue;
             }
 
+            // Get id of the current view
             var curr_view_ID = this.reader.getString(curr_view, 'id');
+
+
+            // ! I feel like this could be done in a more effective way
+            // ? Check this later
 
             // handle perspective view
             if(curr_view_type == "perspective"){
@@ -280,6 +287,8 @@ export class MySceneGraph {
                 var from = this.parseCoordinates3D(curr_view_children[0], "from field of view for ID" + curr_view_ID);
                 var to = this.parseCoordinates3D(curr_view_children[1], "to field of view for ID" + curr_view_ID);
 
+                // Create new perspective view
+                // ? Don't know if the fov is correctly calculated
                 var view = new CGFcamera(angle*DEGREE_TO_RAD, near, far, from, to);
 
                 this.views[curr_view_ID] = view
@@ -327,6 +336,8 @@ export class MySceneGraph {
                 else
                     up = [0, 1, 0]
 
+
+                // Create new orthogonal camera
                 var view = new CGFcameraOrtho(left, right, bottom, top, naer, far, from, to, up);
                 this.views[curr_view_ID] = view
             }
@@ -499,6 +510,7 @@ export class MySceneGraph {
 
         this.textures = [];
 
+        // For any number of textures
         for (var i = 0; i < children.length; i++){
 
             if (children[i].nodeName != "texture"){
@@ -519,8 +531,14 @@ export class MySceneGraph {
             // Texture filepath
             var textureFilepath = this.reader.getString(children[i], 'file');
 
+            /* TODO: Check if the file exists and handle folder differences
+             Example. We expect: scenes/images/texture.png(or jpg), we might get only texture.png or images/texture.png
+            */
+
+            // Create new texture
             var texture = new CGFtexture(this.scene, textureFilepath);
 
+            // Push it to the texture list
             this.textures[textureID] = texture;
         }
 
@@ -539,8 +557,10 @@ export class MySceneGraph {
 
         var grandChildren = [];
 
+        // For any number of materials
         for (var i = 0; i < children.length; i++) {
 
+            // Check the <material> tag
             if (children[i].nodeName != "material"){
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
@@ -570,15 +590,18 @@ export class MySceneGraph {
 			var diffuse = this.parseColor(grandChildren[2], "diffuse propertie of the material with ID = " + materialID);
 			var specular = this.parseColor(grandChildren[3], "specular propertie of the material with ID = " + materialID);
 
+            // Create new material
             var newMat = new CGFappearance(this.scene);
 
-            newMat.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
-            newMat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
-            newMat.setEmission(emission[0], emission[1], emission[2], emission[3]);
-            newMat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
+            // Fill its properties
+            newMat.setAmbient(...ambient);
+            newMat.setDiffuse(...diffuse);
+            newMat.setEmission(...emission);
+            newMat.setSpecular(...specular);
 
             newMat.setShininess(shininess);
 
+            // Add it to the list of materials
             this.materials[materialID] = newMat;
         }
     }
@@ -908,11 +931,6 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            /* // Assess correct order first
-            if (transformationsIndex != 0 || materialsIndex != 1 || textureIndex != 2 || childrenIndex != 3){
-                this.onXMLError("Incorrect order");
-            } */
-
             // Transformations
             var transfNode = grandChildren[transformationIndex].children;
 
@@ -930,57 +948,24 @@ export class MySceneGraph {
                     this.onXMLMinorError("Undefined transformation with the id: " + transnfID);
             }
 
-            else {
-               /*  for (var j = 0; j < transfNode.length; j++){
-                    switch (transfNode[j].nodeName) {
-                        // translate transformation
-                        case 'translate':
-                            var coordinates = this.parseCoordinates3D(transfNode[j], "translate transformation on component node");
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
+            // parse a new tranformation
+            else
+               transf = this.parseTransformationsHelper(transfNode);
 
-                            transf = mat4.translate(transf, transf, coordinates);
-                            break;
-
-                        // scale transformation
-                        case 'scale':
-                            var coordinates = this.parseCoordinates3D(transfNode[j], "scale transformation on component node");
-                            if(!Array.isArray(coordinates))
-                                return coordinates;
-
-                            //console.log(coordinates);
-                            transf = mat4.scale(transf, transf, coordinates);
-                            break;
-
-                        // rotate transformation
-                        case 'rotate':
-                            var axis = this.reader.getString(transfNode[j], "axis");
-                            if (axis != 'x' && axis != 'y' && axis != 'z')
-                                this.onXMLError("Invalid axis for transformation on component node")
-
-                            var angle = this.reader.getFloat(transfNode[j], "angle");
-                            if (!(angle != null && !isNaN(angle)))
-                                return "unable to parse angle of the rotation transformation on component node";
-
-                            transf = mat4.rotate(transf, transf, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
-
-                            break;
-                    }
-                } */
-                transf = this.parseTransformationsAux(transfNode);
-            }
             // Materials
             var materialID = [];
 
-			for (var x = 0; x < grandChildren[materialsIndex].children.length; x++) {
-				materialID[x] = this.reader.getString(grandChildren[materialsIndex].children[x], "id");
+			for (var j = 0; j < grandChildren[materialsIndex].children.length; j++) {
+				materialID[j] = this.reader.getString(grandChildren[materialsIndex].children[j], "id");
 
-				if (materialID[x] != "inherit" && this.materials[materialID[x]] == null) {
-					this.onXMLMinorError("No material for ID : " + materialID[x]);
+				if (materialID[j] != "inherit" && this.materials[materialID[j]] == null) {
+					this.onXMLMinorError("No material for ID : " + materialID[j]);
 				}
 			}
 
-            // Texture
+            // TODO: Better parse the materials
+
+            // TODO: Parse textures
 
             // Children
             var children_children = grandChildren[childrenIndex].children;
@@ -1011,7 +996,7 @@ export class MySceneGraph {
         this.log("Parsed components")
     }
 
-    parseTransformationsAux(transfNode){
+    parseTransformationsHelper(transfNode){
         var transf = mat4.create();
 
         for (var j = 0; j < transfNode.length; j++){
@@ -1177,7 +1162,6 @@ export class MySceneGraph {
      * Display each node, receives the root node
      */
     displayComponent(componentID, material, texture, s , t) {
-        let i;
 
         if(this.components[componentID] == null)
         this.onXMLError("Error - No component with ID " + componentID);
@@ -1191,35 +1175,16 @@ export class MySceneGraph {
         if(component.material != "inherit")
             material = this.materials[component.material];
 
-        /* if(component.texture == "inherit) {
-            material.setTexture(this.textures[texture]);
-            component.length_s = s;
-            component.length_t = t;
-        }
-        else if(component.texture == "none")
-            material.setTexture(null);
-        else {
-            texture = component.texture;
-            material.setTexture(this.textures[texture]);
-        } */
 
         material.apply();
 
-        for (i in component.primitives) {
-            /* if(component.length_s == null  && component.length_t == null)
-                this.primitives[component.primitives[i]].updateTexCoords(1,1);
-            else if(component.length_s == null)
-                this.primitives[component.primitives[i]].updateTexCoords(1,component.length_t);
-            else if(component.length_t == null)
-                this.primitives[component.primitives[i]].updateTexCoords(component.length_s, 1);
-            else
-                this.primitives[component.primitives[i]].updateTexCoords(component.length_s, component.length_t); */
+        for (var i = 0; i < component.primitives.length; i++){
             let primitive = this.primitives[component.primitives[i]];
             primitive.display();
             //this.primitives[component.primitives[i]].display();
         }
 
-        for (i in component.children){
+        for (var i = 0; i < component.children.length; i++){
             //this.scene.pushMatrix()
             this.displayComponent(component.children[i], material, texture, s, t);
             //this.scene.popMatrix();
