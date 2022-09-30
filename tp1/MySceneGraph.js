@@ -1,4 +1,4 @@
-import { CGFXMLreader, CGFtexture, CGFcamera, CGFcameraOrtho } from '../lib/CGF.js';
+import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcamera, CGFcameraOrtho } from '../lib/CGF.js';
 
 import { MyRectangle } from './MyRectangle.js';
 import { MyCylinder } from './MyCylinder.js';
@@ -236,132 +236,102 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        //this.onXMLMinorError("To do: Parse views and create cameras.");
+        // Create views array
+        this.views = [];
+
         var children = viewsNode.children;
 
-        this.cameras = [];
-        var numCameras = 0;
+        // this.defaultCamera = this.reader.getString(viewsNode, 'default');
 
-        var grandChildren = [];
-        var nodeNames = [];
+        if (children.length == 0)
+            this.onXMLError("No views defined");
 
         for (var i = 0; i < children.length; i++) {
+            var curr_view = children[i];
+            var curr_view_type = children[i].nodeName;
 
-            // Storing camera information
-            var global = [];
-            var attributeNames = [];
-            var attributeTypes = [];
-
-            // Check type of camera
-            if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+            if (curr_view_type != "perspective" && curr_view_type != "ortho") {
+                this.onXMLMinorError("unknown tag <" + curr_view_type + ">");
                 continue;
             }
 
-            else{
-                attributeNames.push(...["from", "to"]);
-                attributeTypes.push(...["position", "position"]);
-            }
+            var curr_view_ID = this.reader.getString(curr_view, 'id');
 
-            // Get id of current camera
-            var cameraId = this.reader.getString(children[i], 'id');
-            if (cameraId == null)
-                return "no ID defined for camera";
-
-            // Check for repeated IDs.
-            if (this.cameras[cameraId] != null)
-                return "ID must be unique for each camera (conflict: ID = " + cameraId + ")";
-
-            // Camera near and far
-            var near = this.reader.getFloat(children[i], 'near');
-            var far = this.reader.getFloat(children[i], 'far');
-
-            if (!(near != null && !isNaN(near)))
-                this.onXMLMinorError("unable to parse value component of the 'near' field for ID = " + cameraId);
-
-            if (!(far != null && !isNaN(far)))
-                this.onXMLMinorError("unable to parse value component of the 'far' field for ID = " + cameraId)
-
-            // Add near, far components and type name to camera info
-            global.push(near);
-            global.push(far);
-            global.push(children[i].nodeName);
-
-            grandChildren = children[i].children;
-            // Specifications for the current camera
-
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
-            }
-
-            for (var j = 0; j < attributeNames.length; j++){
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
-
-                if (attributeIndex != -1){
-                    if (attributeTypes[j] == "position")
-                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "camera position for ID = " + cameraId)
-
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    global.push(aux);
+            // handle perspective view
+            if(curr_view_type == "perspective"){
+                var near = this.reader.getString(curr_view, "near");
+                if (near == null || isNaN(near)){
+                    return "unable to parse near component of the view for ID = " + curr_view_ID;
                 }
-                else
-                    return "camera " + attributeTypes[j] + " undefined for ID = " + cameraId;
-            }
 
-            // Gets the additional attributtes of the perspective camera
-            if (children[i].nodeName == "perspective"){
-                var angle = this.reader.getFloat(children[i], 'angle');
-                if (!(angle != null && !isNaN(angle)))
-                    return "unable to parse angle of the camera for ID = " + cameraId;
-
-                global.push(...[angle])
-            }
-
-            // Gets the additional attributtes of the orthographic camera
-            if (children[i].nodeName == "ortho"){
-                var left = this.reader.getFloat(children[i], 'left');
-                if (!(left != null && !isNaN(left)))
-                    return"unable to parse left component of the camera for ID = " + cameraId;
-
-                var right = this.reader.getFloat(children[i], 'right');
-                if(!(right != null && !isNaN(right)))
-                    return "unable to parse right component of the camera for ID = " + cameraId;
-
-                var top = this.reader.getFloat(children[i], 'top');
-                if (!(top != null && !isNaN(top)))
-                    return "unable to parse top component of the camera for ID = " + cameraId;
-
-                var bottom = this.reader.getFloat(children[i], 'bottom');
-                if (!(bottom != null && !isNaN(bottom)))
-                    return "unable to parse bottom component of the camera for ID = " + cameraId;
-
-                var upIndex = nodeNames.indexOf("up");
-
-                // Retrives the ortho camera up values
-                var upCamera = [];
-                if (upIndex != -1){
-                    var aux = this.parseCoordinates3D(grandChildren[upIndex], "up values for ID " + cameraId);
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    upCamera = aux;
+                var far = this.reader.getString(curr_view, "far");
+                if (far == null || isNaN(near)){
+                    return "unable to parse far component of the view for ID = " + curr_view_ID;
                 }
-                else
-                    return "camera up values undefined for ID = " + cameraId;
 
-                global.push(...[left, right, top, bottom, upCamera]);
+                var angle = this.reader.getString(curr_view, "angle");
+                if (angle == null || isNaN(angle)){
+                    return "unable to parse angle component of the view for ID = " + curr_view_ID;
+                }
+
+                // Read child nodes
+                var curr_view_children = curr_view.children;
+
+                var from = this.parseCoordinates3D(curr_view_children[0], "from field of view for ID" + curr_view_ID);
+                var to = this.parseCoordinates3D(curr_view_children[1], "to field of view for ID" + curr_view_ID);
+
+                var view = new CGFcamera(angle*DEGREE_TO_RAD, near, far, from, to);
+
+                this.views[curr_view_ID] = view
             }
 
-            this.cameras[cameraId] = global;
-            numCameras++;
+            // handle ortho view
+            else if(curr_view_type == "ortho"){
+                var near = this.reader.getString(curr_view, "near");
+                if (near == null || isNaN(near))
+                    return "unable to parse near component of the view for ID = " + curr_view_ID;
+
+                var far = this.reader.getString(curr_view, "far");
+                if (far == null || isNaN(far))
+                    return "unable to parse far component of the view for ID = " + curr_view_ID;
+
+                var left = this.reader.getString(curr_view, "left");
+                if (left == null || isNaN(left))
+                    return "unable to parse left component of the view for ID = " + curr_view_ID;
+
+                var right = this.reader.getString(curr_view, "right");
+                if (right == null || isNaN(right))
+                    return "unable to parse right component of the view for ID = " + curr_view_ID;
+
+                var top = this.reader.getString(curr_view, "top");
+                if (top == null || isNaN(top))
+                    return "unable to parse top component of the view for ID = " + curr_view_ID;
+
+                var bottom = this.reader.getString(curr_view, "bottom");
+                if (bottom == null || isNaN(bottom))
+                    return "unable to parse bottom component of the view for ID = " + curr_view_ID;
+
+                // Read child nodes
+                var curr_view_children = curr_view.children;
+
+                var from = this.parseCoordinates3D(curr_view_children[0], "from field of view for ID" + curr_view_ID);
+                var to = this.parseCoordinates3D(curr_view_children[1], "to field of view for ID" + curr_view_ID);
+
+                // Read up values if lenght is 3
+                var up;
+
+                if (curr_view_children.length == 3)
+                    up = this.parseCoordinates3D(curr_view_children[2], "up field of view for ID" + curr_view_ID);
+
+                // default is [0, 1, 0]
+                else
+                    up = [0, 1, 0]
+
+                var view = new CGFcameraOrtho(left, right, bottom, top, naer, far, from, to, up);
+                this.views[curr_view_ID] = view
+            }
         }
 
-        if (numCameras == 0)
-            return "at least one view must be defined"
-        this.log(this.cameras[cameraId][1])
         this.log("Parsed views");
         return null;
     }
@@ -528,15 +498,8 @@ export class MySceneGraph {
         var children = texturesNode.children;
 
         this.textures = [];
-        var numTextures = 0;
-
-        var grandChildren = [];
-        var nodeNames = [];
 
         for (var i = 0; i < children.length; i++){
-
-            // Storing texture information
-            var global = [];
 
             if (children[i].nodeName != "texture"){
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -556,19 +519,12 @@ export class MySceneGraph {
             // Texture filepath
             var textureFilepath = this.reader.getString(children[i], 'file');
 
-            // Add filepath to texture info
-            global.push(textureFilepath);
+            var texture = new CGFtexture(this.scene, textureFilepath);
 
-            this.textures[textureID] = global;
-            numTextures++;
-
-            // Continue here
-            //this.onXMLMinorError("To do: Parse textures.");
+            this.textures[textureID] = texture;
         }
 
-        //this.log("Parsed textures");
-        /* if (numTextures == 0)
-            return "at least one texture must be defined" */
+        this.log("Parsed textures");
 
         return null;
     }
@@ -579,84 +535,52 @@ export class MySceneGraph {
      */
     parseMaterials(materialsNode) {
         var children = materialsNode.children;
-
         this.materials = [];
-        var numMaterials = 0;
 
         var grandChildren = [];
-        var nodeNames = [];
 
-        // Any number of materials.
         for (var i = 0; i < children.length; i++) {
 
-            // Storing material information
-            var global = [];
-            var attributeNames = [];
-            var attributeTypes = [];
-
-            if (children[i].nodeName != "material") {
+            if (children[i].nodeName != "material"){
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
 
-            else{
-                attributeNames.push(...["emission", "ambient", "diffuse", "specular"]);
-                attributeTypes.push(...["color", "color", "color", "color"]);
-            }
-
-            // Get id of the current material.
+            // Get id of the current material
             var materialID = this.reader.getString(children[i], 'id');
             if (materialID == null)
                 return "no ID defined for material";
 
-            // Checks for repeated IDs.
-            if (this.materials[materialID] != null)
+            // Checks for repeated IDs
+            if (this.materials[materialID] != null){
                 return "ID must be unique for each material (conflict: ID = " + materialID + ")";
+            }
 
-            // Material Shininess
-            var shininess = this.reader.getFloat(children[i], 'shininess');
-            if(!isNaN(shininess) && !(shininess != null))
-                this.onXMLMinorError("unable to parse value component of the 'shininess' field for ID = " + materialID);
+            // Read shininess
+            var shininess = this.reader.getFloat(children[i], "shininess");
+			if (shininess == null || isNaN(shininess))
+				return ("unable to parse shininess of material with ID = " + materialID);
 
-            // Add shininess to material info
-            global.push(shininess);
-
+            // Check children of the node
             grandChildren = children[i].children;
-            // Specifications for the current material.
 
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++){
-                nodeNames.push(grandChildren[j].nodeName);
-            }
+            // Read material properties
+            var emission = this.parseColor(grandChildren[0], "emission propertie of the material with ID = " + materialID);
+			var ambient = this.parseColor(grandChildren[1], "ambient propertie of the material with ID = " + materialID);
+			var diffuse = this.parseColor(grandChildren[2], "diffuse propertie of the material with ID = " + materialID);
+			var specular = this.parseColor(grandChildren[3], "specular propertie of the material with ID = " + materialID);
 
-            for (var j = 0; j < attributeNames.length; j++){
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+            var newMat = new CGFappearance(this.scene);
 
-                if (attributeIndex != -1){
-                    //if (attributeTypes[j] == "color")
-                    var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + "material specifications for ID" + materialID);
+            newMat.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+            newMat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+            newMat.setEmission(emission[0], emission[1], emission[2], emission[3]);
+            newMat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
 
-                    if (!Array.isArray(aux))
-                        return aux;
+            newMat.setShininess(shininess);
 
-                    global.push(aux);
-                }
-                else
-                    return "material " + attributeNames[i] + "undefined for ID" + materialID;
-            }
-
-            this.materials[materialID] = global;
-            numMaterials++;
-
+            this.materials[materialID] = newMat;
         }
-
-        if (numMaterials == 0)
-            return "at least one material must be defined";
-        /* else if (numMaterials > 8)
-            this.onXMLMinorError("too many textures defined; WebGL imposes a limit of 8 Materials"); */
-
-        this.log("Parsed materials");
-        return null;
     }
 
     /**
@@ -667,7 +591,6 @@ export class MySceneGraph {
         var children = transformationsNode.children;
 
         this.transformations = [];
-        var numTransformations = 0;
 
         var grandChildren = [];
 
@@ -695,6 +618,7 @@ export class MySceneGraph {
 
             for (var j = 0; j < grandChildren.length; j++) {
                 switch (grandChildren[j].nodeName) {
+                    // translate transformation
                     case 'translate':
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
@@ -702,6 +626,8 @@ export class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
+
+                    // scale transformation
                     case 'scale':
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID);
                         if(!Array.isArray(coordinates))
@@ -709,12 +635,14 @@ export class MySceneGraph {
 
                         transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         break;
+
+                    // rotate transformation
                     case 'rotate':
                         var axis = this.reader.getString(grandChildren[j], "axis");
                         if (axis != 'x' && axis != 'y' && axis != 'z')
                             this.onXMLError("Invalid axis for transformation for ID " + transformationID);
 
-                        var angle = this.reader.getInteger(grandChildren[j], "angle")
+                        var angle = this.reader.getInteger(grandChildren[j], "angle");
                         if (!(angle != null && !isNaN(angle)))
                             return "unable to parse angle of the rotation transformation for ID = " + transformationID;
 
@@ -723,11 +651,7 @@ export class MySceneGraph {
                 }
             }
             this.transformations[transformationID] = transfMatrix;
-            numTransformations++;
         }
-        if (numTransformations == 0)
-            return "at leat one transformation must be defined";
-
         this.log("Parsed transformations");
         return null;
     }
@@ -952,6 +876,8 @@ export class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
+        var transf = mat4.create();
+
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
 
@@ -983,15 +909,91 @@ export class MySceneGraph {
 
             this.onXMLMinorError("To do: Parse components.");
 
-            // Transformations
-            var transfMatrix = mat4.create();
+            /* // Assess correct order first
+            if (transformationsIndex != 0 || materialsIndex != 1 || textureIndex != 2 || childrenIndex != 3){
+                this.onXMLError("Incorrect order");
+            } */
 
+            // Transformations
+            var transfNode = grandChildren[tranformsIndex].children;
+
+            // This is the case in which the transformation is being mentioned, not created
+            if (transfNode[0].nodeName == "tranformationref"){
+                var transnfID = this.reader.getString(transfNode[0], "id")
+
+                if (this.transformations[transnfID] != null)
+                    transf = this.transformations[transnfID];
+                else
+                    this.onXMLMinorError("Undefined transformation with the id: " + transnfID);
+            }
+
+            else {
+                for (var j = 0; i < transfNode.length; j++){
+                    switch (transfNode[j].nodeName) {
+                        // translate transformation
+                        case 'translate':
+                            var coordinates = this.parseCoordinates3D(transfNode[j], "translate transformation on component node");
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+
+                            transf = mat4.translate(transf, transf, coordinates);
+                            break;
+
+                        // scale transformation
+                        case 'scale':
+                            var coordinates = this.parseCoordinates3D(transfNode[j], "scale transformation on component node");
+                            if(!Array.isArray(coordinates))
+                                return coordinates;
+
+                            transf = mat4.scale(transf, transf, coordinates);
+                            break;
+
+                        // rotate transformation
+                        case 'rotate':
+                            var axis = this.reader.getString(transfNode[j], "axis");
+                            if (axis != 'x' && axis != 'y' && axis != 'z')
+                                this.onXMLError("Invalid axis for transformation on component node")
+
+                            var angle = this.reader.getInteger(transfNode[j], "angle");
+                            if (!(angle != null && !isNaN(angle)))
+                                return "unable to parse angle of the rotation transformation on component node";
+
+                            transf = mat4.rotate(transf, transf, angle * DEGREE_TO_RAD, axis);
+                            break;
+                    }
+                }
+            }
             // Materials
 
             // Texture
 
             // Children
+            var children_children = grandChildren[childrenIndex].children;
+            var primitives = [];
+            var childs = [];
+            var childID;
+
+            for (var k = 0; k < children_children.length; k++){
+                childID = this.reader.getString(children_children[k], "id");
+
+                if (children_children[k].nodeName == "componentref"){
+                    if (this.components[childID] == null)
+						this.onXMLMinorError("No component with the ID of : " + childID);
+                    childs.push(childID);
+                }
+                else if (children_children[k].nodeName == "primitiveref"){
+                    if (this.primitives[childID] == null)
+						this.onXMLMinorError("No primitive with the ID of : " + childID);
+                    primitives.push(childID);
+                }
+                else{
+                    this.onXMLMinorError("unknown tag");
+                }
+            }
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives);
+            this.components[componentID] = componentID;
         }
+        this.log("Parsed components")
     }
 
 

@@ -10,7 +10,7 @@ import { CGFobject } from "../lib/CGF.js";
  */
 
 export class MyComponent extends CGFobject{
-    constructor(scene, componentID, transf, material, texture) {
+    constructor(scene, componentID, transf, material, texture, children, primtives) {
         super(scene);
 
         this.componentID = componentID;
@@ -18,5 +18,6 @@ export class MyComponent extends CGFobject{
         this.material = material;
         this.texture = texture;
         this.children = children;
+        this.primitives = primtives;
     }
 }
