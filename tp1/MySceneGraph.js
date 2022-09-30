@@ -1,4 +1,4 @@
-import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcamera, CGFcameraOrtho } from '../lib/CGF.js';
+import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcameraOrtho } from '../lib/CGF.js';
 
 import { MyRectangle } from './MyRectangle.js';
 import { MyCylinder } from './MyCylinder.js';
@@ -915,10 +915,10 @@ export class MySceneGraph {
             } */
 
             // Transformations
-            var transfNode = grandChildren[tranformsIndex].children;
+            var transfNode = grandChildren[transformationIndex].children;
 
             // This is the case in which the transformation is being mentioned, not created
-            if (transfNode[0].nodeName == "tranformationref"){
+            if (transfNode[0].nodeName == "transformationref"){
                 var transnfID = this.reader.getString(transfNode[0], "id")
 
                 if (this.transformations[transnfID] != null)
@@ -928,7 +928,7 @@ export class MySceneGraph {
             }
 
             else {
-                for (var j = 0; i < transfNode.length; j++){
+                for (var j = 0; j < transfNode.length; j++){
                     switch (transfNode[j].nodeName) {
                         // translate transformation
                         case 'translate':
@@ -990,8 +990,8 @@ export class MySceneGraph {
                     this.onXMLMinorError("unknown tag");
                 }
             }
-            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives);
-            this.components[componentID] = componentID;
+            var component = new MyComponent(this.scene, componentID, transf, "inherit", "inherit", childs, primitives);
+            this.components[componentID] = component;
         }
         this.log("Parsed components")
     }
@@ -1111,9 +1111,8 @@ export class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    displayScene() {
-        //To do: Create display loop for transversing the scene graph
+     displayScene() {
 
-        //this.primitives['demoTorus'].display();
-    }
+	}
+
 }

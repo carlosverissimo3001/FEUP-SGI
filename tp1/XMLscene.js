@@ -1,5 +1,5 @@
 import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { CGFaxis, CGFcamera } from '../lib/CGF.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -150,7 +150,7 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
 
-            if (this.displayRectangle){
+            /* if (this.displayRectangle){
                 this.pushMatrix();
                 this.rotate(-Math.PI/2, 1, 0, 0)
                 this.translate(0.5, -1, 0);
@@ -166,7 +166,7 @@ export class XMLscene extends CGFscene {
                 this.graph.primitives['demoTriangle'].display();
             if (this.displayCylinder)
                 this.graph.primitives['demoCylinder'].display();
-
+ */
             /* if (this.displayBalls)
                 this.graph.primitives['ball'].display();
 

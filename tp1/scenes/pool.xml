@@ -180,9 +180,9 @@
             </children>
         </component>
 
-        <component id="tabletop"/>
+        <!-- <component id="tabletop">
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -193,9 +193,9 @@
             </children>
         </component>
 
-        <component id="table_leg_1" />
+        <component id="table_leg_1" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -206,9 +206,9 @@
             </children>
         </component>
 
-        <component id="table_leg_2" />
+        <component id="table_leg_2" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -219,9 +219,9 @@
             </children>
         </component>
 
-        <component id="table_leg_3" />
+        <component id="table_leg_3" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -232,9 +232,9 @@
             </children>
         </component>
 
-        <component id="table_leg_4" />
+        <component id="table_leg_4" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -245,9 +245,9 @@
             </children>
         </component>
 
-        <component id="pool_chair_base"/>
+        <component id="pool_chair_base">
             <transformation>
-                <!-- -->
+            
             </transformation>
             <texture id="demoTexture"/>
             <materials>
@@ -258,9 +258,9 @@
             </children>
         </component>
 
-        <component id="pool_chair_top" />
+        <component id="pool_chair_top" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture"/>
             <materials>
@@ -271,9 +271,9 @@
             </children>
         </component>
 
-        <component id="pool_chair_leg_1" />
+        <component id="pool_chair_leg_1" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -284,9 +284,9 @@
             </children>
         </component>
 
-        <component id="pool_chair_leg_2" />
+        <component id="pool_chair_leg_2" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -297,9 +297,9 @@
             </children>
         </component>
 
-        <component id="pool_chair_leg_3" />
+        <component id="pool_chair_leg_3" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -310,9 +310,9 @@
             </children>
         </component>
 
-        <component id="pool_chair_leg_4" />
+        <component id="pool_chair_leg_4" >
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -325,7 +325,7 @@
 
         <component id="ball_1">
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -338,7 +338,7 @@
 
         <component id="ball_2">
             <transformation>
-                <!-- -->
+
             </transformation>
             <texture id="demoTexture" />
             <materials>
@@ -347,7 +347,7 @@
             <children>
                 <primitiveref id="demoSphere" />
             </children>
-        </component>
+        </component> -->
 
 
     </components>
