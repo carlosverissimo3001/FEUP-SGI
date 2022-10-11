@@ -18,10 +18,10 @@ export class MyTorus extends CGFobject{
     this.loops = loops;
 
     this.initBuffers();
-}
+  }
 
 
-    initBuffers() {
+  initBuffers() {
       this.vertices = [];
       this.indices = [];
       this.normals = [];
@@ -69,5 +69,14 @@ export class MyTorus extends CGFobject{
     //this.enableNormalViz();
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
-}
+  }
+
+  /**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the torus
+	 * @param {Array} coords - Array of texture coordinates
+	 */
+	updateTexCoords(coords) {
+		//
+	}
 }
