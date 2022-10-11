@@ -30,6 +30,8 @@ export class MyTriangle extends CGFobject {
 
     // TODO: Change this
 	initBuffers() {
+		this.texCoords = [];
+
 		// Not sure about this
         this.vertices = [
 			this.x1, this.y1, this.z1,
@@ -48,6 +50,13 @@ export class MyTriangle extends CGFobject {
                         0, 0, 1,
                         0, 0, 1];
 
+
+		this.texCoords = [
+			0, 0,
+			this.a, 0,
+			this.c*this.cos_a, this.c*this.sin_a,
+		];
+
 		//The defined indices (and corresponding vertices)
 		//will be read in groups of three to draw triangles
 		this.primitiveType = this.scene.gl.TRIANGLES;
@@ -55,5 +64,18 @@ export class MyTriangle extends CGFobject {
 		//this.enableNormalViz();
 
 		this.initGLBuffers();
+	}
+
+	/**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the triangle
+	 * @param {Array} coords - Array of texture coordinates
+	 */
+	 updateTexCoords(u, v) {
+		this.texCoords = [
+			0, 0,
+			this.a/u, 0,
+			this.c*this.cos_a/u, this.c*this.sin_a/v,
+		];
 	}
 }

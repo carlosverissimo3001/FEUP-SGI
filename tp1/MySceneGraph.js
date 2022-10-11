@@ -528,6 +528,7 @@ export class MySceneGraph {
      */
     parseTextures(texturesNode) {
         var children = texturesNode.children;
+        var tex = {id: null, file: null}
 
         this.textures = [];
 
@@ -540,27 +541,27 @@ export class MySceneGraph {
             }
 
             // Get id of the current texture
-            var textureID = this.reader.getString(children[i], 'id');
-            if (textureID == null)
+            tex.id = this.reader.getString(children[i], 'id');
+            if (tex.id == null)
                 return "no ID defined for texture";
 
             // Checks for repeated IDs
-            if (this.textures[textureID] != null){
-                return "ID must be unique for each texture (conflict: ID = " + textureID + ")";
+            if (this.textures[tex.id] != null){
+                return "ID must be unique for each texture (conflict: ID = " + tex.id + ")";
             }
 
             // Texture filepath
-            var textureFilepath = this.reader.getString(children[i], 'file');
+            tex.file = this.reader.getString(children[i], 'file');
 
             // TODO: Find a better way to do this verification
-            if (!this.doesFileExist(textureFilepath))
-                this.onXMLError("File: " + textureFilepath + " does not exist");
+            if (!this.doesFileExist(tex.file))
+                this.onXMLError("File: " + tex.file + " does not exist");
 
             // Create new texture
-            var texture = new CGFtexture(this.scene, textureFilepath);
+            var texture = new CGFtexture(this.scene, tex.file);
 
             // Push it to the texture list
-            this.textures[textureID] = texture;
+            this.textures[tex.id] = texture;
         }
 
         this.log("Parsed textures");
@@ -1014,6 +1015,15 @@ export class MySceneGraph {
                 if textureID is either "inherit" or "none", length_s and lenght_t should not be included
             */
             var textureID = this.reader.getString(textureNode, "id")
+            var texture = this.textures[textureID]
+            var length_s, length_t
+
+            if (texture == null && textureID != "none" && textureID != "inherit"){
+                this.onXMLMinorError("No textyre for ID : " + textureID)
+            }
+
+            length_s = this.reader.getFloat(textureNode, "length_s", false)
+            length_t = this.reader.getFloat(textureNode, "length_t", false)
 
 
             // ****** CHILDREN (Primitives or Components) ******
@@ -1025,11 +1035,14 @@ export class MySceneGraph {
             for (var k = 0; k < childrenNode.length; k++){
                 childID = this.reader.getString(childrenNode[k], "id");
 
+                /* Reference to an existing component*/
                 if (childrenNode[k].nodeName == "componentref"){
                     if (this.components[childID] == null)
 						this.onXMLMinorError("No component with the ID of : " + childID);
                     childs.push(childID);
                 }
+
+                /* New primitive*/
                 else if (childrenNode[k].nodeName == "primitiveref"){
                     if (this.primitives[childID] == null)
 						this.onXMLMinorError("No primitive with the ID of : " + childID);
@@ -1040,8 +1053,9 @@ export class MySceneGraph {
                 }
             }
 
-
-            var component = new MyComponent(this.scene, componentID, transf, materialID, "none", childs, primitives, 1 , 1);
+            // Save the component and its attributes
+            // Keep 1 and 1 for now
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, length_s , length_t);
             this.components[componentID] = component;
         }
 
@@ -1209,44 +1223,95 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
      displayScene() {
-        //this.scene.pushMatrix();
-        this.displayComponent(this.idRoot, null, null, 1 , 1);
-        //this.scene.popMatrix();
+        this.displayComponent(this.idRoot, null, null, 1, 1);
 	}
 
     /**
      * Display each node, receives the root node
      */
-    displayComponent(componentID, material, texture, s , t) {
+    displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
+        // Get the node from the component tree using its ID
+        var currNode = this.components[currNodeID]
+        if (currNode == null)
+            this.onXMLError("Error - No component with ID " + currNodeID);
 
-        if(this.components[componentID] == null)
-        this.onXMLError("Error - No component with ID " + componentID);
+        // multiply the current scene transformation matrix by the current component matrix
+        this.scene.multMatrix(currNode.transf);
 
-        let component = this.components[componentID];
+        // If the material ID is "inherit" then it should not change the the current material and should pass it onto the children nodes as well
+        var matID = (currNode.materialID != "inherit" ? currNode.materialID : prevMaterialID)
+
+        var texID;
+
+        /* Don't change the curr texture if the ID is "inherit" */
+        if (currNode.textureID == "inherit"){
+            texID = prevTextureID;
+            currNode.length_s = prev_length_s
+            currNode.length_t = prev_length_t
+        }
+
+        /* Covers the case in which the texture "none" */
+        else if (currNode.textureID  == "none"){
+            texID = null
+        }
+
+        /* Any other texure */
+        else
+            texID = currNode.textureID
 
 
-        this.scene.pushMatrix();
-        this.scene.multMatrix(component.transf); // como vou buscar o current transformation?
+        /* Display component children (these are references to other components) */
+        for(var i = 0; i < currNode.children.length ;i++){
+            // preserve current scene transformation matrix
+            this.scene.pushMatrix();
 
-        if(component.material != "inherit")
-            material = this.materials[component.material];
+            // recursively visit the next child component
+            this.displayComponent(currNode.children[i], matID, texID, prev_length_s, prev_length_t);
+
+            // restore scene transformation matrix
+            this.scene.popMatrix()
+        }
+
+        // retrieve the CGFappearence based on resolved material id
+        var currAppearence = this.materials[matID];
+
+        // retrieve the CGFappearence based on resolved texture id if not "null"
+        var currTexture = (texID !== null ? this.textures[texID] : null)
+
+        currAppearence.setTexture(currTexture);
+
+        // set the active material.
+        currAppearence.apply()
 
 
-        material.apply();
+        /* Display component primitives */
+        for (var i = 0; i < currNode.primitives.length; i++){
+            this.scene.pushMatrix()
 
-        for (var i = 0; i < component.primitives.length; i++){
-            let primitive = this.primitives[component.primitives[i]];
+            let primitive = this.primitives[currNode.primitives[i]];
+
+            if (currNode.length_s == null && currNode.lenght_t == null)
+                primitive.updateTexCoords(1, 1)
+
+            else if (currNode.length_s == null)
+                primitive.updateTexCoords(1, currNode.lenght_t)
+
+            else if (currNode.lenght_t == null)
+                primitive.updateTexCoords(currNode.lenght_s, 1)
+
+            else
+                primitive.updateTexCoords(currNode.lenght_s, currNode.lenght_t)
+
+
             primitive.display();
-            //this.primitives[component.primitives[i]].display();
+
+            this.scene.popMatrix()
         }
 
-        for (var i = 0; i < component.children.length; i++){
-            //this.scene.pushMatrix()
-            this.displayComponent(component.children[i], material, texture, s, t);
-            //this.scene.popMatrix();
-        }
-        this.scene.popMatrix();
+
     }
+
+
 
     doesFileExist(urlToFile) {
         var xhr = new XMLHttpRequest();

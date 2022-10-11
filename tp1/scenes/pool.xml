@@ -39,8 +39,8 @@
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
             <specular r="0.6" g="0.0" b="0.0" a="1.0" />
         </material>
 
@@ -251,7 +251,7 @@
             <transformation>
                 <transformationref id="grassTransform" />
             </transformation>
-            <texture id="none"/>
+            <texture id="grassTexture" length_s="0.8" length_t="0.8"/>
             <materials>
                 <material id="grass" />
             </materials>
@@ -264,7 +264,7 @@
             <transformation>
                 <transformationref id="poolTransform" />
             </transformation>
-            <texture id="none"/>
+            <texture id="waterTexture"/>
             <materials>
                 <material id="water" />
             </materials>
@@ -290,7 +290,7 @@
             <transformation>
                 <transformationref id="torusTransform" />
             </transformation>
-            <texture id="none"/>
+            <texture id="torusTexture" length_s="0.1" length_t="0.1"/>
             <materials>
                 <material id="red" />
             </materials>
@@ -303,9 +303,9 @@
             <transformation>
                 <transformationref id="ball1Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="ballTexture" />
             <materials>
-                <material id="red" />
+                <material id="white" />
             </materials>
             <children>
                 <primitiveref id="demoSphere" />
@@ -319,6 +319,7 @@
             <texture id="none" />
             <materials>
                 <material id="blue" />
+                <material id="red" />
             </materials>
             <children>
                 <primitiveref id="demoSphere" />
@@ -329,7 +330,7 @@
             <transformation>
                 <transformationref id="tableTopTransform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -342,7 +343,7 @@
             <transformation>
                 <transformationref id="tableLeg1Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -355,7 +356,7 @@
             <transformation>
                 <transformationref id="tableLeg2Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -368,7 +369,7 @@
             <transformation>
                 <transformationref id="tableLeg3Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -381,7 +382,7 @@
             <transformation>
                 <transformationref id="tableLeg4Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -394,7 +395,7 @@
             <transformation>
                 <transformationref id="chairBaseTransform" />
             </transformation>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <materials>
                 <material id="white" />
             </materials>
@@ -407,7 +408,7 @@
             <transformation>
                 <transformationref id="chairTopTransform" />
             </transformation>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <materials>
                 <material id="white" />
             </materials>
@@ -420,7 +421,7 @@
             <transformation>
                 <transformationref id="chairLeg1Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -433,7 +434,7 @@
             <transformation>
                 <transformationref id="chairLeg2Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -446,7 +447,7 @@
             <transformation>
                 <transformationref id="chairLeg3Transform" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -461,7 +462,7 @@
                 <scale x="0.2" y="0.2" z="0.4" />
                 <translate x="30.0" y="-75" z="-0.1" />
             </transformation>
-            <texture id="demoTexture" />
+            <texture id="none" />
             <materials>
                 <material id="wood" />
             </materials>
