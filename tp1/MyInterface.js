@@ -35,10 +35,13 @@ export class MyInterface extends CGFinterface {
     /**
      * initKeys
      */
-    initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+    initKeys(){
+        //Create reference from the scene to the gui
+        this.scene.gui = this;
+        //Disable the processKeyboard function
+        this.processKeyboard = function(){};
+        //Create a named array to store which keys are being pressed
+        this.activeKeys = {};
     }
 
     processKeyDown(event) {
@@ -50,6 +53,11 @@ export class MyInterface extends CGFinterface {
     };
 
     isKeyPressed(keyCode) {
+        if(this.activeKeys[keyCode] && (keyCode == "keyM" || keyCode == "keym")){
+            this.activeKeys[keyCode] = false;
+            return true;
+        }
+        
         return this.activeKeys[keyCode] || false;
     }
 

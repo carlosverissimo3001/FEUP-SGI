@@ -26,6 +26,8 @@ export class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
+        this.setUpdatePeriod(50);
+
         this.enableTextures(true);
         this.initCameras();
 
@@ -81,7 +83,7 @@ export class XMLscene extends CGFscene {
                     this.lights[i].setVisible(true);
                 } else
                     this.lights[i].setVisible(false);
-                
+
 
                 if (light[0])
                     this.lights[i].enable();
@@ -110,9 +112,9 @@ export class XMLscene extends CGFscene {
         this.gl.clearColor(...this.graph.background);
 
         this.setGlobalAmbientLight(...this.graph.ambient);
-        
+
         this.interface.createInterface(this.graph.views);
-        
+
         this.initLights();
 
         this.sceneInited = true;
@@ -161,12 +163,43 @@ export class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
-    updateLights(){
-
+    update(t){
+        this.checkKeys();
     }
 
-    updateViews(){
+    checkKeys(){
+        var text="Keys pressed: ";
+        var keysPressed = false;
 
+        if (this.gui.isKeyPressed("KeyM")){
+            this.updateMaterials();
+            text += "M "
+            keysPressed = true;
+        }
+
+        if (keysPressed)
+            console.log(text);
+    }
+
+    updateMaterials(){
+        if (!this.sceneInited)
+            return
+
+        var components = this.graph.components
+
+        /* Transverse the scene tree */
+        for (var i in components){
+            var currComp = components[i]
+
+            /* If there are more than two materials declared for a component, cycle through them */
+            if (currComp.materials.length > 1){
+                /* Update the material */
+                currComp.changeMaterial();
+
+                /* Display the component after changing the material*/
+                this.graph.displayComponent(currComp.componentID, currComp.textureID, currComp.materialID, currComp.length_s, currComp.length_t);
+            }
+        }
     }
 
     setLights(){
@@ -174,7 +207,7 @@ export class XMLscene extends CGFscene {
 
         for (var key in this.lightsVal){
             if(this.lightsVal.hasOwnProperty(key)){
-                
+
                 this.lights[i].setVisible(this.showLights);
                 if (this.lightsVal[key])
                     this.lights[i].enable();
@@ -182,7 +215,7 @@ export class XMLscene extends CGFscene {
                     this.lights[i].disable()
 
                 this.lights[i].update()
-                
+
                 i++;
             }
         }

@@ -236,7 +236,6 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
         //this.onXMLMinorError("To do: Parse views and create cameras.");
         var children = viewsNode.children;
 

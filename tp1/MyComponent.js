@@ -14,7 +14,7 @@ import { CGFobject } from "../lib/CGF.js";
  */
 
 export class MyComponent extends CGFobject{
-    constructor(scene, componentID, transf, materials, textureID, children, primtives, lenght_t, lenght_s) {
+    constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t) {
         super(scene);
         this.componentID = componentID;
         this.transf = transf;
@@ -22,18 +22,20 @@ export class MyComponent extends CGFobject{
         this.textureID = textureID;
         this.children = children;
         this.primitives = primtives;
-        this.lenght_t = lenght_t;
-        this.lenght_s = lenght_s;
+        this.length_s = length_s;
+        this.length_t = length_t;
 
         this.materialID = this.materials[0];
         this.matIndex = 0;
     }
 
-    change_material(){
-        if (this.matIndex++ == this.materials.length)
+    changeMaterial(){
+        this.matIndex++;
+
+        if (this.matIndex == this.materials.length)
             this.matIndex = 0
 
-        this.materialID = this.materials[++matIndex];
+        this.materialID = this.materials[this.matIndex];
     }
 
     setTransformation(transf) {
