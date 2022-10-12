@@ -20,12 +20,20 @@
     </ambient>
 
     <lights>
-        <omni id="demoLight" enabled="1">
+        <omni id="omniLight" enabled="1">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
+        
+        <spot id="spotLight" enabled="1" angle="45.0" exponent="1">
+            <location x="9.8" y="10" z="10" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <target x="5" y="0" z="5" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
     </lights>
 
     <textures>
@@ -34,14 +42,15 @@
         <texture id="grassTexture" file="scenes/images/grassTex.jpg" />
         <texture id="torusTexture" file="scenes/images/torus.jpg" />
         <texture id="ballTexture" file="scenes/images/ballTex.jpg" />
+        <texture id="testTexture" file="scenes/images/texture.jpg" />
     </textures>
 
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
         <material id="light_cyan" shininess="10">
@@ -237,7 +246,7 @@
         </primitive>
 
         <primitive id="demoTorus">
-            <torus inner="0.6" outer="1.4" slices="20" loops="300" />
+            <torus inner="0.6" outer="1.4" slices="4" loops="4" />
         </primitive>
 
         <primitive id="demoSphere">
@@ -290,9 +299,9 @@
             <transformation>
                 <transformationref id="torusTransform" />
             </transformation>
-            <texture id="torusTexture" length_s="0.1" length_t="0.1"/>
+            <texture id="testTexture" />
             <materials>
-                <material id="red" />
+                <material id="demoMaterial" />
             </materials>
             <children>
                 <primitiveref id="demoTorus"/>

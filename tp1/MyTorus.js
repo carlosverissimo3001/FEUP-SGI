@@ -76,7 +76,7 @@ export class MyTorus extends CGFobject{
 	 * Updates the list of texture coordinates of the torus
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
+	updateTexCoords(u, v) {
 		//
 	}
 }

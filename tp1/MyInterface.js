@@ -52,4 +52,31 @@ export class MyInterface extends CGFinterface {
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
+
+    createInterface(views){
+        this.addLightsFolder();
+        this.addViewsFolder(views);
+        this.createCheckboxes();
+    }
+
+    addLightsFolder(){
+        var lightsFolder = this.gui.addFolder('Lights');
+
+        var lights = this.scene.graph.lights;
+
+        for (var i in lights){
+            if(lights.hasOwnProperty(i)){
+                this.scene.lightsVal[i] = lights[i][0]
+                lightsFolder.add(this.scene.lightsVal, i).onChange(this.scene.setLights.bind(this.scene))
+            }
+        }
+    }
+
+    addViewsFolder(views){
+        var viewsFolder = this.gui.addFolder('Views');
+    }
+    createCheckboxes(){
+        this.gui.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
+    }
+    
 }

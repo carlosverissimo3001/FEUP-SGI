@@ -30,6 +30,9 @@ export class XMLscene extends CGFscene {
         this.initCameras();
 
         this.displayAxis = true;
+        this.showLights = false;
+
+        this.lightsVal = []
 
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -73,7 +76,13 @@ export class XMLscene extends CGFscene {
                     this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
                 }
 
-                this.lights[i].setVisible(true);
+
+                if (this.showLights) {
+                    this.lights[i].setVisible(true);
+                } else
+                    this.lights[i].setVisible(false);
+                
+
                 if (light[0])
                     this.lights[i].enable();
                 else
@@ -101,7 +110,9 @@ export class XMLscene extends CGFscene {
         this.gl.clearColor(...this.graph.background);
 
         this.setGlobalAmbientLight(...this.graph.ambient);
-
+        
+        this.interface.createInterface(this.graph.views);
+        
         this.initLights();
 
         this.sceneInited = true;
@@ -148,5 +159,32 @@ export class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    updateLights(){
+
+    }
+
+    updateViews(){
+
+    }
+
+    setLights(){
+        var i = 0;
+
+        for (var key in this.lightsVal){
+            if(this.lightsVal.hasOwnProperty(key)){
+                
+                this.lights[i].setVisible(this.showLights);
+                if (this.lightsVal[key])
+                    this.lights[i].enable();
+                else
+                    this.lights[i].disable()
+
+                this.lights[i].update()
+                
+                i++;
+            }
+        }
     }
 }

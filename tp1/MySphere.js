@@ -96,7 +96,7 @@ export class MySphere extends CGFobject{
 	 * Updates the list of texture coordinates of the sphere
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
+	updateTexCoords(u, v) {
     //
 	}
 }

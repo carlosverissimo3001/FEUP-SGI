@@ -76,7 +76,7 @@ export class MyCylinder extends CGFobject {
 	 * Updates the list of texture coordinates of the cylinder
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(coords) {
+	updateTexCoords(u, v) {
 		//
 	}
 }
