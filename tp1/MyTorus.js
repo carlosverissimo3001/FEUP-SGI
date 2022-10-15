@@ -42,7 +42,6 @@ export class MyTorus extends CGFobject{
 
               this.vertices.push((this.outerRadius + this.innerRadius * cosPhi) * cosAngle, (this.outerRadius + this.innerRadius * cosPhi) * sinAngle, this.innerRadius * Math.sin(phi));
 
-              this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
 
               var n_x = (this.outerRadius + this.innerRadius * cosPhi) * cosAngle - cosAngle*this.outerRadius;
               var n_y = (this.outerRadius + this.innerRadius * cosPhi) * sinAngle - sinAngle*this.outerRadius;
@@ -63,6 +62,8 @@ export class MyTorus extends CGFobject{
 
                   this.indices.push(first, second, first+1);
                   this.indices.push(second, second+1, first+1);
+
+                  this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
         }
       }
 

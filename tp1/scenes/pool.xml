@@ -312,7 +312,7 @@
             <transformation>
                 <transformationref id="ball1Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="testTexture" />
             <materials>
                 <material id="white" />
                 <material id="red" />
