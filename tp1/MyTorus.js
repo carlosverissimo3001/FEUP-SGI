@@ -40,12 +40,12 @@ export class MyTorus extends CGFobject{
               var cosPhi = Math.cos(phi);
               var sinPhi = Math.sin(phi);
 
-              this.vertices.push((this.outerRadius + this.innerRadius * cosPhi) * cosAngle, (this.outerRadius + this.innerRadius * cosPhi) * sinAngle, this.innerRadius * Math.sin(phi));
+              this.vertices.push((this.outerRadius + this.innerRadius * cosAngle) * cosPhi, (this.outerRadius + this.innerRadius * cosAngle) * sinPhi, this.innerRadius * sinAngle);
 
 
               var n_x = (this.outerRadius + this.innerRadius * cosPhi) * cosAngle - cosAngle*this.outerRadius;
               var n_y = (this.outerRadius + this.innerRadius * cosPhi) * sinAngle - sinAngle*this.outerRadius;
-              var n_z = this.innerRadius * Math.sin(phi);
+              var n_z = this.innerRadius * sinPhi;
               var magn = Math.sqrt(Math.pow(n_x, 2) + Math.pow(n_y,2) + Math.pow(n_z,2));
               this.normals.push(n_x/magn, n_y/magn, n_z/magn);
 
@@ -54,16 +54,22 @@ export class MyTorus extends CGFobject{
           angle += angleStep;
       }
 
-      var loopVerts = this.slices + 1;
       for (let loop = 0; loop < this.loops; loop++) {
         for(let slice = 0; slice < this.slices; slice++) {
-                  const first = loop * loopVerts + slice;
-                  const second = first + loopVerts;
+            const first = (loop * (this.slices + 1)) + slice;
+            const second = first + this.slices + 1;
 
-                  this.indices.push(first, second, first+1);
-                  this.indices.push(second, second+1, first+1);
+            this.indices.push(first, second + 1, second);
+            this.indices.push(first, first+1, second+1);
 
-                  this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
+            this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
+
+        }
+      }
+
+      for (let loop = 0; loop < this.loops-1; loop++) {
+        for(let slice = 0; slice < this.slices-1; slice++) {
+          //this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
         }
       }
 
