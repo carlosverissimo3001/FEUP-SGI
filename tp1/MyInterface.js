@@ -82,17 +82,17 @@ export class MyInterface extends CGFinterface {
 
     addViewsFolder(views){
         var viewsFolder = this.gui.addFolder('Views');
-        var viewValues = [];
-        for(var key in views){
-            if(views.hasOwnProperty(key)){
-                viewValues.push(key)
-            }   
-        }
+        // var viewValues = [];
+        // for(var key in views){
+        //     if(views.hasOwnProperty(key)){
+        //         viewValues.push(key)
+        //     }   
+        // }
         //setting the cameras dropdown 
-        viewsFolder.add(this.scene, "cameraID", viewValues).onChange(val => this.scene.updateCamera(val)).name("Camera");
+        //viewsFolder.add(this.scene, "cameraID", viewValues).onChange(val => this.scene.updateCamera(val)).name("Camera");
     }
     createCheckboxes(){
-        view.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
+        this.gui.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
     }
     
 }

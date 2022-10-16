@@ -49,10 +49,10 @@ export class XMLscene extends CGFscene {
      * Initializes the scene cameras.
      */
 
-     initXMLCameras() {
-        this.cameraID = this.graph.defaultCameraId;
-        this.camera = this.graph.views[this.graph.defaultCameraId];
-        this.interface.setActiveCamera(this.default);
+    initXMLCameras() {
+    //     this.cameraID = this.graph.defaultCameraId;
+    //     this.camera = this.graph.views[this.graph.defaultCameraId];
+    //     this.interface.setActiveCamera(this.default);
     }
 
     /**
@@ -112,9 +112,9 @@ export class XMLscene extends CGFscene {
      * Update the current camera according to a change in the  cameras dropdown in the interface
      */
      updateCamera(newCamera) {
-        this.cameraID = newCamera;
-        this.camera = this.graph.views[this.cameraID];
-        this.interface.setActiveCamera(this.camera);
+        // this.cameraID = newCamera;
+        // this.camera = this.graph.views[this.cameraID];
+        // this.interface.setActiveCamera(this.camera);
     }
 
     setDefaultAppearance() {
