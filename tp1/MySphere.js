@@ -78,8 +78,8 @@ export class MySphere extends CGFobject{
         theta += thetaInc;
 
         //--- Texture Coordinates
-       this.texCoords.push(long, lat);
-       long = long + longIncrement; // increments long value inside the correspondent for loop
+        this.texCoords.push(lat,long);
+        long = long + longIncrement; // increments long value inside the correspondent for loop
 
       }
       phi += phiInc;
