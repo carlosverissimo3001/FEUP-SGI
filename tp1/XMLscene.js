@@ -48,6 +48,16 @@ export class XMLscene extends CGFscene {
     /**
      * Initializes the scene cameras.
      */
+
+     initXMLCameras() {
+        this.cameraID = this.graph.defaultCameraId;
+        this.camera = this.graph.views[this.graph.defaultCameraId];
+        this.interface.setActiveCamera(this.default);
+    }
+
+    /**
+     * Initializes the scene cameras.
+     */
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(50, 20, 50), vec3.fromValues(0, 0, 0));
     }
@@ -78,6 +88,7 @@ export class XMLscene extends CGFscene {
                     this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
                 }
 
+                this.lights[i].setVisible(true);
 
                 if (this.showLights) {
                     this.lights[i].setVisible(true);
@@ -97,6 +108,15 @@ export class XMLscene extends CGFscene {
         }
     }
 
+    /**
+     * Update the current camera according to a change in the  cameras dropdown in the interface
+     */
+     updateCamera(newCamera) {
+        this.cameraID = newCamera;
+        this.camera = this.graph.views[this.cameraID];
+        this.interface.setActiveCamera(this.camera);
+    }
+
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -112,6 +132,10 @@ export class XMLscene extends CGFscene {
         this.gl.clearColor(...this.graph.background);
 
         this.setGlobalAmbientLight(...this.graph.ambient);
+
+        this.initCameras();
+
+        this.initXMLCameras();
 
         this.interface.createInterface(this.graph.views);
 
@@ -137,6 +161,8 @@ export class XMLscene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
+        this.setLights();
+
         this.pushMatrix();
 
         if (this.displayAxis)
@@ -146,9 +172,6 @@ export class XMLscene extends CGFscene {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
         }
-
-        if (this.displayAxis)
-            this.axis.display();
 
         if (this.sceneInited) {
             // Draw axis
@@ -212,9 +235,9 @@ export class XMLscene extends CGFscene {
                 if (this.lightsVal[key])
                     this.lights[i].enable();
                 else
-                    this.lights[i].disable()
+                    this.lights[i].disable();
 
-                this.lights[i].update()
+                this.lights[i].update();
 
                 i++;
             }
