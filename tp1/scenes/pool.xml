@@ -1,17 +1,21 @@
 <sxs>
     <scene root="sgi_tp1_T03_G10_v01" axis_length="17"/>
 
-    <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+    <views default="perspective1">
+        <perspective id="perspective1" near="0.1" far="500" angle="23">
+            <from x="50" y="20" z="50" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
-        <ortho id="defaultOrthoCamera" near="0.1" far="500" left="0.1" right="0.1" top="0.1" bottom="0.1">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
-            <up x="1" y="0" z="0" />
-        </ortho>
+        <perspective id="perspective2" near="0.1" far="500" angle="23">
+            <from x="20" y="80" z="20" />
+            <to x="10" y="0" z="10" />
+        </perspective>
+
+        <ortho id="ortho1" near="0.1" far="500" left="-3.0" right="3.0" top="3.0" bottom="-3.0">
+			<from x="20" y="14" z="20" />
+			<to x="0" y="0" z="0" />
+		</ortho>
     </views>
 
     <ambient>
@@ -299,7 +303,7 @@
             <transformation>
                 <transformationref id="torusTransform" />
             </transformation>
-            <texture id="testTexture" />
+            <texture id="torusTexture" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -327,7 +331,7 @@
             <transformation>
                 <transformationref id="ball2Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="ballTexture" />
             <materials>
                 <material id="white" />
                 <material id="blue" />
