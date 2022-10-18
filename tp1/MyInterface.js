@@ -57,13 +57,13 @@ export class MyInterface extends CGFinterface {
             this.activeKeys[keyCode] = false;
             return true;
         }
-        
+
         return this.activeKeys[keyCode] || false;
     }
 
-    createInterface(views){
+    createInterface(){
         this.addLightsFolder();
-        this.addViewsFolder(views);
+        this.addViewsFolder();
         this.createCheckboxes();
     }
 
@@ -80,19 +80,13 @@ export class MyInterface extends CGFinterface {
         }
     }
 
-    addViewsFolder(views){
-        var viewsFolder = this.gui.addFolder('Views');
-        // var viewValues = [];
-        // for(var key in views){
-        //     if(views.hasOwnProperty(key)){
-        //         viewValues.push(key)
-        //     }   
-        // }
-        //setting the cameras dropdown 
-        //viewsFolder.add(this.scene, "cameraID", viewValues).onChange(val => this.scene.updateCamera(val)).name("Camera");
+    addViewsFolder(){
+        var cameraNames = this.scene.cameraNames;
+        this.gui.add(this.scene, "cameraID", cameraNames).onChange(val => this.scene.updateCamera(val)).name("Camera");
     }
+
     createCheckboxes(){
         this.gui.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
     }
-    
+
 }

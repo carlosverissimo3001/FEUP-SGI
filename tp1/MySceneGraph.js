@@ -71,6 +71,8 @@ export class MySceneGraph {
 
         this.loadedOk = true;
 
+        this.scene.graphLoaded = true;
+
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
     }
@@ -239,11 +241,15 @@ export class MySceneGraph {
         //this.onXMLMinorError("To do: Parse views and create cameras.");
         var children = viewsNode.children;
 
-        this.cameras = [];
-        var numCameras = 0;
+        this.views = [];
+        var numViews = 0;
 
         var grandChildren = [];
         var nodeNames = [];
+
+        this.defaultCameraID = this.reader.getString(viewsNode, "default");
+        if (this.defaultCameraID == null)
+            this.onXMLMinorError("No default view specified");
 
         for (var i = 0; i < children.length; i++) {
 
@@ -252,7 +258,7 @@ export class MySceneGraph {
             var attributeNames = [];
             var attributeTypes = [];
 
-            // Check type of camera
+            // Check type of view
             if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
@@ -263,32 +269,32 @@ export class MySceneGraph {
                 attributeTypes.push(...["position", "position"]);
             }
 
-            // Get id of current camera
-            var cameraId = this.reader.getString(children[i], 'id');
-            if (cameraId == null)
+            // Get id of current view
+            var viewId = this.reader.getString(children[i], 'id');
+            if (viewId == null)
                 return "no ID defined for camera";
 
             // Check for repeated IDs.
-            if (this.cameras[cameraId] != null)
-                return "ID must be unique for each camera (conflict: ID = " + cameraId + ")";
+            if (this.views[viewId] != null)
+                return "ID must be unique for each view (conflict: ID = " + viewId + ")";
 
-            // Camera near and far
+            // View near and far
             var near = this.reader.getFloat(children[i], 'near');
             var far = this.reader.getFloat(children[i], 'far');
 
             if (!(near != null && !isNaN(near)))
-                this.onXMLMinorError("unable to parse value component of the 'near' field for ID = " + cameraId);
+                this.onXMLMinorError("unable to parse value component of the 'near' field for ID = " + viewId);
 
             if (!(far != null && !isNaN(far)))
-                this.onXMLMinorError("unable to parse value component of the 'far' field for ID = " + cameraId)
+                this.onXMLMinorError("unable to parse value component of the 'far' field for ID = " + viewId)
 
-            // Add near, far components and type name to camera info
+            // Add near, far components and type name to view info
             global.push(near);
             global.push(far);
             global.push(children[i].nodeName);
 
             grandChildren = children[i].children;
-            // Specifications for the current camera
+            // Specifications for the current view
 
             nodeNames = [];
             for (var j = 0; j < grandChildren.length; j++) {
@@ -300,7 +306,7 @@ export class MySceneGraph {
 
                 if (attributeIndex != -1){
                     if (attributeTypes[j] == "position")
-                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "camera position for ID = " + cameraId)
+                        var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "view position for ID = " + viewId)
 
                     if (!Array.isArray(aux))
                         return aux;
@@ -308,59 +314,62 @@ export class MySceneGraph {
                     global.push(aux);
                 }
                 else
-                    return "camera " + attributeTypes[j] + " undefined for ID = " + cameraId;
+                    return "view " + attributeTypes[j] + " undefined for ID = " + viewId;
             }
 
-            // Gets the additional attributtes of the perspective camera
+            // Gets the additional attributtes of the perspective view
             if (children[i].nodeName == "perspective"){
                 var angle = this.reader.getFloat(children[i], 'angle');
                 if (!(angle != null && !isNaN(angle)))
-                    return "unable to parse angle of the camera for ID = " + cameraId;
+                    return "unable to parse angle of the view for ID = " + viewId;
 
                 global.push(...[angle])
             }
 
-            // Gets the additional attributtes of the orthographic camera
+            // Gets the additional attributtes of the orthographic view
             if (children[i].nodeName == "ortho"){
                 var left = this.reader.getFloat(children[i], 'left');
                 if (!(left != null && !isNaN(left)))
-                    return"unable to parse left component of the camera for ID = " + cameraId;
+                    return"unable to parse left component of the view for ID = " + viewId;
 
                 var right = this.reader.getFloat(children[i], 'right');
                 if(!(right != null && !isNaN(right)))
-                    return "unable to parse right component of the camera for ID = " + cameraId;
+                    return "unable to parse right component of the view for ID = " + viewId;
 
                 var top = this.reader.getFloat(children[i], 'top');
                 if (!(top != null && !isNaN(top)))
-                    return "unable to parse top component of the camera for ID = " + cameraId;
+                    return "unable to parse top component of the view for ID = " + viewId;
 
                 var bottom = this.reader.getFloat(children[i], 'bottom');
                 if (!(bottom != null && !isNaN(bottom)))
-                    return "unable to parse bottom component of the camera for ID = " + cameraId;
+                    return "unable to parse bottom component of the view for ID = " + viewId;
 
                 var upIndex = nodeNames.indexOf("up");
 
-                // Retrives the ortho camera up values
-                var upCamera = [];
+                // Retrives the ortho view up values
+                var upView = [];
                 if (upIndex != -1){
-                    var aux = this.parseCoordinates3D(grandChildren[upIndex], "up values for ID " + cameraId);
+                    var aux = this.parseCoordinates3D(grandChildren[upIndex], "up values for ID " + viewId);
                     if (!Array.isArray(aux))
                         return aux;
 
-                    upCamera = aux;
+                    upView = aux;
                 }
                 else
-                    return "camera up values undefined for ID = " + cameraId;
+                    upView = this.axisCoords['y']
 
-                global.push(...[left, right, top, bottom, upCamera]);
+                global.push(...[left, right, top, bottom, upView]);
             }
 
-            this.cameras[cameraId] = global;
-            numCameras++;
+            this.views[viewId] = global;
+            numViews++;
         }
 
-        if (numCameras == 0)
+        if (numViews == 0)
             return "at least one view must be defined"
+
+        if (this.views[this.defaultCameraID] == null && this.defaultCameraID != null)
+            this.onXMLError("Error: Declared a default camera ID "+ defaultCameraID +" but didn't define it");
 
         this.log("Parsed views");
         return null;
@@ -1309,8 +1318,6 @@ export class MySceneGraph {
 
 
     }
-
-
 
     doesFileExist(urlToFile) {
         var xhr = new XMLHttpRequest();
