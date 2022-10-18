@@ -7,6 +7,7 @@ import { MySphere } from './MySphere.js'
 import { MyTorus } from './MyTorus.js';
 import { MyComponent} from './MyComponent.js';
 
+
 var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
@@ -1324,10 +1325,6 @@ export class MySceneGraph {
         xhr.open('HEAD', urlToFile, false);
         xhr.send();
 
-        if (xhr.status == "404") {
-            return false;
-        } else {
-            return true;
-        }
+        return !(xhr.status == "404")
     }
 }
