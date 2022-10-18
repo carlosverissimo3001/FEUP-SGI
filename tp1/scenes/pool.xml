@@ -40,12 +40,21 @@
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" />
         </omni>
 
-        <spot id="spotLight" enabled="false" angle="45.0" exponent="1">
+        <spot id="spotLight" enabled="true" angle="45.0" exponent="1">
             <location x="9.8" y="10" z="10" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <target x="5" y="0" z="5" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
+
+        <spot id="treeSpotLight" enabled="true" angle="45.0" exponent="1">
+            <location x="2.9" y="0.2" z="67" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <target x="0" y="0.2" z="67" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
