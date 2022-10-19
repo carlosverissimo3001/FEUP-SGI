@@ -63,9 +63,13 @@ export class MyTorus extends CGFobject{
             this.indices.push(first, first+1, second+1);
 
             this.texCoords.push(1 - (slice / this.slices), 1 - (loop / this.loops));
-
+            this.texCoords.push(slice/this.slices, 1 - (loop * 1/this.loops));
         }
       }
+
+      /* console.log(this.vertices); */
+      /* console.log(this.indices); */
+
 
       for (let loop = 0; loop < this.loops-1; loop++) {
         for(let slice = 0; slice < this.slices-1; slice++) {

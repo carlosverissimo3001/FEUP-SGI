@@ -7,6 +7,7 @@ import { MySphere } from './MySphere.js'
 import { MyTorus } from './MyTorus.js';
 import { MyComponent} from './MyComponent.js';
 
+
 var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
@@ -458,7 +459,7 @@ export class MySceneGraph {
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 
-            enableLight = aux || 1;
+            enableLight = aux;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -478,7 +479,8 @@ export class MySceneGraph {
                 if (attributeIndex != -1) {
                     if (attributeTypes[j] == "position")
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-                    else
+
+                    else if (attributeTypes[j] == "color")
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
 
                     if (!Array.isArray(aux))
@@ -486,6 +488,10 @@ export class MySceneGraph {
 
                     global.push(aux);
                 }
+                else if (attributeNames[i] == "attenuation"){
+                    console.log("Need to parse attenuation for lights");
+                }
+
                 else
                     return "light " + attributeNames[i] + " undefined for ID = " + lightId;
             }
@@ -1145,6 +1151,33 @@ export class MySceneGraph {
     }
 
     /**
+     * Parse the attenuation from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
+    parseAttenuation(node, messageError){
+        var attenuation = [];
+
+        // constant
+        var constant = this.reader.getFloat(node, 'constant');
+
+        // linear
+        var linear = this.reader.getFloat(node, 'linear');
+
+        // quadratic
+        var quadratic = this.reader.getFloat(node, 'quadratic');
+
+        // Only one of the three properties can be defined
+        if (constant != null){
+            if ((quadratic != null && quadratic != 0.0) || (linear != null && linear != 0.0)){
+                this.onXMLError("Only one of the attenuation properties can be defined");
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
@@ -1324,10 +1357,6 @@ export class MySceneGraph {
         xhr.open('HEAD', urlToFile, false);
         xhr.send();
 
-        if (xhr.status == "404") {
-            return false;
-        } else {
-            return true;
-        }
+        return !(xhr.status == "404")
     }
 }
