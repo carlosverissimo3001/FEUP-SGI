@@ -27,7 +27,7 @@ export class MyCylinder extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        this.textCoords = [];
+        this.texCoords = [];
 
         let angle = 0;
         let angleStep = 2*Math.PI/this.slices;
@@ -44,7 +44,7 @@ export class MyCylinder extends CGFobject {
 
                 this.vertices.push(cur_radius*cos_angle,cur_radius*sin_angle,cur_height);
                 this.normals.push(cos_angle, sin_angle,0);
-                this.textCoords.push(x/this.slices, 1 - (y * 1/this.stacks));
+                this.texCoords.push(x/this.slices, 1 - (y * 1/this.stacks));
 
                 cur_radius += radiusStep;
                 cur_height += heightStep;
