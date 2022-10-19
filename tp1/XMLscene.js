@@ -321,7 +321,8 @@ export class XMLscene extends CGFscene {
     for (var key in this.lightsVal) {
       if (this.lightsVal.hasOwnProperty(key)) {
         this.lights[i].setVisible(this.showLights);
-        if (this.lightsVal[key]) this.lights[i].enable();
+        if (this.lightsVal[key]) 
+          this.lights[i].enable();
         else this.lights[i].disable();
 
         this.lights[i].update();
