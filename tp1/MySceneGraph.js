@@ -488,9 +488,6 @@ export class MySceneGraph {
 
                     global.push(aux);
                 }
-                else if (attributeNames[i] == "attenuation"){
-                    console.log("Need to parse attenuation for lights");
-                }
 
                 else
                     return "light " + attributeNames[i] + " undefined for ID = " + lightId;
@@ -521,6 +518,29 @@ export class MySceneGraph {
                     return "light target undefined for ID = " + lightId;
 
                 global.push(...[angle, exponent, targetLight])
+            }
+
+            var attenuationIndex = nodeNames.indexOf("attenuation");
+            if (attenuationIndex != -1){
+                var constant = this.reader.getFloat(grandChildren[attenuationIndex], "constant");
+                var quadratic = this.reader.getFloat(grandChildren[attenuationIndex], "quadratic");
+                var linear = this.reader.getFloat(grandChildren[attenuationIndex], "linear");
+
+                if (constant == 1 && linear == 0 && quadratic == 0){
+                    global.push("Constant");
+                    global.push(constant);
+                }
+                else if (constant == 0 && linear == 1 && quadratic == 0){
+                    global.push("Linear");
+                    global.push(linear);
+                }
+                else if (constant == 0 && linear == 0 && quadratic == 1){
+                    global.push("Quadratic")
+                    global.push(quadratic)
+                }
+                else{
+                    return "unable to parse attenuation values for light ID = " + lightId;
+                }
             }
 
             this.lights[lightId] = global;
@@ -1148,33 +1168,6 @@ export class MySceneGraph {
         position.push(...[x, y, z]);
 
         return position;
-    }
-
-    /**
-     * Parse the attenuation from a node with ID = id
-     * @param {block element} node
-     * @param {message to be displayed in case of error} messageError
-     */
-    parseAttenuation(node, messageError){
-        var attenuation = [];
-
-        // constant
-        var constant = this.reader.getFloat(node, 'constant');
-
-        // linear
-        var linear = this.reader.getFloat(node, 'linear');
-
-        // quadratic
-        var quadratic = this.reader.getFloat(node, 'quadratic');
-
-        // Only one of the three properties can be defined
-        if (constant != null){
-            if ((quadratic != null && quadratic != 0.0) || (linear != null && linear != 0.0)){
-                this.onXMLError("Only one of the attenuation properties can be defined");
-            }
-        }
-
-        return 0;
     }
 
     /**
