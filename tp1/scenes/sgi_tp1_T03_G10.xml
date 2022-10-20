@@ -96,6 +96,14 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
+        <spot id="poolPartySpotLight" enabled="false" angle="90.0" exponent="1">
+            <location x="50" y="1" z="70" w="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <target x="50" y="0" z="70" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
+
     </lights>
 
     <textures>
@@ -114,6 +122,7 @@
         <texture id="linenTexture" file="scenes/images/linen.jpg" />
         <texture id="darkWoodTexture" file="scenes/images/dark_wood.png" />
         <texture id="lightWoodTexture" file="scenes/images/light_wood.png" />
+        <texture id="poolParty" file="scenes/images/images.jpeg" />
     </textures>
 
     <materials>
@@ -511,14 +520,14 @@
             </children>
         </component>
 
-        <component id="cube">
+        <component id="house">
             <transformation>
-                <scale x="10" y="10" z="10" />
-                <translate x="4" y="0.5" z="4" /> 
+                <scale x="25" y="4" z="2" />
+                <translate x="2.2" y="0.5" z="35" />
             </transformation>
-            <texture id="waterTexture" />
+            <texture id="poolParty" />
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <children>
                 <componentref id="cube_front" />
@@ -1044,7 +1053,7 @@
 
         <component id="table_and_chairs_1">
             <transformation>
-				<translate x="0" y="0" z="0" />
+				<translate x="0" y="0" z="-15" />
 			</transformation>
 			<materials>
 				<material id="demoMaterial" />
@@ -1073,7 +1082,7 @@
 
         <component id="table_and_chairs_2">
             <transformation>
-				<translate x="15" y="0" z="0" />
+				<translate x="15" y="0" z="-15" />
 			</transformation>
 			<materials>
 				<material id="demoMaterial" />
@@ -1975,6 +1984,7 @@
                 <componentref id="trees" />
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
+                <componentref id="house" />
             </children>
         </component>
     </components>
