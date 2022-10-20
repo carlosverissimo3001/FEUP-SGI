@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="sgi_tp1_T03_G10_v01" axis_length="17"/>
+    <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
     <views default="perspective2">
         <perspective id="jacuzzi" near="0.1" far="500" angle="23">
@@ -22,6 +22,11 @@
             <to x="0" y="3" z="12" />
         </perspective>
 
+        <perspective id="shower" near="0.1" far="500" angle="23">
+            <from x="14" y="4" z="30" />
+            <to x="14" y="4" z="0" />
+        </perspective>
+
 
         <ortho id="ortho1" near="0.1" far="500" left="-3.0" right="3.0" top="3.0" bottom="-3.0">
 			<from x="20" y="14" z="20" />
@@ -35,7 +40,7 @@
     </ambient>
 
     <lights>
-        <omni id="omniLight" enabled="false">
+        <omni id="omniLight" enabled="true">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -51,7 +56,7 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        <spot id="tree1SpotLight" enabled="true" angle="45.0" exponent="10">
+        <spot id="tree1SpotLight" enabled="false" angle="45.0" exponent="10">
             <location x="2.9" y="0.2" z="67" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <target x="0" y="0.2" z="67" w="1.0" />
@@ -59,15 +64,38 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-         <spot id="tree2SpotLight" enabled="true" angle="45.0" exponent="10">
-            <location x="2.9" y="0.2" z="67" w="1.0" />
+        <spot id="tree2SpotLight" enabled="false" angle="45.0" exponent="10">
+            <location x="2.9" y="0.2" z="52" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <target x="0" y="0.2" z="67" w="1.0" />
+            <target x="0" y="0.2" z="52" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        
+        <spot id="tree3SpotLight" enabled="false" angle="45.0" exponent="10">
+            <location x="2.9" y="0.2" z="37" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <target x="0" y="0.2" z="37" w="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
+
+        <spot id="tree4SpotLight" enabled="false" angle="45.0" exponent="10">
+            <location x="2.9" y="0.2" z="22" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <target x="0" y="0.2" z="22" w="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
+
+        <spot id="tree5SpotLight" enabled="false" angle="45.0" exponent="10">
+            <location x="2.9" y="0.2" z="7" w="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <target x="0" y="0.2" z="7" w="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </spot>
+
     </lights>
 
     <textures>
@@ -83,6 +111,9 @@
         <texture id="soilTexture" file="scenes/images/soil.png" />
         <texture id="concreteTexture" file="scenes/images/concrete.jpg" />
         <texture id="darkConcreteTexture" file="scenes/images/dark_concrete.png" />
+        <texture id="linenTexture" file="scenes/images/linen.jpg" />
+        <texture id="darkWoodTexture" file="scenes/images/dark_wood.png" />
+        <texture id="lightWoodTexture" file="scenes/images/light_wood.png" />
     </textures>
 
     <materials>
@@ -121,11 +152,11 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
-        <material id="metal" shininess = "10">
+        <material id="metal" shininess = ".6">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.19225" g="0.19225" b="0.19225" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.774597" g="0.774597" b="0.774597" a="1.0" />
         </material>
 
         <material id="light_cyan" shininess="10">
@@ -205,6 +236,13 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
+        <material id="darkWood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.33" g="0.20" b="0.17" a="1.0" />
+            <diffuse r="0.33" g="0.20" b="0.17" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
     </materials>
 
     <transformations>
@@ -271,7 +309,7 @@
 
         <transformation id="ball2Transform">
             <scale x="1" y="1" z="1" />
-            <translate x="45.0" y="0.9" z="35.0" />
+            <translate x="65.0" y="0.9" z="35.0" />
         </transformation>
 
         <transformation id="tableLeg1Transform">
@@ -374,7 +412,7 @@
     <components>
         <component id="cube_front">
             <transformation>
-                <translate x="0" y="0" z="0.5" /> 
+                <translate x="0" y="0" z="0.5" />
             </transformation>
             <texture id="inherit" />
             <materials>
@@ -457,12 +495,11 @@
 
         <component id="cube">
             <transformation>
-                <scale x="10" y="10" z="10" />
-                <translate x="4" y="0.5" z="4" /> 
+                <scale x="1" y="1" z="1" />
             </transformation>
-            <texture id="waterTexture" />
+            <texture id="inherit" />
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
             <children>
                 <componentref id="cube_front" />
@@ -597,109 +634,17 @@
             </children>
         </component>
 
-        <component id="divider_top">
-            <transformation>
-                <rotate axis="x" angle="-90" />
-                <scale x="20" y="1.95" z="2" />
-                <translate x="0.75" y="-15" z="1" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <children>
-                <primitiveref id="demoRectangle"/>
-            </children>
-        </component>
-
-        <component id="divider_bottom">
-            <transformation>
-                <rotate axis="x" angle="-90" />
-                <scale x="20" y="1.95" z="1" />
-                <translate x="0.75" y="-15" z="0.1" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <children>
-                <primitiveref id="demoRectangle"/>
-            </children>
-        </component>
-
-        <component id="divider_left">
-            <transformation>
-                <rotate axis="y" angle="90" />
-                <scale x="3.89" y="1" z="1" />
-                <translate x="-7.51" y="1" z="5" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <children>
-                <primitiveref id="demoRectangle"/>
-            </children>
-        </component>
-
-        <component id="divider_right">
-            <transformation>
-                <rotate axis="y" angle="90" />
-                <scale x="3.89" y="1" z="1" />
-                <translate x="-7.51" y="1" z="25" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <children>
-                <primitiveref id="demoRectangle"/>
-            </children>
-        </component>
-
-        <component id="divider_front">
-            <transformation>
-                <scale x="20" y="1" z="1" />
-                <translate x="0.75" y="1" z="31.19" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <children>
-                <primitiveref id="demoRectangle"/>
-            </children>
-        </component>
-
-        <component id="divider_back">
-            <transformation>
-                <scale x="20" y="1" z="1" />
-                <translate x="0.75" y="1" z="27.19" />
-            </transformation>
-            <texture id="concreteTexture"/>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <children>
-                <primitiveref id="demoRectangle"/>
-            </children>
-        </component>
-
         <component id="divider">
             <transformation>
-                <scale x="1" y="1" z="1" />
+                <scale x="20" y="1.95" z="4" />
+                <translate x="0.75" y="0.5" z="7.3" />
             </transformation>
             <texture id="concreteTexture"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <children>
-                <componentref id="divider_top" />
-                <componentref id="divider_bottom" />
-                <componentref id="divider_left" />
-                <componentref id="divider_right" />
-                <componentref id="divider_front" />
-                <componentref id="divider_back" />
+                <componentref id ="cube" />
             </children>
         </component>
 
@@ -1515,10 +1460,10 @@
                 <scale x="1" y="1" z="1" />
 			</transformation>
 			<materials>
-				<material id="fall" />
-                <material id="summer" />
-                <material id="winter" />
                 <material id="spring" />
+                <material id="summer" />
+				<material id="fall" />
+                <material id="winter" />
 			</materials>
 			<texture id="none" />
 			<children>
@@ -1675,6 +1620,7 @@
 
         <component id="trees" >
             <transformation>
+                <scale x="1" y="1.2" z="1" />
 				<translate x="0" y="0" z="0" />
 			</transformation>
 			<materials>
@@ -1695,7 +1641,311 @@
 			</children>
         </component>
 
-       <component id="sgi_tp1_T03_G10_v01">
+        <component id="lounge_chair_leg1" >
+            <transformation>
+				<translate x="50" y="0.5" z="50" />
+                <scale x="0.5" y="1" z=".5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="cube" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_leg2" >
+            <transformation>
+				<translate x="0" y="0" z="4" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair_leg1" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_leg3" >
+            <transformation>
+				<translate x="10" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair_leg2" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_leg4" >
+            <transformation>
+				<translate x="0" y="0" z="-4" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair_leg3" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_support1" >
+            <transformation>
+				<translate x="55" y="1" z="50" />
+                <scale x="10.5" y=".5" z=".5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="cube" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_support2" >
+            <transformation>
+				<translate x="0" y="0" z="4" />
+        	</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair_support1" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_support3" >
+            <transformation>
+                <rotate axis="z" angle="30" />
+                <translate x="54" y="-29" z="50" />
+                <scale x="3.5" y=".5" z=".5" />
+        	</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="cube" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_support4" >
+            <transformation>
+                <translate x="0" y="0" z="4" />
+        	</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair_support3" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_bottom_cloth" >
+            <transformation>
+                <translate x="55" y="1" z="52" />
+                <scale x="10.5" y=".1" z="3" />
+        	</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="linenTexture" />
+			<children>
+				<componentref id="cube" />
+			</children>
+        </component>
+
+        <component id="lounge_chair_top_cloth" >
+            <transformation>
+                <rotate axis="z" angle="30" />
+                <translate x="54" y="-29" z="52" />
+                <scale x="3.5" y=".1" z="3" />
+        	</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="linenTexture" />
+			<children>
+				<componentref id="cube" />
+			</children>
+        </component>
+
+        <component id="lounge_chair1" >
+            <transformation>
+				<translate x="0" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair_leg1" />
+                <componentref id="lounge_chair_leg2" />
+                <componentref id="lounge_chair_leg3" />
+                <componentref id="lounge_chair_leg4" />
+                <componentref id="lounge_chair_support1" />
+                <componentref id="lounge_chair_support2" />
+                <componentref id="lounge_chair_support3" />
+                <componentref id="lounge_chair_support4" />
+                <componentref id="lounge_chair_top_cloth" />
+                <componentref id="lounge_chair_bottom_cloth" />
+			</children>
+        </component>
+
+        <component id="lounge_chair2" >
+            <transformation>
+				<translate x="0" y="0" z="-7.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair1" />
+			</children>
+        </component>
+
+        <component id="lounge_chair3" >
+            <transformation>
+				<translate x="0" y="0" z="-7.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair2" />
+			</children>
+        </component>
+
+        <component id="lounge_chair4" >
+            <transformation>
+				<translate x="0" y="0" z="-7.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<componentref id="lounge_chair3" />
+			</children>
+        </component>
+
+        <component id="lounge_chairs" >
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="-80" y="0" z="12" />
+			</transformation>
+			<materials>
+				<material id="darkWood" />
+			</materials>
+			<texture id="lightWoodTexture" />
+			<children>
+				<componentref id="lounge_chair1" />
+                <componentref id="lounge_chair2" />
+                <componentref id="lounge_chair3" />
+                <componentref id="lounge_chair4" />
+			</children>
+        </component>
+
+        <component id="shower_fixture" >
+            <transformation>
+                <translate x="14" y="5.5" z="3.67" />
+                <scale x=".2" y=".2" z=".05" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="shower_head" >
+            <transformation>
+                <translate x="14" y="5" z="5.5" />
+                <rotate axis="x" angle="90" />
+                <scale x=".4" y=".4" z=".1" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="shower_pipe_1" >
+            <transformation>
+                <translate x="14" y="5.5" z="3.67" />
+                <scale x=".06" y=".05" z="0.62" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="shower_pipe_2" >
+            <transformation>
+                <translate x="14" y="5.5" z="5.5" />
+                <scale x=".05" y="0.2" z="0.05" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="shower_button" >
+            <transformation>
+                <translate x="14" y="3.5" z="3.67" />
+                <scale x=".1" y=".1" z=".05" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="shower" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+			<materials>
+				<material id="metal" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="shower_head" />
+                <componentref id="shower_pipe_1" />
+                <componentref id="shower_pipe_2" />
+                <componentref id="shower_button" />
+                <componentref id="shower_fixture" />
+            </children>
+        </component>
+
+       <component id="sgi_tp1_T03_G10">
             <transformation>
 				<translate x="0" y="0" z="0" />
 				<scale x="1" y="1" z="1" />
@@ -1723,7 +1973,8 @@
                 <componentref id="table_and_chairs_2" />
                 <componentref id="board" />
                 <componentref id="trees" />
-                <componentref id="cube" />
+                <componentref id="lounge_chairs" />
+                <componentref id="shower" />
             </children>
         </component>
     </components>

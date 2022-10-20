@@ -29,7 +29,8 @@ function main() {
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
 
-    var filename=getUrlVars()['file'] || "pool.xml";
+    //var filename=getUrlVars()['file'] || "pool.xml";
+    var filename=getUrlVars()['file'] || "sgi_tp1_T03_G10.xml";
 
 	// create and load graph, and associate it to scene.
 	// Check console for loading errors
