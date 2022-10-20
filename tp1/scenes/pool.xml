@@ -22,6 +22,11 @@
             <to x="0" y="3" z="12" />
         </perspective>
 
+        <perspective id="shower" near="0.1" far="500" angle="23">
+            <from x="14" y="4" z="30" />
+            <to x="14" y="4" z="0" />
+        </perspective>
+
 
         <ortho id="ortho1" near="0.1" far="500" left="-3.0" right="3.0" top="3.0" bottom="-3.0">
 			<from x="20" y="14" z="20" />
@@ -147,11 +152,11 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
-        <material id="metal" shininess = "10">
+        <material id="metal" shininess = ".6">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.19225" g="0.19225" b="0.19225" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.774597" g="0.774597" b="0.774597" a="1.0" />
         </material>
 
         <material id="light_cyan" shininess="10">
@@ -1831,6 +1836,95 @@
 			</children>
         </component>
 
+        <component id="shower_fixture" >
+            <transformation>
+                <translate x="14" y="5.5" z="3.67" />
+                <scale x=".2" y=".2" z=".05" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="shower_head" >
+            <transformation>
+                <translate x="14" y="5" z="5.5" />
+                <rotate axis="x" angle="90" />
+                <scale x=".4" y=".4" z=".1" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="shower_pipe_1" >
+            <transformation>
+                <translate x="14" y="5.5" z="3.67" />
+                <scale x=".06" y=".05" z="0.62" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="shower_pipe_2" >
+            <transformation>
+                <translate x="14" y="5.5" z="5.5" />
+                <scale x=".05" y="0.2" z="0.05" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="shower_button" >
+            <transformation>
+                <translate x="14" y="3.5" z="3.67" />
+                <scale x=".1" y=".1" z=".05" />
+            </transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" />
+			<children>
+				<primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="shower" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+			<materials>
+				<material id="metal" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="shower_head" />
+                <componentref id="shower_pipe_1" />
+                <componentref id="shower_pipe_2" />
+                <componentref id="shower_button" />
+                <componentref id="shower_fixture" />
+            </children>
+        </component>
+
        <component id="sgi_tp1_T03_G10_v01">
             <transformation>
 				<translate x="0" y="0" z="0" />
@@ -1860,6 +1954,7 @@
                 <componentref id="board" />
                 <componentref id="trees" />
                 <componentref id="lounge_chairs" />
+                <componentref id="shower" />
             </children>
         </component>
     </components>
