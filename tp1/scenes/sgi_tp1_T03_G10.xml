@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="sgi_tp1_T03_G10_v01" axis_length="17"/>
+    <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
     <views default="perspective2">
         <perspective id="jacuzzi" near="0.1" far="500" angle="23">
@@ -1601,6 +1601,7 @@
 
         <component id="trees" >
             <transformation>
+                <scale x="1" y="1.2" z="1" />
 				<translate x="0" y="0" z="0" />
 			</transformation>
 			<materials>
@@ -1925,7 +1926,7 @@
             </children>
         </component>
 
-       <component id="sgi_tp1_T03_G10_v01">
+       <component id="sgi_tp1_T03_G10">
             <transformation>
 				<translate x="0" y="0" z="0" />
 				<scale x="1" y="1" z="1" />
