@@ -474,6 +474,25 @@
             </children>
         </component>
 
+        <component id="cube">
+            <transformation>
+                <scale x="10" y="10" z="10" />
+                <translate x="4" y="0.5" z="4" /> 
+            </transformation>
+            <texture id="waterTexture" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <componentref id="cube_front" />
+                <componentref id="cube_back" />
+                <componentref id="cube_bottom" />
+                <componentref id="cube_right" />
+                <componentref id="cube_left" />
+                <componentref id="cube_top" />
+            </children>
+        </component>
+
         <component id="deck">
             <transformation>
                 <transformationref id="deckTransform" />
