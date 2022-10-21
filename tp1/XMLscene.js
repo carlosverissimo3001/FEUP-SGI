@@ -41,7 +41,7 @@ export class XMLscene extends CGFscene {
     this.showLights = false;
 
     this.lightsVal = [];
-    
+
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.enable(this.gl.CULL_FACE);
@@ -186,6 +186,7 @@ export class XMLscene extends CGFscene {
           );
         }
 
+
         this.lights[i].setVisible(true);
 
         if (this.showLights) {
@@ -254,8 +255,8 @@ export class XMLscene extends CGFscene {
     if (this.displayAxis) this.axis.display();
 
     for (var i = 0; i < this.lights.length; i++) {
-      this.lights[i].setVisible(true);
-      this.lights[i].enable();
+      this.lights[i].setVisible(this.showLights);
+      this.lights[i].update();
     }
 
     if (this.sceneInited) {
@@ -321,7 +322,7 @@ export class XMLscene extends CGFscene {
     for (var key in this.lightsVal) {
       if (this.lightsVal.hasOwnProperty(key)) {
         this.lights[i].setVisible(this.showLights);
-        if (this.lightsVal[key]) 
+        if (this.lightsVal[key])
           this.lights[i].enable();
         else this.lights[i].disable();
 

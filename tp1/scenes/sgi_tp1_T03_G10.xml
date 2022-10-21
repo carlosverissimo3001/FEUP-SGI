@@ -45,7 +45,7 @@
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-            <attenuation quadratic="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </omni>
 
         <omni id="omniLightHouse" enabled="false">
@@ -62,6 +62,7 @@
             <target x="5" y="0" z="5" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </spot>
 
         <spot id="treeSpotLight" enabled="false" angle="45.0" exponent="10">
@@ -70,6 +71,7 @@
             <target x="0" y="0.2" z="67" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </spot>
 
         <spot id="showerSpotLight" enabled="false" angle="27.0" exponent="10">
@@ -78,6 +80,7 @@
             <target x="1.0" y="1.0" z="0" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </spot>
 
         <spot id="poolSpotLight" enabled="false" angle="80.0" exponent="10">
@@ -86,6 +89,7 @@
             <target x="10" y="0.2" z="20" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </spot>
 
         <spot id="chairsSpotLight" enabled="false" angle="80.0" exponent="10">
@@ -94,6 +98,7 @@
             <target x="20" y="0.2" z="22" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </spot>
 
         <omni id="poolPartySpotLight" enabled="true" angle="-45.0" exponent="2">
@@ -103,6 +108,7 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
             <attenuation quadratic="1.0" />
         </omni>
+
 
     </lights>
 
@@ -683,7 +689,7 @@
             <transformation>
                 <transformationref id="poolTransform" />
             </transformation>
-            <texture id="waterTexture"/>
+            <texture id="waterTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -696,7 +702,7 @@
             <transformation>
                 <transformationref id="jacuzziTransform" />
             </transformation>
-            <texture id="waterTexture"/>
+            <texture id="waterTexture " length_s="1" length_t="1"/>
             <materials>
                 <material id="water" />
             </materials>
@@ -709,7 +715,7 @@
             <transformation>
                 <transformationref id="soilTransform" />
             </transformation>
-            <texture id="soilTexture"/>
+            <texture id="soilTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -722,7 +728,7 @@
             <transformation>
                 <transformationref id="soil2Transform" />
             </transformation>
-            <texture id="soilTexture"/>
+            <texture id="soilTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -762,7 +768,7 @@
                 <scale x="20" y="1.95" z="4" />
                 <translate x="0.75" y="0.5" z="7.3" />
             </transformation>
-            <texture id="concreteTexture"/>
+            <texture id="concreteTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -855,7 +861,7 @@
             <transformation>
                 <translate x=".4" y="0" z="0" />
             </transformation>
-            <texture id="darkConcreteTexture" />
+            <texture id="darkConcreteTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -873,7 +879,7 @@
             <transformation>
                 <transformationref id="torusTransform" />
             </transformation>
-            <texture id="torusTexture" />
+            <texture id="torusTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -901,7 +907,7 @@
             <transformation>
                 <transformationref id="ball2Transform" />
             </transformation>
-            <texture id="ballTexture" />
+            <texture id="ballTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="white" />
                 <material id="blue" />
@@ -1346,7 +1352,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="trunkTexture" length_s="1" length_t="1"/>
 			<children>
 				<primitiveref id ="demoCylinder" />
 			</children>
@@ -1389,7 +1395,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="trunkTexture" length_s="1" length_t="1"/>
 			<children>
                 <componentref id="branch1" />
 				<componentref id="branch2" />
@@ -1643,7 +1649,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="trunk" />
                 <componentref id="branches" />
@@ -1658,7 +1664,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree1" />
 			</children>
@@ -1671,7 +1677,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree2" />
 			</children>
@@ -1684,7 +1690,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree3" />
 			</children>
@@ -1697,7 +1703,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree4" />
 			</children>
@@ -1711,7 +1717,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree5" />
 			</children>
@@ -1724,7 +1730,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree6" />
 			</children>
@@ -1737,7 +1743,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree7" />
 			</children>
@@ -1750,7 +1756,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree8" />
 			</children>
@@ -1763,7 +1769,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit"/>
 			<children>
 				<componentref id="tree9" />
 			</children>
@@ -1803,7 +1809,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="trunkTexture" length_s="1" length_t="1"/>
 			<children>
 				<componentref id="tree1" />
                 <componentref id="tree2" />
@@ -1936,7 +1942,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="linenTexture" />
+			<texture id="linenTexture" length_s="1" length_t="1"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -1951,7 +1957,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="linenTexture" />
+			<texture id="linenTexture" length_s="1" length_t="1"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -2026,7 +2032,7 @@
 			<materials>
 				<material id="darkWood" />
 			</materials>
-			<texture id="lightWoodTexture" />
+			<texture id="lightWoodTexture" length_s="1" length_t="1"/>
 			<children>
 				<componentref id="lounge_chair1" />
                 <componentref id="lounge_chair2" />
