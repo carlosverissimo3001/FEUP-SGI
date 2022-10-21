@@ -13,8 +13,8 @@
         </perspective>
 
         <perspective id="perspective2" near="0.1" far="500" angle="23">
-            <from x="150" y="60" z="150" />
-            <to x="0" y="0" z="0" />
+            <from x="70" y="50" z="170" />
+            <to x="50" y="0" z="0" />
         </perspective>
 
         <perspective id="tree" near="0.1" far="500" angle="23">
@@ -48,6 +48,14 @@
             <attenuation quadratic="1.0" />
         </omni>
 
+        <omni id="omniLightHouse" enabled="false">
+            <location x="100.8" y="20.9" z="50" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" />
+        </omni>
+
         <spot id="spotLight" enabled="false" angle="45.0" exponent="1">
             <location x="9.8" y="10" z="10" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -56,7 +64,7 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        <spot id="tree1SpotLight" enabled="false" angle="45.0" exponent="10">
+        <spot id="treeSpotLight" enabled="false" angle="45.0" exponent="10">
             <location x="2.9" y="0.2" z="67" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <target x="0" y="0.2" z="67" w="1.0" />
@@ -64,45 +72,37 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        <spot id="tree2SpotLight" enabled="false" angle="45.0" exponent="10">
-            <location x="2.9" y="0.2" z="52" w="1.0" />
+        <spot id="showerSpotLight" enabled="false" angle="27.0" exponent="10">
+            <location x="5" y="1,0" z="2" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <target x="0" y="0.2" z="52" w="1.0" />
+            <target x="1.0" y="1.0" z="0" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        <spot id="tree3SpotLight" enabled="false" angle="45.0" exponent="10">
-            <location x="2.9" y="0.2" z="37" w="1.0" />
+        <spot id="poolSpotLight" enabled="false" angle="80.0" exponent="10">
+            <location x="10" y="1.0" z="20" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <target x="0" y="0.2" z="37" w="1.0" />
+            <target x="10" y="0.2" z="20" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        <spot id="tree4SpotLight" enabled="false" angle="45.0" exponent="10">
-            <location x="2.9" y="0.2" z="22" w="1.0" />
+        <spot id="chairsSpotLight" enabled="false" angle="80.0" exponent="10">
+            <location x="20" y="1.0" z="30" w="1.0" />
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <target x="0" y="0.2" z="22" w="1.0" />
+            <target x="20" y="0.2" z="22" w="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </spot>
 
-        <spot id="tree5SpotLight" enabled="false" angle="45.0" exponent="10">
-            <location x="2.9" y="0.2" z="7" w="1.0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <target x="0" y="0.2" z="7" w="1.0" />
+        <omni id="poolPartySpotLight" enabled="true" angle="-45.0" exponent="2">
+            <location x="20" y="-10" z="-10" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        </spot>
-
-        <spot id="poolPartySpotLight" enabled="false" angle="90.0" exponent="1">
-            <location x="50" y="1" z="70" w="1.0" />
-            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-            <target x="50" y="0" z="70" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        </spot>
+            <attenuation quadratic="1.0" />
+        </omni>
 
     </lights>
 
@@ -123,6 +123,8 @@
         <texture id="darkWoodTexture" file="scenes/images/dark_wood.png" />
         <texture id="lightWoodTexture" file="scenes/images/light_wood.png" />
         <texture id="poolParty" file="scenes/images/images.jpeg" />
+        <texture id="whiteHouse" file="scenes/images/white-house.jpg" />
+        <texture id="door" file="scenes/images/door.jpg" />
     </textures>
 
     <materials>
@@ -267,8 +269,8 @@
 
         <transformation id="grassTransform">
             <rotate axis="x" angle="-90" />
-            <scale x="40.6" y="35.3" z="1" />
-            <translate x="1.313" y="-1.085" z="0" />
+            <scale x="70.6" y="35.3" z="1" />
+            <translate x="0.965" y="-1.085" z="0" />
         </transformation>
 
         <transformation id="wallTransform">
@@ -278,7 +280,7 @@
         </transformation>
 
         <transformation id="wall2Transform">
-           <scale x="73.6" y="3.0" z="1" />
+           <scale x="103.6" y="3.0" z="1" />
             <translate x="0.5" y="1" z="0" />
         </transformation>
 
@@ -290,7 +292,7 @@
 
         <transformation id="soil2Transform">
             <rotate axis="x" angle="-90" />
-            <scale x="73.6" y="1.5" z="1" />
+            <scale x="103.6" y="1.5" z="1" />
             <translate x="0.5" y="-1" z="0" />
         </transformation>
 
@@ -419,6 +421,80 @@
     </primitives>
 
     <components>
+        <component id="triangle1">
+            <transformation>
+                <scale x="15" y="15" z="1" />
+                <rotate axis="z" angle="180" />
+                <translate x="-6.33" y="-1" z="60" />
+            </transformation>
+            <texture id="torusTexture" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="demoTriangle"/>
+            </children>
+        </component>
+
+        <component id="triangle2">
+            <transformation>
+                <scale x="13" y="13" z="1" />
+                <translate x="5.85" y="0" z="60" />
+            </transformation>
+            <texture id="torusTexture" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="demoTriangle"/>
+            </children>
+        </component>
+
+        <component id="triangle3">
+            <transformation>
+                <scale x="13" y="13" z="1" />
+                <translate x="5.85" y="0" z="20" />
+            </transformation>
+            <texture id="torusTexture" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="demoTriangle"/>
+            </children>
+        </component>
+
+        <component id="triangle4">
+            <transformation>
+                <scale x="15" y="15" z="1" />
+                <rotate axis="z" angle="180" />
+                <translate x="-6.33" y="-1" z="20" />
+            </transformation>
+            <texture id="torusTexture" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="demoTriangle"/>
+            </children>
+        </component>
+
+        <component id="triangles">
+            <transformation>
+
+            </transformation>
+            <texture id="torusTexture" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <componentref id="triangle1"/>
+                <componentref id="triangle2"/>
+                <componentref id="triangle3"/>
+                <componentref id="triangle4"/>
+            </children>
+        </component>
+
         <component id="cube_front">
             <transformation>
                 <translate x="0" y="0" z="0.5" />
@@ -520,14 +596,52 @@
             </children>
         </component>
 
-        <component id="house">
+        <component id="poolPartyAdd">
             <transformation>
-                <scale x="25" y="4" z="2" />
-                <translate x="2.2" y="0.5" z="35" />
+                <scale x="2" y="4" z="25" />
+                <translate x="38" y="3" z="1.5" />
             </transformation>
             <texture id="poolParty" />
             <materials>
                 <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cube_front" />
+                <componentref id="cube_back" />
+                <componentref id="cube_bottom" />
+                <componentref id="cube_right" />
+                <componentref id="cube_left" />
+                <componentref id="cube_top" />
+            </children>
+        </component>
+
+        <component id="door">
+            <transformation>
+                <scale x="1" y="6" z="4" />
+                <translate x="76" y="0.50" z="13" />
+            </transformation>
+            <texture id="door" />
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cube_front" />
+                <componentref id="cube_back" />
+                <componentref id="cube_bottom" />
+                <componentref id="cube_right" />
+                <componentref id="cube_left" />
+                <componentref id="cube_top" />
+            </children>
+        </component>
+
+        <component id="house">
+            <transformation>
+                <scale x="19" y="15" z="40" />
+                <translate x="4.5" y="0.5" z="1" />
+            </transformation>
+            <texture id="whiteHouse" />
+            <materials>
+                <material id="demoMaterial" />
             </materials>
             <children>
                 <componentref id="cube_front" />
@@ -1094,6 +1208,34 @@
 			</children>
         </component>
 
+        <component id="table_and_chairs_3">
+            <transformation>
+				<translate x="15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="table1" />
+                <componentref id="chairs1" />
+			</children>
+        </component>
+
+        <component id="table_and_chairs_4">
+            <transformation>
+				<translate x="0" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="table1" />
+                <componentref id="chairs1" />
+			</children>
+        </component>
+
         <component id="stripe1">
             <transformation>
 				<rotate axis="x" angle="-90" />
@@ -1627,6 +1769,32 @@
 			</children>
         </component>
 
+        <component id="tree11" >
+            <transformation>
+				<translate x="15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree10" />
+			</children>
+        </component>
+
+        <component id="tree12" >
+            <transformation>
+				<translate x="15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree11" />
+			</children>
+        </component>
+
         <component id="trees" >
             <transformation>
                 <scale x="1" y="1.2" z="1" />
@@ -1647,6 +1815,8 @@
                 <componentref id="tree8" />
                 <componentref id="tree9" />
                 <componentref id="tree10" />
+                <componentref id="tree11" />
+                <componentref id="tree12" />
 			</children>
         </component>
 
@@ -1980,11 +2150,16 @@
                 <componentref id="ball_2" />
                 <componentref id="table_and_chairs_1" />
                 <componentref id="table_and_chairs_2" />
+                <componentref id="table_and_chairs_3" />
+                <componentref id="table_and_chairs_4" />
                 <componentref id="board" />
                 <componentref id="trees" />
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
                 <componentref id="house" />
+                <componentref id="poolPartyAdd" />
+                <componentref id="door" />
+                <componentref id="triangles" />
             </children>
         </component>
     </components>
