@@ -42,7 +42,9 @@ export class MyTriangle extends CGFobject {
 
 		this.indices = [
 			//Counter-clockwise reference of vertices
-			0, 1, 2
+			0, 1, 2,
+
+			1, 0, 2
 		];
 
 
