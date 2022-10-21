@@ -293,6 +293,9 @@ export class XMLscene extends CGFscene {
   updateMaterials() {
     if (!this.sceneInited) return;
 
+    console.log("Position: X->" + this.camera["position"][0] + " Y->" + this.camera["position"][1] + " Z->" + this.camera["position"][2]);
+    console.log("To: X->" + this.camera["target"][0] + " Y->" + this.camera["target"][1] + " Z->" + this.camera["target"][2]);
+
     var components = this.graph.components;
 
     /* Transverse the scene tree */
