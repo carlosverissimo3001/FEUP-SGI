@@ -2,10 +2,10 @@
 
 ## Group T03G10
 
-| Name              | Number    | E-Mail            |
+| Name              | Number    | EMail            |
 | ----------------- | --------- | ----------------- |
 | Carlos Veríssimo | 201907716 | up201907716@up.pt |
-| Miguel Amorim     | 201907756 | 201907756@up.pt   |
+| Miguel Amorim     | 201907756 | up201907756@up.pt   |
 
 ---
 
