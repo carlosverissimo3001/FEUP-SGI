@@ -38,7 +38,7 @@
 - There were some difficulties on getting the torus right, but at the end, we were happy with result.
 - There were some misunderstanding related how the texture component should be specified, however, at the end everything became clear.
 
-### Some Screenshots
+### Some [Screenshots](scenes/images/screenshots/)
 
 ##### Top Left View
 
