@@ -11,20 +11,47 @@
 
 ## Project information
 
-- (items describing main strong points)
 - Scene
-  - Our scene consists on a replication of a public pool
-  - [Link to the scene file](scenes/pool.xml)
-  - The following primitives are used:
+  - Initial Idea
+    ![Inital Idea](scenes/images/scene_idea.png)
+  - Our scene consists on a replication of a pool
+  - [Link to the scene file](scenes/sgi_tp1_T03_G10.xml)
+  - Below are the used primitives are some examples of how they were used:
     - **MyRectangle**
-      - Used to draw tables by the side of the pool
+      - Tables and chairs by the pool
+      - Walls
+      - ...
     - **MyCylinder**
-      - Used to table legs
+      - Table and chair legs
+      - Tree branches and trunk
+      - Shower
     - **MySphere**
-      - Used to draw pool balls
+      - Balls
+      - Simulate tree leaves
     - **MyTorus**
-      - Used to draw the lifebuoy
+      - Lifebuoy
+    - **MyTriangle**
+      - Pool bar sides
 
 ## Issues/Problems
 
-- (items describing unimplemented features, bugs, problems, etc.)
+- There were some difficulties on getting the torus right, but at the end, we were happy with result.
+- There were some misunderstanding related how the texture component should be specified, however, at the end everything became clear.
+
+### Some Screenshots
+
+##### Top Left View
+
+![Top-Left](scenes/images/screenshots/Top-Left.png)
+
+##### Bottom Right View
+
+![Bottom-Right](scenes/images/screenshots/Bottom-Right.png)
+
+##### Pool Bar
+
+![Pool Bar](scenes/images/screenshots/pool-bar.png)
+
+##### Shower Details
+
+![Shower](scenes/images/screenshots/shower.png)

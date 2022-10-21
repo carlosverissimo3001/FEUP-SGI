@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
-    <views default="Trees">
+    <views default="Jacuzzi">
         <perspective id="Jacuzzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -53,7 +53,7 @@
         </perspective>
 
 
-        <ortho id="ortho1" near="0.1" far="500" left="-3.0" right="3.0" top="3.0" bottom="-3.0">
+        <ortho id="Ortho" near="0.1" far="500" left="-3.0" right="3.0" top="3.0" bottom="-3.0">
 			<from x="20" y="14" z="20" />
 			<to x="0" y="0" z="0" />
 		</ortho>
@@ -2638,6 +2638,7 @@
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
                 <componentref id="poolHouse" />
+                <componentref id="roof" />
             </children>
         </component>
     </components>
