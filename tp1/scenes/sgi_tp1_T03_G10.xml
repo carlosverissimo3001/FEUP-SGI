@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
-    <views default="perspective2">
+    <views default="pool_bar">
         <perspective id="jacuzzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -17,7 +17,7 @@
             <to x="50" y="0" z="0" />
         </perspective>
 
-        <perspective id="tree" near="0.1" far="500" angle="23">
+        <perspective id="trees" near="0.1" far="500" angle="23">
             <from x="45" y="2" z="12" />
             <to x="0" y="3" z="12" />
         </perspective>
@@ -25,6 +25,11 @@
         <perspective id="shower" near="0.1" far="500" angle="23">
             <from x="14" y="4" z="30" />
             <to x="14" y="4" z="0" />
+        </perspective>
+
+        <perspective id="pool_bar" near="0.1" far="500" angle="45">
+            <from x="70" y="4" z="32" />
+            <to x="100" y="5" z="32" />
         </perspective>
 
 
@@ -131,6 +136,7 @@
         <texture id="poolParty" file="scenes/images/images.jpeg" />
         <texture id="whiteHouse" file="scenes/images/white-house.jpg" />
         <texture id="door" file="scenes/images/door.jpg" />
+        <texture id="menuDisplay" file="scenes/images/menu_display.png" />
     </textures>
 
     <materials>
@@ -281,12 +287,12 @@
 
         <transformation id="wallTransform">
             <rotate axis="y" angle="90" />
-            <scale x="73.6" y="3.0" z="1" />
+            <scale x="76.6" y="3.0" z="1" />
             <translate x="-0.5" y="1" z="0" />
         </transformation>
 
         <transformation id="wall2Transform">
-           <scale x="103.6" y="3.0" z="1" />
+           <scale x="106.45" y="3.0" z="1" />
             <translate x="0.5" y="1" z="0" />
         </transformation>
 
@@ -326,7 +332,7 @@
 
         <transformation id="ball2Transform">
             <scale x="1" y="1" z="1" />
-            <translate x="65.0" y="0.9" z="35.0" />
+            <translate x="65.0" y="1" z="35.0" />
         </transformation>
 
         <transformation id="tableLeg1Transform">
@@ -431,9 +437,9 @@
             <transformation>
                 <scale x="15" y="15" z="1" />
                 <rotate axis="z" angle="180" />
-                <translate x="-6.33" y="-1" z="60" />
+                <translate x="-6.33" y="-1" z="60.1" />
             </transformation>
-            <texture id="torusTexture" />
+            <texture id="inherit"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -445,9 +451,9 @@
         <component id="triangle2">
             <transformation>
                 <scale x="13" y="13" z="1" />
-                <translate x="5.85" y="0" z="60" />
+                <translate x="5.85" y="0" z="60.1" />
             </transformation>
-            <texture id="torusTexture" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -458,36 +464,33 @@
 
         <component id="triangle3">
             <transformation>
-                <scale x="13" y="13" z="1" />
-                <translate x="5.85" y="0" z="20" />
+                <translate x="0" y="0" z="-40.2" />
             </transformation>
-            <texture id="torusTexture" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <children>
-                <primitiveref id="demoTriangle"/>
+                <componentref id="triangle2"/>
             </children>
         </component>
 
         <component id="triangle4">
             <transformation>
-                <scale x="15" y="15" z="1" />
-                <rotate axis="z" angle="180" />
-                <translate x="-6.33" y="-1" z="20" />
+                <translate x="0" y="0" z="-40.2"/>
             </transformation>
-            <texture id="torusTexture" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <children>
-                <primitiveref id="demoTriangle"/>
+                <componentref id="triangle1"/>
             </children>
         </component>
 
         <component id="triangles">
             <transformation>
-
+                <translate x="0" y="0" z="0" />
             </transformation>
             <texture id="torusTexture" />
             <materials>
@@ -604,10 +607,10 @@
 
         <component id="poolPartyAdd">
             <transformation>
-                <scale x="2" y="4" z="25" />
-                <translate x="38" y="3" z="1.5" />
+                <scale x="2" y="5" z="21.5" />
+                <translate x="37.95" y="2.46" z="1.44" />
             </transformation>
-            <texture id="poolParty" />
+            <texture id="poolParty" length_s="1" length_t="1" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -626,7 +629,7 @@
                 <scale x="1" y="6" z="4" />
                 <translate x="76" y="0.50" z="13" />
             </transformation>
-            <texture id="door" />
+            <texture id="door" length_s="1" length_t="1" />
             <materials>
                 <material id="inherit" />
             </materials>
@@ -637,6 +640,61 @@
                 <componentref id="cube_right" />
                 <componentref id="cube_left" />
                 <componentref id="cube_top" />
+            </children>
+        </component>
+
+        <component id="bar_1">
+            <transformation>
+                <scale x="1" y="14.9" z="18" />
+                <translate x="76.5" y="0.5" z="2.83" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="bar_2">
+            <transformation>
+                <scale x="1" y="0.35" z="1.3" />
+                <translate x="0" y="27.7" z="-26.52" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="bar_1" />
+            </children>
+        </component>
+
+        <component id="bar_3">
+            <transformation>
+                <translate x="0" y="-9.7" z="0" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="bar_2" />
+            </children>
+        </component>
+
+        <component id="bar_4">
+            <transformation>
+                <translate x="87.1" y="5" z="-1" />
+                <scale x="0.1" y="1.1" z="1.05" />
+            </transformation>
+            <texture id="menuDisplay" length_s="1" length_t="1"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="bar_3" />
             </children>
         </component>
 
@@ -654,8 +712,28 @@
                 <componentref id="cube_back" />
                 <componentref id="cube_bottom" />
                 <componentref id="cube_right" />
-                <componentref id="cube_left" />
                 <componentref id="cube_top" />
+            </children>
+        </component>
+
+        <component id="poolHouse">
+            <transformation>
+                <translate x="55.92" y="0.01" z="10" />
+                <scale x="0.5" y="0.7" z="0.7" />
+            </transformation>
+            <texture id="none" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <componentref id="house" />
+                <componentref id="triangles" />
+                <componentref id="poolPartyAdd" />
+                <componentref id="door" />
+                <componentref id="bar_1" />
+                <componentref id="bar_2" />
+                <componentref id="bar_3" />
+                <componentref id="bar_4" />
             </children>
         </component>
 
@@ -702,7 +780,7 @@
             <transformation>
                 <transformationref id="jacuzziTransform" />
             </transformation>
-            <texture id="waterTexture " length_s="1" length_t="1"/>
+            <texture id="waterTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="water" />
             </materials>
@@ -711,11 +789,11 @@
             </children>
         </component>
 
-        <component id="soil">
+        <component id="soil1">
             <transformation>
                 <transformationref id="soilTransform" />
             </transformation>
-            <texture id="soilTexture" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -728,7 +806,7 @@
             <transformation>
                 <transformationref id="soil2Transform" />
             </transformation>
-            <texture id="soilTexture" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -737,7 +815,50 @@
             </children>
         </component>
 
-        <component id="wall">
+        <component id="soil3">
+            <transformation>
+                <translate x="103.42" y="0" z="0" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <componentref id="soil1" />
+            </children>
+        </component>
+
+        <component id="soil4">
+            <transformation>
+                <translate x="0" y="0" z="73.6" />
+                <scale x="1.027" y="1" z="1" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <componentref id="soil2" />
+            </children>
+        </component>
+
+        <component id="soil">
+            <transformation>
+                <translate x="0" y="0" z="0"/>
+            </transformation>
+            <texture id="soilTexture" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <componentref id="soil1" />
+                <componentref id="soil2" />
+                <componentref id="soil3" />
+                <componentref id="soil4" />
+            </children>
+        </component>
+
+        <component id="wall1">
             <transformation>
                 <transformationref id="wallTransform" />
             </transformation>
@@ -763,10 +884,52 @@
             </children>
         </component>
 
+        <component id="wall3">
+            <transformation>
+                <translate x="106.4" y="0" z="0" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="light_gray" />
+            </materials>
+            <children>
+                <componentref id="wall1" />
+            </children>
+        </component>
+
+        <component id="wall4">
+            <transformation>
+                <translate x="0" y="0" z="76.6" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="light_gray" />
+            </materials>
+            <children>
+                <componentref id="wall2" />
+            </children>
+        </component>
+
+        <component id="walls">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="light_gray" />
+            </materials>
+            <children>
+                <componentref id="wall1" />
+                <componentref id="wall2" />
+                <componentref id="wall3" />
+                <componentref id="wall4" />
+            </children>
+        </component>
+
         <component id="divider">
             <transformation>
                 <scale x="20" y="1.95" z="4" />
-                <translate x="0.75" y="0.5" z="7.3" />
+                <translate x="0.75" y="0.515" z="7.3" />
             </transformation>
             <texture id="concreteTexture" length_s="1" length_t="1"/>
             <materials>
@@ -857,6 +1020,110 @@
             </children>
         </component>
 
+        <component id="step_7">
+            <transformation>
+                <translate x="6" y="0" z="0" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_1" />
+            </children>
+        </component>
+
+        <component id="step_8">
+            <transformation>
+                <translate x="0" y="0" z="6" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_7" />
+            </children>
+        </component>
+
+         <component id="step_9">
+            <transformation>
+                <translate x="0" y="0" z="6" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_8" />
+            </children>
+        </component>
+
+        <component id="step_10">
+            <transformation>
+                <translate x="0" y="0" z="6" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_9" />
+            </children>
+        </component>
+
+        <component id="step_11">
+            <transformation>
+                <translate x="0" y="0" z="6" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_10" />
+            </children>
+        </component>
+
+        <component id="step_12">
+            <transformation>
+                <translate x="6" y="0" z="0" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_11" />
+            </children>
+        </component>
+
+        <component id="step_13">
+            <transformation>
+                <translate x="6" y="0" z="0" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_12" />
+            </children>
+        </component>
+
+        <component id="step_14">
+            <transformation>
+                <translate x="6" y="0" z="0" />
+            </transformation>
+            <texture id="inherit" />
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+             <children>
+                <componentref id="step_13" />
+            </children>
+        </component>
+
         <component id="steps">
             <transformation>
                 <translate x=".4" y="0" z="0" />
@@ -872,6 +1139,14 @@
                 <componentref id="step_4" />
                 <componentref id="step_5" />
                 <componentref id="step_6" />
+                <componentref id="step_7" />
+                <componentref id="step_8" />
+                <componentref id="step_9" />
+                <componentref id="step_10" />
+                <componentref id="step_11" />
+                <componentref id="step_12" />
+                <componentref id="step_13" />
+                <componentref id="step_14" />
             </children>
         </component>
 
@@ -1239,6 +1514,22 @@
 			<children>
 				<componentref id="table1" />
                 <componentref id="chairs1" />
+			</children>
+        </component>
+
+        <component id="table_and_chairs">
+            <transformation>
+				<translate x="0" y="0.05" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="none" />
+			<children>
+                <componentref id="table_and_chairs_1" />
+                <componentref id="table_and_chairs_2" />
+                <componentref id="table_and_chairs_3" />
+				<componentref id="table_and_chairs_4" />
 			</children>
         </component>
 
@@ -1801,6 +2092,163 @@
 			</children>
         </component>
 
+        <component id="tree13" >
+            <transformation>
+				<rotate axis="y" angle="90" />
+                <translate x="-104.5" y="0" z="103.5" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree12" />
+			</children>
+        </component>
+
+        <component id="tree14" >
+            <transformation>
+                <translate x="0" y="0" z="15" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree13" />
+			</children>
+        </component>
+
+        <component id="tree15" >
+            <transformation>
+                <translate x="0" y="0" z="15" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree14" />
+			</children>
+        </component>
+
+        <component id="tree16" >
+            <transformation>
+                <translate x="0" y="0" z="15" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree15" />
+			</children>
+        </component>
+
+        <component id="tree17" >
+            <transformation>
+                <translate x="0" y="0" z="15" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree16" />
+			</children>
+        </component>
+
+        <component id="tree18" >
+            <transformation>
+                <translate x="0" y="0" z="73.5" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree12" />
+			</children>
+        </component>
+
+        <component id="tree19" >
+            <transformation>
+                <translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree18" />
+			</children>
+        </component>
+
+        <component id="tree20" >
+            <transformation>
+                <translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree19" />
+			</children>
+        </component>
+
+         <component id="tree21" >
+            <transformation>
+                <translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree20" />
+			</children>
+        </component>
+
+        <component id="tree22" >
+            <transformation>
+                <translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree21" />
+			</children>
+        </component>
+
+        <component id="tree23" >
+            <transformation>
+                <translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree22" />
+			</children>
+        </component>
+
+        <component id="tree24" >
+            <transformation>
+                <translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="demoMaterial" />
+			</materials>
+			<texture id="trunkTexture" />
+			<children>
+				<componentref id="tree23" />
+			</children>
+        </component>
+
         <component id="trees" >
             <transformation>
                 <scale x="1" y="1.2" z="1" />
@@ -1823,6 +2271,18 @@
                 <componentref id="tree10" />
                 <componentref id="tree11" />
                 <componentref id="tree12" />
+                <componentref id="tree13" />
+                <componentref id="tree14" />
+                <componentref id="tree15" />
+                <componentref id="tree16" />
+                <componentref id="tree17" />
+                <componentref id="tree18" />
+                <componentref id="tree19" />
+                <componentref id="tree20" />
+                <componentref id="tree21" />
+                <componentref id="tree22" />
+                <componentref id="tree23" />
+                <componentref id="tree24" />
 			</children>
         </component>
 
@@ -2027,7 +2487,7 @@
         <component id="lounge_chairs" >
             <transformation>
                 <rotate axis="y" angle="90" />
-                <translate x="-80" y="0" z="12" />
+                <translate x="-82.5" y="0.05" z="12" />
 			</transformation>
 			<materials>
 				<material id="darkWood" />
@@ -2144,28 +2604,20 @@
                 <componentref id="jacuzzi" />
                 <componentref id="deck" />
                 <componentref id="soil" />
-                <componentref id="soil2" />
 				<componentref id="grass" />
-                <componentref id="wall" />
-                <componentref id="wall2" />
+                <componentref id="walls" />
                 <componentref id="divider" />
                 <componentref id="steps" />
                 <componentref id="pole" />
                 <componentref id="lifebuoy" />
                 <componentref id="ball_1" />
                 <componentref id="ball_2" />
-                <componentref id="table_and_chairs_1" />
-                <componentref id="table_and_chairs_2" />
-                <componentref id="table_and_chairs_3" />
-                <componentref id="table_and_chairs_4" />
+                <componentref id="table_and_chairs" />
                 <componentref id="board" />
                 <componentref id="trees" />
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
-                <componentref id="house" />
-                <componentref id="poolPartyAdd" />
-                <componentref id="door" />
-                <componentref id="triangles" />
+                <componentref id="poolHouse" />
             </children>
         </component>
     </components>
