@@ -12,10 +12,50 @@
 
 ### [TP1 - Scene Graph](tp1)
 
-- (items briefly describing main strong points)
 - Scene
-  - (Brief description of the created scene)
-  - (relative link to the scene)
+  - Initial Idea
+    ![Inital Idea](tp1/scenes/images/scene_idea.png)
+  - Our scene consists on a replication of a pool
+  - [Link to the scene file](tp1/scenes/sgi_tp1_T03_G10.xml)
+  - Below are the used primitives and some examples of how they were used:
+    - **MyRectangle**
+      - Tables and chairs by the pool
+      - Walls
+      - ...
+    - **MyCylinder**
+      - Table and chair legs
+      - Tree branches and trunk
+      - Shower
+    - **MySphere**
+      - Balls
+      - Simulate tree leaves
+    - **MyTorus**
+      - Lifebuoy
+    - **MyTriangle**
+      - Pool bar sides
+
+## Issues/Problems
+
+- There were some difficulties on getting the torus right, but at the end, we were happy with result.
+- There were some misunderstanding related how the texture component should be specified, however, at the end everything became clear.
+
+### Some Screenshots
+
+##### Top Left View
+
+![Top-Left](tp1/scenes/images/screenshots/Top-Left.png)
+
+##### Bottom Right View
+
+![Bottom-Right](tp1/scenes/images/screenshots/Bottom-Right.png)
+
+##### Pool Bar
+
+![Pool Bar](tp1/scenes/images/screenshots/pool-bar.png)
+
+##### Shower Details
+
+![Shower](tp1/scenes/images/screenshots/shower.png)
 
 -----
 
