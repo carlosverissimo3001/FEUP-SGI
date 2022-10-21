@@ -1046,19 +1046,52 @@ export class MySceneGraph {
                 If textureID is "inherit", the component inherits the father's texture;
                 textureID = "none" removes the texture from the parent component
 
+                if textureID is neither "none" nor "inherit", length_s and length_t are to be defined
                 if textureID is either "inherit" or "none", length_s and lenght_t should not be included
             */
+
+            // Get the textureID
             var textureID = this.reader.getString(textureNode, "id")
-            var texture = this.textures[textureID]
-            var length_s, length_t
+            var length_s, length_t, final_length_s, final_length_t;
 
-            if (texture == null && textureID != "none" && textureID != "inherit"){
-                this.onXMLMinorError("No textyre for ID : " + textureID)
-            }
-
-            length_s = this.reader.getFloat(textureNode, "length_s", false)
+            // Get the scale attributes but don't require them otherwise it'll trigger an error if they're not defined
+            length_s = this.reader.getFloat(textureNode, "length_s", false);
             length_t = this.reader.getFloat(textureNode, "length_t", false)
 
+            // If textureID is either "inherit" or "none", length_s and lenght_t should not be included
+            if (textureID == "inherit" || textureID == "none") {
+                if (length_s != null || length_t != null){
+                    this.onXMLMinorError("When texture ID is " + textureID + " length_s and length_t should not be defined");
+                    if (textureID == "inherit"){
+                        this.onXMLMinorError("Will use the values defined instead of the ones inherited from the parent component");
+                        final_length_s = length_s;
+                        final_length_t = length_t;
+                    }
+                    else if (textureID == "none"){
+                        this.onXMLMinorError("Will ignore the values defined");
+                        final_length_s = null;
+                        final_length_t = null;
+                    }
+                }
+            }
+
+            else{
+                var texture = this.textures[textureID]
+
+                if (texture == null)
+                    this.onXMLMinorError("No texture for ID : " + textureID)
+
+                if (length_s == null || length_t == null){
+                    this.onXMLMinorError("When textureID is neither 'none' nor 'inherit' length_s and length_t should be defined");
+                    this.onXMLMinorError("Will use 1.0 as a default");
+                    final_length_s = 1.0;
+                    final_length_t = 1.0;
+                }
+                else{
+                    final_length_s = length_s;
+                    final_length_t = length_t;
+                }
+            }
 
             // ****** CHILDREN (Primitives or Components) ******
             var childrenNode = grandChildren[childrenIndex].children;
@@ -1088,8 +1121,7 @@ export class MySceneGraph {
             }
 
             // Save the component and its attributes
-            // Keep 1 and 1 for now
-            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, length_s , length_t);
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t);
             this.components[componentID] = component;
         }
 
