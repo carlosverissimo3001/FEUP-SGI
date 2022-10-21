@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
-    <views default="Jacuzzi">
+    <views default="Inside Pool Bar">
         <perspective id="Jacuzzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -52,6 +52,10 @@
             <to x="100" y="5" z="32" />
         </perspective>
 
+        <perspective id="Inside Pool Bar" near="0.1" far="500" angle="65">
+            <from x="101" y="5" z="30" />
+            <to x="0" y="4" z="30" />
+        </perspective>
 
         <ortho id="Ortho" near="0.1" far="500" left="-3.0" right="3.0" top="3.0" bottom="-3.0">
 			<from x="20" y="14" z="20" />
@@ -510,9 +514,9 @@
 
         <component id="triangles">
             <transformation>
-                <translate x="0" y="0" z="0" />
+                <transformationref id="demoTransform" />
             </transformation>
-            <texture id="torusTexture" />
+            <texture id="torusTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -723,7 +727,7 @@
                 <scale x="19" y="15" z="40" />
                 <translate x="4.5" y="0.5" z="1" />
             </transformation>
-            <texture id="whiteHouse" />
+            <texture id="whiteHouse" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1205,8 +1209,6 @@
             <texture id="ballTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="white" />
-                <material id="blue" />
-                <material id="black" />
             </materials>
             <children>
                 <primitiveref id="demoSphere" />
@@ -1217,7 +1219,7 @@
             <transformation>
                 <transformationref id="tableTopTransform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -1230,7 +1232,7 @@
             <transformation>
                 <transformationref id="tableLeg1Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -1243,7 +1245,7 @@
             <transformation>
                 <transformationref id="tableLeg2Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -1256,7 +1258,7 @@
             <transformation>
                 <transformationref id="tableLeg3Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -1269,7 +1271,7 @@
             <transformation>
                 <transformationref id="tableLeg4Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="light_gray" />
             </materials>
@@ -1278,11 +1280,11 @@
             </children>
         </component>
 
-        <component id="table1" >
+        <component id="table" >
             <transformation>
                 <translate x="40" y="0" z="60" />
             </transformation>
-            <texture id="none" />
+            <texture id="darkWoodTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1299,7 +1301,7 @@
             <transformation>
                 <transformationref id="chairBaseTransform" />
             </transformation>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <materials>
                 <material id="white" />
             </materials>
@@ -1312,7 +1314,7 @@
             <transformation>
                 <transformationref id="chairTopTransform" />
             </transformation>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <materials>
                 <material id="white" />
             </materials>
@@ -1325,7 +1327,7 @@
             <transformation>
                 <transformationref id="chairLeg1Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -1338,7 +1340,7 @@
             <transformation>
                 <transformationref id="chairLeg2Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -1351,7 +1353,7 @@
             <transformation>
                 <transformationref id="chairLeg3Transform" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -1366,7 +1368,7 @@
                 <scale x="0.2" y="0.2" z="0.4" />
                 <translate x="30.0" y="-75" z="-0.1" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="wood" />
             </materials>
@@ -1379,7 +1381,7 @@
             <transformation>
                 <translate x="39" y="0" z="51" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1398,7 +1400,7 @@
                 <rotate axis="y" angle="-90" />
                 <translate x="56.3" y="0" z="-55" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1417,7 +1419,7 @@
                 <rotate axis="y" angle="180" />
                 <translate x="-49.5" y="0" z="-72.5" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1434,9 +1436,9 @@
         <component id="chair4" >
             <transformation>
                 <rotate axis="y" angle="90" />
-                <translate x="-68" y="0" z="33.5" />
+                <translate x="-67" y="0" z="33.5" />
             </transformation>
-            <texture id="none" />
+            <texture id="inherit" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1450,11 +1452,11 @@
             </children>
         </component>
 
-        <component id="chairs1" >
+        <component id="chairs" >
             <transformation>
                 <translate x="0" y="0" z="0" />
             </transformation>
-            <texture id="none" />
+            <texture id="lightWoodTexture" length_s="1" length_t="1" />
             <materials>
                 <material id="demoMaterial" />
             </materials>
@@ -1475,8 +1477,8 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="table1" />
-                <componentref id="chairs1" />
+				<componentref id="table" />
+                <componentref id="chairs" />
 			</children>
         </component>
 
@@ -1504,8 +1506,8 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="table1" />
-                <componentref id="chairs1" />
+				<componentref id="table" />
+                <componentref id="chairs" />
 			</children>
         </component>
 
@@ -1518,8 +1520,8 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="table1" />
-                <componentref id="chairs1" />
+				<componentref id="table" />
+                <componentref id="chairs" />
 			</children>
         </component>
 
@@ -1532,8 +1534,8 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="table1" />
-                <componentref id="chairs1" />
+				<componentref id="table" />
+                <componentref id="chairs" />
 			</children>
         </component>
 
@@ -2093,7 +2095,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree10" />
 			</children>
@@ -2106,7 +2108,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree11" />
 			</children>
@@ -2120,7 +2122,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree12" />
 			</children>
@@ -2133,7 +2135,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree13" />
 			</children>
@@ -2146,7 +2148,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree14" />
 			</children>
@@ -2159,7 +2161,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree15" />
 			</children>
@@ -2172,7 +2174,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree16" />
 			</children>
@@ -2185,7 +2187,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree12" />
 			</children>
@@ -2198,7 +2200,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree18" />
 			</children>
@@ -2211,7 +2213,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree19" />
 			</children>
@@ -2224,7 +2226,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree20" />
 			</children>
@@ -2237,7 +2239,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree21" />
 			</children>
@@ -2250,7 +2252,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree22" />
 			</children>
@@ -2263,7 +2265,7 @@
 			<materials>
 				<material id="demoMaterial" />
 			</materials>
-			<texture id="trunkTexture" />
+			<texture id="inherit" />
 			<children>
 				<componentref id="tree23" />
 			</children>
@@ -2638,7 +2640,6 @@
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
                 <componentref id="poolHouse" />
-                <componentref id="roof" />
             </children>
         </component>
     </components>
