@@ -1,7 +1,7 @@
-<sxs>
+<sxs>poolHouse
     <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
-    <views default="Whole Scene 1">
+    <views default="Top Left">
         <perspective id="Jacuzzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -12,22 +12,22 @@
             <to x="10" y="0" z="70" />
         </perspective>
 
-        <perspective id="Whole Scene 1" near="0.1" far="500" angle="23">
+        <perspective id="Top Left" near="0.1" far="500" angle="23">
             <from x="-115.6" y="84.97" z="-76.1" />
             <to x="46.68" y="6.80" z="45." />
         </perspective>
 
-        <perspective id="Whole Scene 2" near="0.1" far="500" angle="23">
+        <perspective id="Bottom Left" near="0.1" far="500" angle="23">
             <from x="-79.56" y="83.99" z="144.8" />
             <to x="43.3" y="1.17" z="46" />
         </perspective>
 
-        <perspective id="Whole Scene 3" near="0.1" far="500" angle="23">
+        <perspective id="Bottom Right" near="0.1" far="500" angle="23">
             <from x="178.5" y="81.17" z="137.2" />
             <to x="63.4" y="-4" z="36" />
         </perspective>
 
-        <perspective id="Whole Scene 4" near="0.1" far="500" angle="23">
+        <perspective id="Top Right" near="0.1" far="500" angle="23">
             <from x="201.37" y="101.6" z="-83" />
             <to x="53" y="-0.23" z="27.3" />
         </perspective>
@@ -57,8 +57,8 @@
             <to x="0" y="4" z="30" />
         </perspective>
 
-        <ortho id="RightView" near="0.1" far="500" left="-10" right="10" top="5" bottom="-5">
-            <from x="25" y="2.5" z="5"/>
+        <ortho id="Ball Ortho" near="0.1" far="500" left="-10" right="10" top="5" bottom="-2.5">
+            <from x="79.9" y="2.65" z="44"/>
             <to x="0" y="2.5" z="5"/>
         </ortho>
     </views>
@@ -742,7 +742,7 @@
 
         <component id="poolHouse">
             <transformation>
-                <translate x="55.92" y="0.01" z="12" />
+                <translate x="55.92" y="0.2" z="12" />
                 <scale x="0.5" y="0.6" z="0.6" />
             </transformation>
             <texture id="none" />
@@ -953,7 +953,7 @@
         <component id="divider">
             <transformation>
                 <scale x="20" y="1.95" z="4" />
-                <translate x="0.75" y="0.515" z="7.3" />
+                <translate x="0.75" y="0.6" z="7.3" />
             </transformation>
             <texture id="concreteTexture" length_s="1" length_t="1"/>
             <materials>
