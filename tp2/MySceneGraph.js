@@ -203,7 +203,7 @@ export class MySceneGraph {
         else {
             if (index != ANIMATION_INDEX)
                 this.onXMLMinorError("tag <components> out of order");
-            
+
             //Parse animations block
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
@@ -795,7 +795,7 @@ export class MySceneGraph {
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
                     grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)"
             }
 
             // Specifications for the current primitive.
@@ -973,39 +973,39 @@ export class MySceneGraph {
                 var degree_v = this.reader.getFloat(grandChildren[0], 'degree_v')
                 if (!(degree_v != null && !isNaN(degree_v)))
                     return "unable to parse degree_v of the primitive attributes for ID = " + primitiveId;
-                
+
                 // parts_v
                 var parts_v = this.reader.getFloat(grandChildren[0], 'parts_v')
                 if(!(parts_v != null && !isNaN(parts_v)))
                     return "unable to parse parts_v of the primitive attributes for ID = " + primitiveId;
 
-                var numControlPoints = (degree_u + 1) * (degree_v + 1);
-
                 var controlPointsNode = grandChildren[0].children
 
                 var u_vertexes = []
-                for (var i = 0; i < (degree_u + 1); i++){
-                    var aux = this.parseCoordinates3D(controlPointsNode[i])
+                for (var j = 0; j < (degree_u + 1); j++){
+                    var aux = this.parseCoordinates3D(controlPointsNode[j])
                     if (!Array.isArray(aux))
                         return aux;
-                    
+
                     u_vertexes.push(aux)
                 }
 
                 var v_vertexes = []
-                for (var i = 0; i < (degree_v + 1); i++){
-                    var aux = this.parseCoordinates3D(controlPointsNode[i])
+                for (var j = 0; j < (degree_v + 1); j++){
+                    var aux = this.parseCoordinates3D(controlPointsNode[j])
                     if (!Array.isArray(aux))
                         return aux;
-                    
+
                     v_vertexes.push(aux)
                 }
 
                 var vertexes = [];
-                
+
                 vertexes.push(u_vertexes, v_vertexes)
 
-                var patch = new MyPatch(scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes)
+                var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes);
+
+                this.primitives[primitiveId] = patch;
             }
 
             else {
@@ -1369,6 +1369,9 @@ export class MySceneGraph {
      * Display each node, receives the root node
      */
     displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
+        if (currNodeID == "patch")
+            console.log("here");
+
         // Get the node from the component tree using its ID
         var currNode = this.components[currNodeID]
         if (currNode == null)
