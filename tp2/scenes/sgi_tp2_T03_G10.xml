@@ -142,25 +142,26 @@
     </lights>
 
     <textures>
-        <texture id="trunkTexture" file="scenes/images/trunk-image.jpg" />
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
-        <texture id="waterTexture2" file="scenes/images/waterTex2.jpg" />
-        <texture id="waterTexture" file="scenes/images/waterTex.jpg" />
-        <texture id="grassTexture" file="scenes/images/grassTex.jpg" />
-        <texture id="torusTexture" file="scenes/images/torus.jpg" />
-        <texture id="ballTexture" file="scenes/images/ballTex.jpg" />
-        <texture id="testTexture" file="scenes/images/texture.jpg" />
-        <texture id="deckTexture" file="scenes/images/deck.jpg" />
-        <texture id="soilTexture" file="scenes/images/soil.png" />
-        <texture id="concreteTexture" file="scenes/images/concrete.jpg" />
-        <texture id="darkConcreteTexture" file="scenes/images/dark_concrete.png" />
-        <texture id="linenTexture" file="scenes/images/linen.jpg" />
-        <texture id="darkWoodTexture" file="scenes/images/dark_wood.png" />
-        <texture id="lightWoodTexture" file="scenes/images/light_wood.png" />
-        <texture id="poolParty" file="scenes/images/images.jpeg" />
-        <texture id="whiteHouse" file="scenes/images/white-house.jpg" />
-        <texture id="door" file="scenes/images/door.jpg" />
-        <texture id="menuDisplay" file="scenes/images/menu_display.png" />
+        <texture id="trunkTexture" file="scenes/images/textures/trunk-image.jpg" />
+        <texture id="demoTexture" file="scenes/images/textures/vidral.jpg" />
+        <texture id="waterTexture2" file="scenes/images/textures/waterTex2.jpg" />
+        <texture id="waterTexture" file="scenes/images/textures/waterTex.jpg" />
+        <texture id="grassTexture" file="scenes/images/textures/grassTex.jpg" />
+        <texture id="torusTexture" file="scenes/images/textures/torus.jpg" />
+        <texture id="ballTexture" file="scenes/images/textures/ballTex.jpg" />
+        <texture id="testTexture" file="scenes/images/textures/texture.jpg" />
+        <texture id="deckTexture" file="scenes/images/textures/deck.jpg" />
+        <texture id="soilTexture" file="scenes/images/textures/soil.png" />
+        <texture id="concreteTexture" file="scenes/images/textures/concrete.jpg" />
+        <texture id="darkConcreteTexture" file="scenes/images/textures/dark_concrete.png" />
+        <texture id="linenTexture" file="scenes/images/textures/linen.jpg" />
+        <texture id="darkWoodTexture" file="scenes/images/textures/dark_wood.png" />
+        <texture id="lightWoodTexture" file="scenes/images/textures/light_wood.png" />
+        <texture id="poolParty" file="scenes/images/textures/images.jpeg" />
+        <texture id="whiteHouse" file="scenes/images/textures/white-house.jpg" />
+        <texture id="door" file="scenes/images/textures/door.jpg" />
+        <texture id="menuDisplay" file="scenes/images/textures/menu_display.png" />
+        <texture id="patch_texture" file="scenes/images/textures/patch_test.png"/>
     </textures>
 
     <materials>
@@ -453,12 +454,26 @@
         </primitive>
 
         <primitive id="demoPatch">
-            <patch degree_u="1" parts_u="1" degree_v="1" parts_v="1" >
+            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20" >
                 <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
-                <controlpoint x="-2" y="-2" z="0" />
-                <controlpoint x="-2" y="2" z="0" />
-                <controlpoint x="2" y="-2" z="0" />
-                <controlpoint x="2" y="2" z="0" />
+
+                <!-- U = 0 // V = 0..3 -->
+                <controlpoint x="-1.5" y="-1.5" z="0.0" />
+                <controlpoint x="-2.0" y="-2.0" z="2.0" />
+                <controlpoint x="-2.0" y="2.0" z="2.0" />
+                <controlpoint x="-1.5" y="1.5" z="0.0" />
+
+                <!-- U = 1 // V = 0..3 -->
+                <controlpoint x="0" y="0" z="3.0" />
+                <controlpoint x="0" y="-2.0" z="3.0" />
+                <controlpoint x="0" y="2.0" z="3.0" />
+                <controlpoint x="0" y="0" z="3.0" />
+
+                <!-- U = 2 // V = 0..3 -->
+                <controlpoint x="1.5" y="-1.5" z="0.0" />
+                <controlpoint x="2.0" y="-2.0" z="2.0" />
+                <controlpoint x="2.0" y="2.0" z="2.0" />
+                <controlpoint x="1.5" y="1.5" z="0.0" />
             </patch>
         </primitive>
 
@@ -2627,12 +2642,12 @@
 
         <component id="patch" >
             <transformation>
-                <scale x="2" y="2" z="2" />
+                <translate x="7.5" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="waterTexture" />
+            <texture id="patch_texture" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="demoPatch" />
             </children>
@@ -2648,24 +2663,24 @@
             </materials>
             <texture id="none" />
             <children>
-                <!-- <componentref id="pool" /> -->
-                <!-- <componentref id="jacuzzi" /> -->
-                <!-- <componentref id="deck" /> -->
-                <!-- <componentref id="soil" /> -->
-                <!-- <componentref id="grass" /> -->
-                <!-- <componentref id="walls" /> -->
-                <!-- <componentref id="divider" /> -->
-                <!-- <componentref id="steps" /> -->
-                <!-- <componentref id="pole" /> -->
-                <!-- <componentref id="lifebuoy" /> -->
-                <!-- <componentref id="ball_1" /> -->
-                <!-- <componentref id="ball_2" /> -->
-                <!-- <componentref id="table_and_chairs" /> -->
-                <!-- <componentref id="board" /> -->
-                <!-- <componentref id="trees" /> -->
-                <!-- <componentref id="lounge_chairs" /> -->
-                <!-- <componentref id="shower" /> -->
-                <!-- <componentref id="poolHouse" /> -->
+                <componentref id="pool" />
+                <componentref id="jacuzzi" />
+                <componentref id="deck" /> 
+                <componentref id="soil" />
+                <componentref id="grass" />
+                <componentref id="walls" />
+                <componentref id="divider" />
+                <componentref id="steps" />
+                <componentref id="pole" />
+                <componentref id="lifebuoy" />
+                <componentref id="ball_1" />
+                <componentref id="ball_2" />
+                <componentref id="table_and_chairs" />
+                <componentref id="board" />
+                <componentref id="trees" />
+                <componentref id="lounge_chairs" />
+                <componentref id="shower" />
+                <componentref id="poolHouse" /> -->
                 <componentref id="patch" />
             </children>
         </component>
