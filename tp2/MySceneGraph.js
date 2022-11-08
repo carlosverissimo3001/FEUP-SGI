@@ -987,21 +987,29 @@ export class MySceneGraph {
                     if (!Array.isArray(aux))
                         return aux;
 
+                    // w coordinate
+                    aux.push(1);
                     u_vertexes.push(aux)
-                }
-
-                var v_vertexes = []
-                for (var j = 0; j < (degree_v + 1); j++){
-                    var aux = this.parseCoordinates3D(controlPointsNode[j])
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    v_vertexes.push(aux)
                 }
 
                 var vertexes = [];
 
-                vertexes.push(u_vertexes, v_vertexes)
+                // Fix U, iterate V
+                for (var u = 0; u < (degree_u + 1); u++){
+                    var subvertexes = [];
+                    for (var v = 0; v < (degree_v + 1); v++){
+                        var index =  u * (degree_v + 1) + v;
+                        var aux = this.parseCoordinates3D(controlPointsNode[index])
+                        if(!Array.isArray(aux))
+                            return aux;
+
+                        // w coordinate
+                        aux.push(1);
+
+                        subvertexes.push(aux);
+                    }
+                    vertexes.push(subvertexes);
+                }
 
                 var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes);
 
@@ -1369,9 +1377,6 @@ export class MySceneGraph {
      * Display each node, receives the root node
      */
     displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
-        if (currNodeID == "patch")
-            console.log("here");
-
         // Get the node from the component tree using its ID
         var currNode = this.components[currNodeID]
         if (currNode == null)

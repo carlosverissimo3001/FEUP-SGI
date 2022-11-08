@@ -34,11 +34,11 @@ export class MyPatch extends CGFobject {
   }
 
   /**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the cylinder
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(u, v) {
-		//
-	}
+   * @method updateTexCoords
+   * Updates the list of texture coordinates of the cylinder
+   * @param {Array} coords - Array of texture coordinates
+   */
+  updateTexCoords(u, v) {
+    //
+  }
 }
