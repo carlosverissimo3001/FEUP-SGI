@@ -28,6 +28,7 @@ export class XMLscene extends CGFscene {
     this.graphLoaded = false;
 
     this.setUpdatePeriod(100);
+    this.startTime = null;
 
     this.enableTextures(true);
 
@@ -274,7 +275,13 @@ export class XMLscene extends CGFscene {
   }
 
   update(t) {
-    this.checkKeys();
+    if (this.sceneInited){
+      if (this.startTime === null) this.startTime = t;
+
+      //this.graph.root.computeAnimation(time - this.startTime)
+
+      this.checkKeys();
+    }
   }
 
   checkKeys() {

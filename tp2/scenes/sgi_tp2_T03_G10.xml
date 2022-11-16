@@ -480,6 +480,51 @@
     </primitives>
 
     <animations>
+        <!-- podem existir zero ou mais sub-nós -->
+        <!--  KeyframeAnimation  -->
+        <!-- A animação inicia-se no tempo da primeira keyframe, -->
+        <!-- sendo que o objeto em causa deve permanecer -->
+        <!-- invisível até esse momento -->
+        <!-- Deve existir pelo menos 1 elemento “keyframe”. -->
+        <!-- “instant” e’ o tempo expresso em segundos -->
+        <!-- desde o inicio da animacao. -->
+        <!-- Os keyframes devem ser declarados por -->
+        <!-- ordem crescente do tempo.  -->
+        <keyframeanim id="demoAnimation">
+
+            <keyframe instant="10">
+                <!-- translate, rotate e scale representam as -->
+                <!-- quantidades das transformações -->
+                <!-- correspondentes, medidas em relação à -->
+                <!-- situação inicial (instante zero) -->
+                <!-- Para uma mesma keyframe, os elementos -->
+                <!-- translate, rotate e scale sao obrigatorios -->
+                <!-- e fornecidos por esta ordem -->
+                <!-- os angulos são expressos em graus -->
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="20">
+                <!-- translate, rotate e scale representam as -->
+                <!-- quantidades das transformações -->
+                <!-- correspondentes, medidas em relação à -->
+                <!-- situação inicial (instante zero) -->
+                <!-- Para uma mesma keyframe, os elementos -->
+                <!-- translate, rotate e scale sao obrigatorios -->
+                <!-- e fornecidos por esta ordem -->
+                <!-- os angulos são expressos em graus -->
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+        </keyframeanim >
     </animations>
 
     <components>
@@ -2665,7 +2710,7 @@
             <children>
                 <componentref id="pool" />
                 <componentref id="jacuzzi" />
-                <componentref id="deck" /> 
+                <componentref id="deck" />
                 <componentref id="soil" />
                 <componentref id="grass" />
                 <componentref id="walls" />

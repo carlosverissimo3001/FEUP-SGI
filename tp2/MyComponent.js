@@ -14,7 +14,7 @@ import { CGFobject } from "../lib/CGF.js";
  */
 
 export class MyComponent extends CGFobject {
-  constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t, animation, higlighted) 
+  constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t, animation, higlighted)
   {
     super(scene);
     this.componentID = componentID;
@@ -29,8 +29,8 @@ export class MyComponent extends CGFobject {
     this.materialID = this.materials[0];
     this.matIndex = 0;
 
-    this.animation = animation;
     this.higlighted = higlighted
+    this.animationMatrix = null; // no animation matrix
   }
 
   changeMaterial() {
@@ -41,43 +41,18 @@ export class MyComponent extends CGFobject {
     this.materialID = this.materials[this.matIndex];
   }
 
-  setTransformation(transf) {
-    this.transf = transf;
-  }
+  /* display(){
+    if (this.animationMatrix !== null)
+      this.scene.multMatrix(this.animationMatrix);
+  } */
 
-  setMaterial(material) {
-    this.material = material;
-  }
-
-  setTexture(texture) {
-    this.texture = texture;
-  }
-
-  setChildren(children) {
-    this.children = children;
-  }
-
-  setPrimitives(primitives) {
-    this.primitives = primitives;
-  }
-
-  getTransformation() {
-    return this.transf;
-  }
-
-  getMaterial() {
-    return this.material;
-  }
-
-  getTexture() {
-    return this.texture;
-  }
-
-  getChildren() {
-    return this.children;
-  }
-
-  getPrimitives() {
-    return this.primitives;
-  }
+  computeAnimation(ellapsedTime) {
+    // if node does not have animation return
+    // if beyond animation range, animationMatrix is the last animation state and return
+    // know the active animation segment based on ellapsed time
+    // calculate execution ratio [0..1] within the active segment
+    // calculate TRS properties based on execution ratio
+    // compute animationMatrix mat4 based on active segment start state and TRS properties
+    // animationMatrix mat4 is used in the display method
+    }
 }

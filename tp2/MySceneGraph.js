@@ -7,6 +7,8 @@ import { MySphere } from './MySphere.js'
 import { MyTorus } from './MyTorus.js';
 import { MyComponent} from './MyComponent.js';
 import { MyPatch } from './MyPatch.js'
+import { MyKeyframeAnimation} from './animation/MyKeyframeAnimation.js'
+import { MyKeyframe } from './animation/MyKeyframe.js'
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -205,7 +207,7 @@ export class MySceneGraph {
                 this.onXMLMinorError("tag <components> out of order");
 
             //Parse animations block
-            if ((error = this.parseComponents(nodes[index])) != null)
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -389,7 +391,6 @@ export class MySceneGraph {
         this.log("Parsed views");
         return null;
     }
-
 
     /**
      * Parses the <ambient> node.
@@ -981,17 +982,6 @@ export class MySceneGraph {
 
                 var controlPointsNode = grandChildren[0].children
 
-                var u_vertexes = []
-                for (var j = 0; j < (degree_u + 1); j++){
-                    var aux = this.parseCoordinates3D(controlPointsNode[j])
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    // w coordinate
-                    aux.push(1);
-                    u_vertexes.push(aux)
-                }
-
                 var vertexes = [];
 
                 // Fix U, iterate V
@@ -1030,7 +1020,161 @@ export class MySceneGraph {
      * @param {animations block element} animationsNode
      */
     parseAnimations(animationsNode){
+        var children = animationsNode.children
 
+        this.kfAnimations = []
+
+        // For each keyframe animation
+        for (let i = 0; i < children.length; i++){
+            if (children[i].nodeName != "keyframeanim") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the (keyframe) aniamtion
+            var kfAnimationId = this.reader.getString(children[i], 'id')
+            if (kfAnimationId == null)
+            {
+                return "no ID defined for keyframe animation";
+            }
+
+            if (this.kfAnimations[kfAnimationId] != null)
+            {
+                return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
+            }
+
+            var newKfAnim = new MyKeyframeAnimation();
+
+            // Get keyfames of the animation
+            var keyframes = children[i].children
+
+            // For each keyframe in the keyframe animation
+            for (let j = 0; j < keyframes.length; j++) {
+                if(keyframes[j].nodeName != "keyframe")
+                {
+                    this.onXMLMinorError("unknown tag <" + keyframes[j].nodeName + ">" + " in keyframe animation " + kfAnimationId + ". Will ignore");
+                    continue;
+                }
+
+                // Get the start instant
+                var instant = this.reader.getFloat(keyframes[j], 'instant')
+
+                var transformations = keyframes[j].children
+
+                var translation = transformations[0]
+                var rotationZ = transformations[1]
+                var rotationY = transformations[2]
+                var rotationX = transformations[3]
+                var scale = transformations[4]
+
+
+                // -- TRANSLATION -- //
+                if (translation.nodeName != "translation"){
+                    this.onXMLMinorError("Expected <translation> tag but found <" + translation.nodeName + ">. Will ignore");
+                    continue;
+                }
+
+                var translationX = this.reader.getString(translation, 'x')
+                if (!(translationX != null && !isNaN(translationX))){
+                    this.onXMLMinorError("Couldn't compute translation at X for keyframe animation " + kfAnimationId + ". Using X = 0")
+                    translationX = 0
+                    continue;
+                }
+
+                var translationY = this.reader.getString(translation, 'y')
+                if (!(translationY != null && !isNaN(translationY))){
+                    this.onXMLMinorError("Couldn't compute translation at Y for keyframe animation " + kfAnimationId + ". Using Y = 0")
+                    translationY = 0
+                    continue;
+                }
+
+                var translationZ = this.reader.getString(translation, 'z')
+                if (!(translationZ != null && !isNaN(translationZ))){
+                    this.onZMLMinorError("Couldn't compute translation at Z for keyframe animation " + kfAnimationId + ". Using Z = 0")
+                    translationZ = 0
+                    continue;
+                }
+
+                // -- ROTATION -- //
+                if (rotationX.nodeName != "rotation" || rotationY.nodeName != "rotation" || rotationZ.nodeName != "rotation"){
+                    this.onXMLMinorError("Expected <rotation> tag but found <" + translation.nodeName + ">. Will ignore");
+                    continue;
+                }
+
+                var rotationXaxis = this.reader.getString(rotationX, 'axis');
+                if (rotationXaxis == null || rotationXaxis != 'x'){
+                    this.onXMLMinorError("Error while computing value for rotation at X axis for keyframe animation " + kfAnimationId + ". Using axis = 'x'")
+                }
+                var rotationXangle = this.reader.getFloat(rotationX, 'angle');
+                if (!(rotationXangle != null && !isNaN(rotationXangle)))
+                {
+                    this.onXMLMinorError("Error while computing value for angle at X axis for keyframe animation " + kfAnimationId + ". Using angle = 0");
+                    rotationXangle = 0;
+                }
+
+                var rotationYaxis = this.reader.getString(rotationY, 'axis');
+                if (rotationYaxis == null || rotationYaxis != 'y'){
+                    this.onXMLMinorError("Error while computing value for rotation at Y axis for keyframe animation " + kfAnimationId + ". Using axis = 'y'")
+                }
+                var rotationYangle = this.reader.getFloat(rotationY, 'angle');
+                if (!(rotationYangle != null && !isNaN(rotationYangle)))
+                {
+                    this.onXMLMinorError("Error while computing value for angle at Y axis for keyframe animation " + kfAnimationId + ". Using angle = 0");
+                    rotationYangle = 0;
+                }
+
+                var rotationZaxis = this.reader.getString(rotationZ, 'axis');
+                if (rotationZaxis == null || rotationZaxis != 'z'){
+                    this.onXMLMinorError("Error while computing value for rotation at Z axis for keyframe animation " + kfAnimationId + ". Using axis = 'z'")
+                }
+                var rotationZangle = this.reader.getFloat(rotationZ, 'angle');
+                if (!(rotationZangle != null && !isNaN(rotationZangle)))
+                {
+                    this.onXMLMinorError("Error while computing value for angle at Z axis for keyframe animation " + kfAnimationId + ". Using angle = 0");
+                    rotationZangle = 0;
+                }
+
+                // -- SCALE -- //
+                if (scale.nodeName != 'scale'){
+                    this.onXMLMinorError("Expected <scale> tag but found <" + scale.nodeName + ">. Will ignore");
+                    continue;
+                }
+
+                var sx = this.reader.getFloat(scale, 'sx')
+                if (!(sx != null && !isNaN(sx)))
+                {
+                    this.onXMLMinorError("Error while computing value for scale value at X axis for keyframe animation " + kfAnimationId + ". Using sx = 1");
+                    sx = 1;
+                }
+
+                var sy = this.reader.getFloat(scale, 'sy')
+                if (!(sy != null && !isNaN(sy)))
+                {
+                    this.onXMLMinorError("Error while computing value for scale value at Y axis for keyframe animation " + kfAnimationId + ". Using sy = 1");
+                    sy = 1;
+                }
+
+                var sz = this.reader.getFloat(scale, 'sz')
+                if (!(sz != null && !isNaN(sz)))
+                {
+                    this.onXMLMinorError("Error while computing value for scale value at Z axis for keyframe animation " + kfAnimationId + ". Using sz = 1");
+                    sz = 1;
+                }
+
+                var trans_array = [translationX, translationY, translationZ]
+                var rot_array = [rotationXangle, rotationYangle, rotationZangle]
+                var scale_array = [sx, sy, sz]
+
+
+                // Create a new keyframe
+                var keyframe = new MyKeyframe(instant, trans_array, rot_array, scale_array)
+
+                // Add the frame to the keyframe animation
+                newKfAnim.addKeyframe(keyframe)
+            }
+
+            this.kfAnimations[kfAnimationId] = newKfAnim
+        }
     }
 
     /**
