@@ -1,12 +1,12 @@
 import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcameraOrtho } from '../lib/CGF.js';
 
-import { MyRectangle } from './MyRectangle.js';
-import { MyCylinder } from './MyCylinder.js';
-import { MyTriangle } from './MyTriangle.js';
-import { MySphere } from './MySphere.js'
-import { MyTorus } from './MyTorus.js';
-import { MyComponent} from './MyComponent.js';
-import { MyPatch } from './MyPatch.js'
+import { MyRectangle } from './primitives/MyRectangle.js';
+import { MyCylinder } from './primitives/MyCylinder.js';
+import { MyTriangle } from './primitives/MyTriangle.js';
+import { MySphere } from './primitives/MySphere.js'
+import { MyTorus } from './primitives/MyTorus.js';
+import { MyComponent} from './primitives/MyComponent.js';
+import { MyPatch } from './primitives/MyPatch.js'
 import { MyKeyframeAnimation} from './animation/MyKeyframeAnimation.js'
 import { MyKeyframe } from './animation/MyKeyframe.js'
 
@@ -1022,6 +1022,9 @@ export class MySceneGraph {
     parseAnimations(animationsNode){
         var children = animationsNode.children
 
+        /**
+         *  Array of keyframe animations
+         */
         this.kfAnimations = []
 
         // For each keyframe animation
@@ -1059,8 +1062,10 @@ export class MySceneGraph {
                 // Get the start instant
                 var instant = this.reader.getFloat(keyframes[j], 'instant')
 
+                // Get the transformations array
                 var transformations = keyframes[j].children
 
+                // This order is obligatory
                 var translation = transformations[0]
                 var rotationZ = transformations[1]
                 var rotationY = transformations[2]
@@ -1074,26 +1079,9 @@ export class MySceneGraph {
                     continue;
                 }
 
-                var translationX = this.reader.getString(translation, 'x')
-                if (!(translationX != null && !isNaN(translationX))){
-                    this.onXMLMinorError("Couldn't compute translation at X for keyframe animation " + kfAnimationId + ". Using X = 0")
-                    translationX = 0
-                    continue;
-                }
-
-                var translationY = this.reader.getString(translation, 'y')
-                if (!(translationY != null && !isNaN(translationY))){
-                    this.onXMLMinorError("Couldn't compute translation at Y for keyframe animation " + kfAnimationId + ". Using Y = 0")
-                    translationY = 0
-                    continue;
-                }
-
-                var translationZ = this.reader.getString(translation, 'z')
-                if (!(translationZ != null && !isNaN(translationZ))){
-                    this.onZMLMinorError("Couldn't compute translation at Z for keyframe animation " + kfAnimationId + ". Using Z = 0")
-                    translationZ = 0
-                    continue;
-                }
+                var trans_array = this.parseCoordinates3D(translation, "translation node for keyframe animation " + kfAnimationId)
+                if(!Array.isArray(trans_array))
+                    return trans_array;
 
                 // -- ROTATION -- //
                 if (rotationX.nodeName != "rotation" || rotationY.nodeName != "rotation" || rotationZ.nodeName != "rotation"){
@@ -1161,7 +1149,6 @@ export class MySceneGraph {
                     sz = 1;
                 }
 
-                var trans_array = [translationX, translationY, translationZ]
                 var rot_array = [rotationXangle, rotationYangle, rotationZangle]
                 var scale_array = [sx, sy, sz]
 
@@ -1172,6 +1159,9 @@ export class MySceneGraph {
                 // Add the frame to the keyframe animation
                 newKfAnim.addKeyframe(keyframe)
             }
+
+            // All keyframes have been added and sorted, update the values
+            newKfAnim.update_order();
 
             this.kfAnimations[kfAnimationId] = newKfAnim
         }
@@ -1217,14 +1207,20 @@ export class MySceneGraph {
             }
 
             var transformationIndex = nodeNames.indexOf("transformation");
-            var materialsIndex = nodeNames.indexOf("materials");
-            var textureIndex = nodeNames.indexOf("texture");
-            var childrenIndex = nodeNames.indexOf("children");
+            var materialsIndex      = nodeNames.indexOf("materials");
+            var textureIndex        = nodeNames.indexOf("texture");
+            var childrenIndex       = nodeNames.indexOf("children");
+            var animationIndex      = nodeNames.indexOf("animation");
+            var highlightIndex      = nodeNames.indexOf("highlighted");
 
-            var transfNode = grandChildren[transformationIndex].children;
-            var materialNode = grandChildren[materialsIndex].children;
-            var textureNode = grandChildren[textureIndex];
-            var childrenNode = grandChildren[childrenIndex].children;
+            var transfNode          = grandChildren[transformationIndex].children;
+            var materialNode        = grandChildren[materialsIndex].children;
+            var textureNode         = grandChildren[textureIndex];
+            var childrenNode        = grandChildren[childrenIndex].children;
+
+            // As these are not obligatory, check if they exist before getting their children
+            var animationNode       = animationIndex == -1 ? null : grandChildren[animationIndex]
+            var highlightNode       = highlightIndex == -1 ? null : grandChildren[highlightIndex]
 
             // ****** TRANSFORMATIONS ******
             if(transfNode.length == 0)
@@ -1345,8 +1341,44 @@ export class MySceneGraph {
                 }
             }
 
+
+            // ***** ANIMATIONS *****
+            var animationId;
+            if (animationNode != null){
+                animationId = this.reader.getString(animationNode, "id");
+
+                if (this.kfAnimations[animationId] == null){
+                    this.onXMLMinorError("No animation with the ID of : " + animationId + "using animationId = null");
+                    animationId == null;
+                }
+            }
+            else
+                animationId = null;
+
+            // ***** HIGHLIGHTED BLOCK*****
+            var highlight = [];
+            if (highlightNode != null){
+                var r = this.reader.getFloat(highlightNode, "r");
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 255))
+                    return "unable to parse R component of the highlighted block of component with id: " + componentID;
+
+                var g = this.reader.getFloat(highlightNode, "g");
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 255))
+                    return "unable to parse G component of the highlighted block of component with id: " + componentID;
+
+                var b = this.reader.getFloat(highlightNode, "b");
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 255))
+                    return "unable to parse B component of the highlighted block of component with id: " + componentID;
+
+                var scale_h = this.reader.getFloat(highlightNode, "scale_h");
+                if (!(scale_h != null && !isNaN(scale_h) && scale_h >= 0 && scale_h <= 255))
+                    return "unable to parse scale_h component of the highlighted block of component with id: " + componentID;
+
+                highlight.push(r, g, b, scale_h);
+            }
+
             // Save the component and its attributes
-            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t);
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, highlight);
             this.components[componentID] = component;
         }
 
@@ -1573,6 +1605,11 @@ export class MySceneGraph {
 
         // set the active material.
         currAppearence.apply()
+
+        var display;
+        if(currNode.animationId != null){
+            display = this.kfAnimations[currNode.animationId].apply()
+        }
 
 
         /* Display component primitives */

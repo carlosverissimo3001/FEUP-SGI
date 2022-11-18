@@ -490,9 +490,9 @@
         <!-- desde o inicio da animacao. -->
         <!-- Os keyframes devem ser declarados por -->
         <!-- ordem crescente do tempo.  -->
-        <keyframeanim id="demoAnimation">
+        <keyframeanim id="flagAnimation" >
 
-            <keyframe instant="10">
+            <keyframe instant="0.0">
                 <!-- translate, rotate e scale representam as -->
                 <!-- quantidades das transformações -->
                 <!-- correspondentes, medidas em relação à -->
@@ -505,18 +505,34 @@
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="15" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="10">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="15" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
             <keyframe instant="20">
-                <!-- translate, rotate e scale representam as -->
-                <!-- quantidades das transformações -->
-                <!-- correspondentes, medidas em relação à -->
-                <!-- situação inicial (instante zero) -->
-                <!-- Para uma mesma keyframe, os elementos -->
-                <!-- translate, rotate e scale sao obrigatorios -->
-                <!-- e fornecidos por esta ordem -->
-                <!-- os angulos são expressos em graus -->
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -524,7 +540,8 @@
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
-        </keyframeanim >
+        </keyframeanim>
+
     </animations>
 
     <components>
@@ -2681,8 +2698,8 @@
                 <componentref id="shower_button" />
                 <componentref id="shower_fixture" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
-            <!-- <highlghted r="255" g="255" b="255" scale_h="1.1" /> -->
+            <animation id="flagAnimation" />
+            <highlighted r="255" g="255" b="255" scale_h="1.1" />
         </component>
 
         <component id="patch" >

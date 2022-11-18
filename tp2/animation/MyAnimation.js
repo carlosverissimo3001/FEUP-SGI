@@ -14,10 +14,9 @@ export class MyAnimation {
     }
 
     /**
-    * Update (override by subclasses)
     * @param {integer} t - elapsed time
     */
     update(t) {
-
+        //
     }
 }

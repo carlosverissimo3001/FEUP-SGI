@@ -275,13 +275,21 @@ export class XMLscene extends CGFscene {
   }
 
   update(t) {
-    if (this.sceneInited){
-      if (this.startTime === null) this.startTime = t;
+    var elapsed;
 
-      //this.graph.root.computeAnimation(time - this.startTime)
+    if (this.sceneInited){
+
+      if (this.startTime === null)
+        elapsed = 0
+      else
+        elapsed = t - this.startTime
 
       this.checkKeys();
+
+      for (var i in this.graph.kfAnimations)
+        this.graph.kfAnimations[i].update(elapsed / 1000);
     }
+
   }
 
   checkKeys() {
