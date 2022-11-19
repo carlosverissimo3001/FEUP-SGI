@@ -2692,6 +2692,7 @@
             </materials>
             <texture id="none" />
             <children>
+                <componentref id="pole" />
                 <componentref id="shower_head" />
                 <componentref id="shower_pipe_1" />
                 <componentref id="shower_pipe_2" />
@@ -2734,7 +2735,6 @@
                 <componentref id="walls" />
                 <componentref id="divider" />
                 <componentref id="steps" />
-                <componentref id="pole" />
                 <componentref id="lifebuoy" />
                 <componentref id="ball_1" />
                 <componentref id="ball_2" />
