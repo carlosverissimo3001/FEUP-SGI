@@ -1,12 +1,14 @@
 import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcameraOrtho } from '../lib/CGF.js';
 
-import { MyRectangle } from './MyRectangle.js';
-import { MyCylinder } from './MyCylinder.js';
-import { MyTriangle } from './MyTriangle.js';
-import { MySphere } from './MySphere.js'
-import { MyTorus } from './MyTorus.js';
-import { MyComponent} from './MyComponent.js';
-import { MyPatch } from './MyPatch.js'
+import { MyRectangle } from './primitives/MyRectangle.js';
+import { MyCylinder } from './primitives/MyCylinder.js';
+import { MyTriangle } from './primitives/MyTriangle.js';
+import { MySphere } from './primitives/MySphere.js'
+import { MyTorus } from './primitives/MyTorus.js';
+import { MyComponent} from './primitives/MyComponent.js';
+import { MyPatch } from './primitives/MyPatch.js'
+import { MyKeyframeAnimation} from './animation/MyKeyframeAnimation.js'
+import { MyKeyframe } from './animation/MyKeyframe.js'
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -205,7 +207,7 @@ export class MySceneGraph {
                 this.onXMLMinorError("tag <components> out of order");
 
             //Parse animations block
-            if ((error = this.parseComponents(nodes[index])) != null)
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -389,7 +391,6 @@ export class MySceneGraph {
         this.log("Parsed views");
         return null;
     }
-
 
     /**
      * Parses the <ambient> node.
@@ -981,17 +982,6 @@ export class MySceneGraph {
 
                 var controlPointsNode = grandChildren[0].children
 
-                var u_vertexes = []
-                for (var j = 0; j < (degree_u + 1); j++){
-                    var aux = this.parseCoordinates3D(controlPointsNode[j])
-                    if (!Array.isArray(aux))
-                        return aux;
-
-                    // w coordinate
-                    aux.push(1);
-                    u_vertexes.push(aux)
-                }
-
                 var vertexes = [];
 
                 // Fix U, iterate V
@@ -1030,7 +1020,151 @@ export class MySceneGraph {
      * @param {animations block element} animationsNode
      */
     parseAnimations(animationsNode){
+        var children = animationsNode.children
 
+        /**
+         *  Array of keyframe animations
+         */
+        this.kfAnimations = []
+
+        // For each keyframe animation
+        for (let i = 0; i < children.length; i++){
+            if (children[i].nodeName != "keyframeanim") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the (keyframe) aniamtion
+            var kfAnimationId = this.reader.getString(children[i], 'id')
+            if (kfAnimationId == null)
+            {
+                return "no ID defined for keyframe animation";
+            }
+
+            if (this.kfAnimations[kfAnimationId] != null)
+            {
+                return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
+            }
+
+            var newKfAnim = new MyKeyframeAnimation(this.scene, kfAnimationId);
+
+            // Get keyfames of the animation
+            var keyframes = children[i].children
+
+            // For each keyframe in the keyframe animation
+            for (let j = 0; j < keyframes.length; j++) {
+                if(keyframes[j].nodeName != "keyframe")
+                {
+                    this.onXMLMinorError("unknown tag <" + keyframes[j].nodeName + ">" + " in keyframe animation " + kfAnimationId + ". Will ignore");
+                    continue;
+                }
+
+                // Get the start instant
+                var instant = this.reader.getFloat(keyframes[j], 'instant')
+
+                // Get the transformations array
+                var transformations = keyframes[j].children
+
+                // This order is obligatory
+                var translation = transformations[0]
+                var rotationZ = transformations[1]
+                var rotationY = transformations[2]
+                var rotationX = transformations[3]
+                var scale = transformations[4]
+
+
+                // -- TRANSLATION -- //
+                if (translation.nodeName != "translation"){
+                    this.onXMLMinorError("Expected <translation> tag but found <" + translation.nodeName + ">. Will ignore");
+                    continue;
+                }
+
+                var trans_array = this.parseCoordinates3D(translation, "translation node for keyframe animation " + kfAnimationId)
+                if(!Array.isArray(trans_array))
+                    return trans_array;
+
+                // -- ROTATION -- //
+                if (rotationX.nodeName != "rotation" || rotationY.nodeName != "rotation" || rotationZ.nodeName != "rotation"){
+                    this.onXMLMinorError("Expected <rotation> tag but found <" + translation.nodeName + ">. Will ignore");
+                    continue;
+                }
+
+                var rotationXaxis = this.reader.getString(rotationX, 'axis');
+                if (rotationXaxis == null || rotationXaxis != 'x'){
+                    this.onXMLMinorError("Error while computing value for rotation at X axis for keyframe animation " + kfAnimationId + ". Using axis = 'x'")
+                }
+                var rotationXangle = this.reader.getFloat(rotationX, 'angle');
+                if (!(rotationXangle != null && !isNaN(rotationXangle)))
+                {
+                    this.onXMLMinorError("Error while computing value for angle at X axis for keyframe animation " + kfAnimationId + ". Using angle = 0");
+                    rotationXangle = 0;
+                }
+
+                var rotationYaxis = this.reader.getString(rotationY, 'axis');
+                if (rotationYaxis == null || rotationYaxis != 'y'){
+                    this.onXMLMinorError("Error while computing value for rotation at Y axis for keyframe animation " + kfAnimationId + ". Using axis = 'y'")
+                }
+                var rotationYangle = this.reader.getFloat(rotationY, 'angle');
+                if (!(rotationYangle != null && !isNaN(rotationYangle)))
+                {
+                    this.onXMLMinorError("Error while computing value for angle at Y axis for keyframe animation " + kfAnimationId + ". Using angle = 0");
+                    rotationYangle = 0;
+                }
+
+                var rotationZaxis = this.reader.getString(rotationZ, 'axis');
+                if (rotationZaxis == null || rotationZaxis != 'z'){
+                    this.onXMLMinorError("Error while computing value for rotation at Z axis for keyframe animation " + kfAnimationId + ". Using axis = 'z'")
+                }
+                var rotationZangle = this.reader.getFloat(rotationZ, 'angle');
+                if (!(rotationZangle != null && !isNaN(rotationZangle)))
+                {
+                    this.onXMLMinorError("Error while computing value for angle at Z axis for keyframe animation " + kfAnimationId + ". Using angle = 0");
+                    rotationZangle = 0;
+                }
+
+                // -- SCALE -- //
+                if (scale.nodeName != 'scale'){
+                    this.onXMLMinorError("Expected <scale> tag but found <" + scale.nodeName + ">. Will ignore");
+                    continue;
+                }
+
+                var sx = this.reader.getFloat(scale, 'sx')
+                if (!(sx != null && !isNaN(sx)))
+                {
+                    this.onXMLMinorError("Error while computing value for scale value at X axis for keyframe animation " + kfAnimationId + ". Using sx = 1");
+                    sx = 1;
+                }
+
+                var sy = this.reader.getFloat(scale, 'sy')
+                if (!(sy != null && !isNaN(sy)))
+                {
+                    this.onXMLMinorError("Error while computing value for scale value at Y axis for keyframe animation " + kfAnimationId + ". Using sy = 1");
+                    sy = 1;
+                }
+
+                var sz = this.reader.getFloat(scale, 'sz')
+                if (!(sz != null && !isNaN(sz)))
+                {
+                    this.onXMLMinorError("Error while computing value for scale value at Z axis for keyframe animation " + kfAnimationId + ". Using sz = 1");
+                    sz = 1;
+                }
+
+                var rot_array = [rotationXangle, rotationYangle, rotationZangle]
+                var scale_array = [sx, sy, sz]
+
+
+                // Create a new keyframe
+                var keyframe = new MyKeyframe(instant, trans_array, rot_array, scale_array)
+
+                // Add the frame to the keyframe animation
+                newKfAnim.addKeyframe(keyframe)
+            }
+
+            // All keyframes have been added and sorted, update the values
+            newKfAnim.update_order();
+
+            this.kfAnimations[kfAnimationId] = newKfAnim
+        }
     }
 
     /**
@@ -1073,14 +1207,20 @@ export class MySceneGraph {
             }
 
             var transformationIndex = nodeNames.indexOf("transformation");
-            var materialsIndex = nodeNames.indexOf("materials");
-            var textureIndex = nodeNames.indexOf("texture");
-            var childrenIndex = nodeNames.indexOf("children");
+            var materialsIndex      = nodeNames.indexOf("materials");
+            var textureIndex        = nodeNames.indexOf("texture");
+            var childrenIndex       = nodeNames.indexOf("children");
+            var animationIndex      = nodeNames.indexOf("animation");
+            var highlightIndex      = nodeNames.indexOf("highlighted");
 
-            var transfNode = grandChildren[transformationIndex].children;
-            var materialNode = grandChildren[materialsIndex].children;
-            var textureNode = grandChildren[textureIndex];
-            var childrenNode = grandChildren[childrenIndex].children;
+            var transfNode          = grandChildren[transformationIndex].children;
+            var materialNode        = grandChildren[materialsIndex].children;
+            var textureNode         = grandChildren[textureIndex];
+            var childrenNode        = grandChildren[childrenIndex].children;
+
+            // As these are not obligatory, check if they exist before getting their children
+            var animationNode       = animationIndex == -1 ? null : grandChildren[animationIndex]
+            var highlightNode       = highlightIndex == -1 ? null : grandChildren[highlightIndex]
 
             // ****** TRANSFORMATIONS ******
             if(transfNode.length == 0)
@@ -1201,8 +1341,44 @@ export class MySceneGraph {
                 }
             }
 
+
+            // ***** ANIMATIONS *****
+            var animationId;
+            if (animationNode != null){
+                animationId = this.reader.getString(animationNode, "id");
+
+                if (this.kfAnimations[animationId] == null){
+                    this.onXMLMinorError("No animation with the ID of : " + animationId + "using animationId = null");
+                    animationId == null;
+                }
+            }
+            else
+                animationId = null;
+
+            // ***** HIGHLIGHTED BLOCK*****
+            var highlight = [];
+            if (highlightNode != null){
+                var r = this.reader.getFloat(highlightNode, "r");
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 255))
+                    return "unable to parse R component of the highlighted block of component with id: " + componentID;
+
+                var g = this.reader.getFloat(highlightNode, "g");
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 255))
+                    return "unable to parse G component of the highlighted block of component with id: " + componentID;
+
+                var b = this.reader.getFloat(highlightNode, "b");
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 255))
+                    return "unable to parse B component of the highlighted block of component with id: " + componentID;
+
+                var scale_h = this.reader.getFloat(highlightNode, "scale_h");
+                if (!(scale_h != null && !isNaN(scale_h) && scale_h >= 0 && scale_h <= 255))
+                    return "unable to parse scale_h component of the highlighted block of component with id: " + componentID;
+
+                highlight.push(r, g, b, scale_h);
+            }
+
             // Save the component and its attributes
-            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t);
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, highlight);
             this.components[componentID] = component;
         }
 
@@ -1374,7 +1550,12 @@ export class MySceneGraph {
 	}
 
     /**
-     * Display each node, receives the root node
+     *
+     * @param {string} currNodeID - Current component ID
+     * @param {string} prevMaterialID - Parent material ID
+     * @param {string} prevTextureID - Parent texture ID
+     * @param {string} prev_length_s - Parent texture scale at s
+     * @param {string} prev_length_t - Parent texture scale at t
      */
     displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
         // Get the node from the component tree using its ID
@@ -1383,7 +1564,7 @@ export class MySceneGraph {
             this.onXMLError("Error - No component with ID " + currNodeID);
 
         // multiply the current scene transformation matrix by the current component matrix
-        this.scene.multMatrix(currNode.transf);
+        //this.scene.multMatrix(currNode.transf);
 
         // If the material ID is "inherit" then it should not change the the current material and should pass it onto the children nodes as well
         var matID = (currNode.materialID != "inherit" ? currNode.materialID : prevMaterialID)
@@ -1406,19 +1587,6 @@ export class MySceneGraph {
         else
             texID = currNode.textureID
 
-
-        /* Display component children (these are references to other components) */
-        for(var i = 0; i < currNode.children.length ;i++){
-            // preserve current scene transformation matrix
-            this.scene.pushMatrix();
-
-            // recursively visit the next child component
-            this.displayComponent(currNode.children[i], matID, texID, prev_length_s, prev_length_t);
-
-            // restore scene transformation matrix
-            this.scene.popMatrix()
-        }
-
         // retrieve the CGFappearence based on resolved material id
         var currAppearence = this.materials[matID];
 
@@ -1430,31 +1598,44 @@ export class MySceneGraph {
         // set the active material.
         currAppearence.apply()
 
+        this.scene.pushMatrix()
+        this.scene.multMatrix(currNode.transf)
 
-        /* Display component primitives */
-        for (var i = 0; i < currNode.primitives.length; i++){
-            this.scene.pushMatrix()
-
-            let primitive = this.primitives[currNode.primitives[i]];
-
-            if (currNode.length_s == null && currNode.lenght_t == null)
-                primitive.updateTexCoords(1, 1)
-
-            else if (currNode.length_s == null)
-                primitive.updateTexCoords(1, currNode.lenght_t)
-
-            else if (currNode.lenght_t == null)
-                primitive.updateTexCoords(currNode.lenght_s, 1)
-
-            else
-                primitive.updateTexCoords(currNode.lenght_s, currNode.lenght_t)
-
-
-            primitive.display();
-
-            this.scene.popMatrix()
+        var display;
+        if(currNode.animationId != null){
+            display = this.kfAnimations[currNode.animationId].apply()
         }
 
+        if (display != 0) {
+            /* Display component primitives */
+            for (var i = 0; i < currNode.primitives.length; i++){
+                let primitive = this.primitives[currNode.primitives[i]];
+
+                /* Update text coords */
+                if (currNode.length_s == null && currNode.lenght_t == null)
+                    primitive.updateTexCoords(1, 1)
+
+                else if (currNode.length_s == null)
+                    primitive.updateTexCoords(1, currNode.lenght_t)
+
+                else if (currNode.lenght_t == null)
+                    primitive.updateTexCoords(currNode.lenght_s, 1)
+
+                else
+                    primitive.updateTexCoords(currNode.lenght_s, currNode.lenght_t)
+
+                primitive.display();
+                currAppearence.apply()
+            }
+
+            /* Display component children (these are references to other components) */
+            for(var j = 0; j < currNode.children.length ; j++){
+                // recursively visits the next child component
+                this.displayComponent(currNode.children[j], matID, texID, prev_length_s, prev_length_t);
+            }
+        }
+
+        this.scene.popMatrix()
 
     }
 

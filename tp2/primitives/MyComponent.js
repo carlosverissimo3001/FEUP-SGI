@@ -1,4 +1,4 @@
-import { CGFobject } from "../lib/CGF.js";
+import { CGFobject } from "../../lib/CGF.js";
 
 /**
  * MyComponenet
@@ -14,7 +14,7 @@ import { CGFobject } from "../lib/CGF.js";
  */
 
 export class MyComponent extends CGFobject {
-  constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t, animation, higlighted) 
+  constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t, animationId, higlighted)
   {
     super(scene);
     this.componentID = componentID;
@@ -29,55 +29,20 @@ export class MyComponent extends CGFobject {
     this.materialID = this.materials[0];
     this.matIndex = 0;
 
-    this.animation = animation;
+    this.animationId = animationId;
     this.higlighted = higlighted
+
+    this.transformation = mat4.create();
+    mat4.identity(this.transformation);
   }
 
   changeMaterial() {
     this.matIndex++;
 
-    if (this.matIndex == this.materials.length) this.matIndex = 0;
+    if (this.matIndex == this.materials.length)
+      this.matIndex = 0;
 
     this.materialID = this.materials[this.matIndex];
   }
 
-  setTransformation(transf) {
-    this.transf = transf;
-  }
-
-  setMaterial(material) {
-    this.material = material;
-  }
-
-  setTexture(texture) {
-    this.texture = texture;
-  }
-
-  setChildren(children) {
-    this.children = children;
-  }
-
-  setPrimitives(primitives) {
-    this.primitives = primitives;
-  }
-
-  getTransformation() {
-    return this.transf;
-  }
-
-  getMaterial() {
-    return this.material;
-  }
-
-  getTexture() {
-    return this.texture;
-  }
-
-  getChildren() {
-    return this.children;
-  }
-
-  getPrimitives() {
-    return this.primitives;
-  }
 }
