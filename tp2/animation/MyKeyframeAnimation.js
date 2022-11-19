@@ -8,8 +8,11 @@ var yAxis = [0, 1, 0];
 var zAxis = [0, 0, 1];
 
 export class MyKeyframeAnimation extends MyAnimation {
-    constructor(scene) {
+    constructor(scene, id) {
         super(scene);
+
+        // Animation ID
+        this.animationId = id;
 
         // Array of keyframes (MyKeyframes)
         this.frames = [];
@@ -22,15 +25,12 @@ export class MyKeyframeAnimation extends MyAnimation {
     }
 
     /**
-     * Adds a keyframe to the animation keyframe array. Sorts the array by ascending start instant
+     * Adds a keyframe to the animation keyframe array.
      * @param {MyKeyframe} keyframe
      */
     addKeyframe(keyframe) {
         // Append the keyframe to the end of the array
         this.frames.push(keyframe);
-
-        // Sort the vector by ascending instant
-        this.frames.sort((a,b) => a.instant - b.instant);
     }
 
     /**
@@ -38,12 +38,23 @@ export class MyKeyframeAnimation extends MyAnimation {
      * Updates the end time of the animation based on the last keyframe
      */
      update_order(){
+        // Sort the vector by ascending instant
+        this.frames.sort((a,b) => a.instant - b.instant);
+
         this.startTime = this.frames[0].instant;
         this.endTime = this.frames[this.frames.length - 1].instant
     }
 
-    update(elasped){
-        this.totalTime += elasped;
+    /**
+     * Overrides MyAnimation update method
+     * Update the animation matrix
+     * @param {integer} t - time since last call
+     */
+    update(t){
+        this.totalTime += t;
+
+        //console.log(this.totalTime)
+        //console.log(this.currInstant);
 
         this.active = (this.startTime < this.totalTime)
 
@@ -51,7 +62,7 @@ export class MyKeyframeAnimation extends MyAnimation {
             return
 
         // last frame -> apply last transformation
-        if (this.totalTime == this.endTime){
+        if (this.totalTime > this.endTime){
             this.animation = this.computeFinalTransformationMatrix()
         }
 
@@ -59,22 +70,20 @@ export class MyKeyframeAnimation extends MyAnimation {
             var lastInstant = ((this.currInstant + 1) == this.frames.length);
 
             if (!lastInstant){
-
                 // Update current instant if needed (if totalTime has passed the next frame instant)
-                if ((this.totalTime > this.keyframe[this.currInstant + 1].instant))
+                if ((this.totalTime > this.frames[this.currInstant + 1].instant))
                     this.currInstant++;
 
                 // Get the last frame
-                var lastFrame = this.keyframe[this.currInstant];
+                var lastFrame = this.frames[this.currInstant];
 
                 // Get the next frame
-                var nextFrame = this.keyframe[this.currInstant + 1];
+                var nextFrame = this.frames[this.currInstant + 1];
 
                 // Percentage of time passed
                 var timepercentage = (this.totalTime - lastFrame.instant) / (nextFrame.instant - lastFrame.instant);
 
-                this.animation = interpolate(lastFrame, nextFrame, timepercentage);
-
+                this.animation = this.interpolate(lastFrame, nextFrame, timepercentage);
             }
         }
     }
@@ -85,6 +94,8 @@ export class MyKeyframeAnimation extends MyAnimation {
     apply(){
         if (this.frames.length == 0 || !this.active)
             return 0;
+
+        console.log("Here")
 
         this.scene.multMatrix(this.animation)
     }
@@ -101,7 +112,7 @@ export class MyKeyframeAnimation extends MyAnimation {
 
         var translation = [0, 0, 0];
         var rotation = [0, 0, 0];
-        var scale = [1, 1, 1];
+        var scale = [0, 0, 0];
 
         // Interpolation between translation transformation of previous and next keyframes
         var lastTranslation = [lastFrame.translation[0], lastFrame.translation[1], lastFrame.translation[2]]
@@ -128,7 +139,7 @@ export class MyKeyframeAnimation extends MyAnimation {
         var lastScale = [lastFrame.scale[0], lastFrame.scale[1], lastFrame.scale[2]]
         var nextScale = [nextFrame.scale[0], nextFrame.scale[1], nextFrame.scale[2]]
 
-        vec3.lerp(scale, lastScale, nextScale)
+        vec3.lerp(scale, lastScale, nextScale, timepercentage)
 
         // Apply the interpolated translation to the transformation matrix
         mat4.scale(transfMatrix, transfMatrix, scale)

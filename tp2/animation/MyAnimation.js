@@ -6,6 +6,7 @@ export class MyAnimation {
 
         this.startTime;
         this.endTime;
+        this.animationId;
 
         this.totalTime = 0;
 
@@ -14,7 +15,7 @@ export class MyAnimation {
     }
 
     /**
-    * @param {integer} t - elapsed time
+    * @param {integer} t - elapsed time since last call
     */
     update(t) {
         //

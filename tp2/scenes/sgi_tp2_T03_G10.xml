@@ -1,7 +1,7 @@
 <sxs>poolHouse
     <scene root="sgi_tp2_T03_G10" axis_length="17"/>
 
-    <views default="Top Left">
+    <views default="Shower">
         <perspective id="Jacuzzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -490,9 +490,9 @@
         <!-- desde o inicio da animacao. -->
         <!-- Os keyframes devem ser declarados por -->
         <!-- ordem crescente do tempo.  -->
-        <keyframeanim id="flagAnimation" >
+        <keyframeanim id="demoAnimation" >
 
-            <keyframe instant="0.0">
+            <keyframe instant="0">
                 <!-- translate, rotate e scale representam as -->
                 <!-- quantidades das transformações -->
                 <!-- correspondentes, medidas em relação à -->
@@ -509,10 +509,10 @@
             </keyframe>
 
             <keyframe instant="5">
-                <translation x="0" y="0" z="0" />
+                <translation x="0" y="10" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="15" />
+                <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
@@ -521,11 +521,11 @@
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
+                <scale sx="2" sy="1" sz="1" />
             </keyframe>
 
             <keyframe instant="15">
-                <translation x="0" y="0" z="0" />
+                <translation x="10" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="15" />
@@ -533,7 +533,7 @@
             </keyframe>
 
             <keyframe instant="20">
-                <translation x="0" y="0" z="0" />
+                <translation x="5" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
@@ -2698,7 +2698,7 @@
                 <componentref id="shower_button" />
                 <componentref id="shower_fixture" />
             </children>
-            <animation id="flagAnimation" />
+            <animation id="demoAnimation" />
             <highlighted r="255" g="255" b="255" scale_h="1.1" />
         </component>
 
@@ -2713,6 +2713,7 @@
             <children>
                 <primitiveref id="demoPatch" />
             </children>
+            <animation id="demoAnimation" />
         </component>
 
         <component id="sgi_tp2_T03_G10">

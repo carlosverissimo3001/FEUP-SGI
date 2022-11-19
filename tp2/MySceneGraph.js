@@ -1046,7 +1046,7 @@ export class MySceneGraph {
                 return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
             }
 
-            var newKfAnim = new MyKeyframeAnimation();
+            var newKfAnim = new MyKeyframeAnimation(this.scene, kfAnimationId);
 
             // Get keyfames of the animation
             var keyframes = children[i].children
@@ -1550,7 +1550,12 @@ export class MySceneGraph {
 	}
 
     /**
-     * Display each node, receives the root node
+     *
+     * @param {string} currNodeID - Current component ID
+     * @param {string} prevMaterialID - Parent material ID
+     * @param {string} prevTextureID - Parent texture ID
+     * @param {string} prev_length_s - Parent texture scale at s
+     * @param {string} prev_length_t - Parent texture scale at t
      */
     displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
         // Get the node from the component tree using its ID
@@ -1559,7 +1564,7 @@ export class MySceneGraph {
             this.onXMLError("Error - No component with ID " + currNodeID);
 
         // multiply the current scene transformation matrix by the current component matrix
-        this.scene.multMatrix(currNode.transf);
+        //this.scene.multMatrix(currNode.transf);
 
         // If the material ID is "inherit" then it should not change the the current material and should pass it onto the children nodes as well
         var matID = (currNode.materialID != "inherit" ? currNode.materialID : prevMaterialID)
@@ -1582,19 +1587,6 @@ export class MySceneGraph {
         else
             texID = currNode.textureID
 
-
-        /* Display component children (these are references to other components) */
-        for(var i = 0; i < currNode.children.length ;i++){
-            // preserve current scene transformation matrix
-            this.scene.pushMatrix();
-
-            // recursively visit the next child component
-            this.displayComponent(currNode.children[i], matID, texID, prev_length_s, prev_length_t);
-
-            // restore scene transformation matrix
-            this.scene.popMatrix()
-        }
-
         // retrieve the CGFappearence based on resolved material id
         var currAppearence = this.materials[matID];
 
@@ -1606,36 +1598,44 @@ export class MySceneGraph {
         // set the active material.
         currAppearence.apply()
 
+        this.scene.pushMatrix()
+        this.scene.multMatrix(currNode.transf)
+
         var display;
         if(currNode.animationId != null){
             display = this.kfAnimations[currNode.animationId].apply()
         }
 
+        if (display != 0) {
+            /* Display component primitives */
+            for (var i = 0; i < currNode.primitives.length; i++){
+                let primitive = this.primitives[currNode.primitives[i]];
 
-        /* Display component primitives */
-        for (var i = 0; i < currNode.primitives.length; i++){
-            this.scene.pushMatrix()
+                /* Update text coords */
+                if (currNode.length_s == null && currNode.lenght_t == null)
+                    primitive.updateTexCoords(1, 1)
 
-            let primitive = this.primitives[currNode.primitives[i]];
+                else if (currNode.length_s == null)
+                    primitive.updateTexCoords(1, currNode.lenght_t)
 
-            if (currNode.length_s == null && currNode.lenght_t == null)
-                primitive.updateTexCoords(1, 1)
+                else if (currNode.lenght_t == null)
+                    primitive.updateTexCoords(currNode.lenght_s, 1)
 
-            else if (currNode.length_s == null)
-                primitive.updateTexCoords(1, currNode.lenght_t)
+                else
+                    primitive.updateTexCoords(currNode.lenght_s, currNode.lenght_t)
 
-            else if (currNode.lenght_t == null)
-                primitive.updateTexCoords(currNode.lenght_s, 1)
+                primitive.display();
+                currAppearence.apply()
+            }
 
-            else
-                primitive.updateTexCoords(currNode.lenght_s, currNode.lenght_t)
-
-
-            primitive.display();
-
-            this.scene.popMatrix()
+            /* Display component children (these are references to other components) */
+            for(var j = 0; j < currNode.children.length ; j++){
+                // recursively visits the next child component
+                this.displayComponent(currNode.children[j], matID, texID, prev_length_s, prev_length_t);
+            }
         }
 
+        this.scene.popMatrix()
 
     }
 
