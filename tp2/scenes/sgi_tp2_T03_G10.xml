@@ -1,7 +1,7 @@
-<sxs>poolHouse
+<sxs>
     <scene root="sgi_tp2_T03_G10" axis_length="17"/>
 
-    <views default="Shower">
+    <views default="Jacuzzi">
         <perspective id="Jacuzzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -539,6 +539,59 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
+
+        </keyframeanim>
+
+        <keyframeanim id="personAnimation" >
+
+            <keyframe instant="0">
+                <translation x="1" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="3">
+                <translation x="10" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="6">
+                <translation x="19" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="9">
+                <translation x="28" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="12">
+                <translation x="38.5" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="14">
+                <translation x="38.5" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
 
         </keyframeanim>
 
@@ -2699,7 +2752,7 @@
                 <componentref id="shower_button" />
                 <componentref id="shower_fixture" />
             </children>
-            <animation id="demoAnimation" />
+            <!-- <animation id="demoAnimation" /> -->
             <highlighted r="255" g="255" b="255" scale_h="1.1" />
         </component>
 
@@ -2714,7 +2767,113 @@
             <children>
                 <primitiveref id="demoPatch" />
             </children>
-            <animation id="demoAnimation" />
+            <!-- <animation id="demoAnimation" /> -->
+        </component>
+
+        <component id="head" >
+            <transformation>
+                <translate x="36" y="5" z="7" />
+                <scale x=".7" y=".7" z=".7" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="body" >
+            <transformation>
+                <translate x="36" y="3.2" z="7" />
+                <scale x=".7" y="2.3" z="1.6" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="arm1">
+            <transformation>
+                <translate x="36" y="3.2" z="8" />
+                <rotate axis="x" angle="60" />
+                <scale x=".3" y=".2" z=".6" />
+                <translate x="0" y="1.1" z="-1.8" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="arm2">
+            <transformation>
+                <translate x="36" y="3.2" z="8" />
+                <rotate axis="x" angle="-60" />
+                <scale x=".3" y=".2" z=".6" />
+                <translate x="0" y="9.5" z="-2.9" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="leg1">
+            <transformation>
+                <translate x="36" y="1.1" z="7.35" />
+                <scale x=".5" y="2" z=".55" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="leg2">
+            <transformation>
+                <translate x="0" y="0" z="-0.7" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="leg1" />
+            </children>
+        </component>
+
+        <component id="person" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="head" />
+                <componentref id="body" />
+                <componentref id="arm1" />
+                <componentref id="arm2" />
+                <componentref id="leg1" />
+                <componentref id="leg2" />
+            </children>
+            <animation id="personAnimation"/>
         </component>
 
         <component id="sgi_tp2_T03_G10">
@@ -2743,7 +2902,8 @@
                 <componentref id="trees" />
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
-                <componentref id="poolHouse" /> -->
+                <componentref id="person" />
+                <componentref id="poolHouse" />
                 <componentref id="patch" />
             </children>
         </component>
