@@ -3,9 +3,9 @@ import {MyAnimation} from "./MyAnimation.js"
 import {MyKeyframe} from "./MyKeyframe.js"
 
 var DEGREE_TO_RAD = Math.PI / 180;
-var xAxis = [1, 0, 0];
-var yAxis = [0, 1, 0];
-var zAxis = [0, 0, 1];
+var XAXIS = [1, 0, 0];
+var YAXIS = [0, 1, 0];
+var ZAXIS = [0, 0, 1];
 
 export class MyKeyframeAnimation extends MyAnimation {
     constructor(scene, id) {
@@ -95,8 +95,6 @@ export class MyKeyframeAnimation extends MyAnimation {
         if (this.frames.length == 0 || !this.active)
             return 0;
 
-        console.log("Here")
-
         this.scene.multMatrix(this.animation)
     }
 
@@ -131,9 +129,9 @@ export class MyKeyframeAnimation extends MyAnimation {
         vec3.lerp(rotation, lastRotation, nextRotation, timepercentage);
 
         // Apply the interpolated rotation to the transformation matrix
-        mat4.rotate(transfMatrix, transfMatrix, rotation[0] * DEGREE_TO_RAD, xAxis)
-        mat4.rotate(transfMatrix, transfMatrix, rotation[1] * DEGREE_TO_RAD, yAxis)
-        mat4.rotate(transfMatrix, transfMatrix, rotation[2] * DEGREE_TO_RAD, zAxis)
+        mat4.rotate(transfMatrix, transfMatrix, rotation[0] * DEGREE_TO_RAD, XAXIS)
+        mat4.rotate(transfMatrix, transfMatrix, rotation[1] * DEGREE_TO_RAD, YAXIS)
+        mat4.rotate(transfMatrix, transfMatrix, rotation[2] * DEGREE_TO_RAD, ZAXIS)
 
         // Interpolation between scale transformation of previous and next keyframes
         var lastScale = [lastFrame.scale[0], lastFrame.scale[1], lastFrame.scale[2]]
@@ -165,10 +163,9 @@ export class MyKeyframeAnimation extends MyAnimation {
         // Get the last keyframe rotation vector
         var lastFrameRotation = [lastFrame.rotation[0], lastFrame.rotation[1], lastFrame.rotation[2]]
 
-        mat4.rotate(transfMatrix, transfMatrix, lastFrameRotation[0] * DEGREE_TO_RAD, xAxis)
-        mat4.rotate(transfMatrix, transfMatrix, lastFrameRotation[1] * DEGREE_TO_RAD, yAxis)
-        mat4.rotate(transfMatrix, transfMatrix, lastFrameRotation[2] * DEGREE_TO_RAD, zAxis)
-
+        mat4.rotate(transfMatrix, transfMatrix, lastFrameRotation[0] * DEGREE_TO_RAD, XAXIS)
+        mat4.rotate(transfMatrix, transfMatrix, lastFrameRotation[1] * DEGREE_TO_RAD, YAXIS)
+        mat4.rotate(transfMatrix, transfMatrix, lastFrameRotation[2] * DEGREE_TO_RAD, ZAXIS)
 
         var lastFrameScale = [lastFrame.scale[0], lastFrame.scale[1], lastFrame.scale[2]]
         mat4.scale(transfMatrix, transfMatrix, lastFrameScale)
