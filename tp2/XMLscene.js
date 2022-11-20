@@ -1,5 +1,5 @@
 import { CGFscene } from "../lib/CGF.js";
-import { CGFaxis, CGFcamera, CGFcameraOrtho } from "../lib/CGF.js";
+import { CGFaxis, CGFcamera, CGFcameraOrtho, CGFshader, CGFtexture } from "../lib/CGF.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -49,6 +49,13 @@ export class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
+
+    this.poolShader = new CGFshader(this.gl, "shaders/pool.vert", "shaders/pool.frag");
+
+    this.poolShader.setUniformsValues({ uSampler2: 1 });
+		this.poolShader.setUniformsValues({ uSampler: 0 });
+
+		this.distortionmap = new CGFtexture(this, "scenes/images/textures/distortionmap.png");
   }
 
   /**
@@ -290,6 +297,8 @@ export class XMLscene extends CGFscene {
 
       for (var i in this.graph.kfAnimations)
         this.graph.kfAnimations[i].update(elapsed / 1000);
+
+      this.poolShader.setUniformsValues({ timeFactor: t / 100 % 100 });
     }
 
   }
