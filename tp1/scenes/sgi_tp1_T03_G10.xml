@@ -2,7 +2,7 @@
     <scene root="sgi_tp1_T03_G10" axis_length="17"/>
 
     <views default="Top Left">
-        <perspective id="Jacuzzi" near="0.1" far="500" angle="23">
+        <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
         </perspective>
@@ -338,7 +338,7 @@
             <translate x="0.75" y="-2.64" z="0.1" />
         </transformation>
 
-        <transformation id="jacuzziTransform">
+        <transformation id="jacuziTransform">
             <rotate axis="x" angle="-90" />
             <scale x="20" y="7" z="1" />
             <translate x="0.75" y="-2.9" z="0.1" />
@@ -800,9 +800,9 @@
             </children>
         </component>
 
-        <component id="jacuzzi">
+        <component id="jacuzi">
             <transformation>
-                <transformationref id="jacuzziTransform" />
+                <transformationref id="jacuziTransform" />
             </transformation>
             <texture id="waterTexture" length_s="1" length_t="1"/>
             <materials>
@@ -2623,7 +2623,7 @@
 			<texture id="none" />
 			<children>
 				<componentref id="pool" />
-                <componentref id="jacuzzi" />
+                <componentref id="jacuzi" />
                 <componentref id="deck" />
                 <componentref id="soil" />
 				<componentref id="grass" />

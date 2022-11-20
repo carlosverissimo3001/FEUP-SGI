@@ -1559,9 +1559,14 @@ export class MySceneGraph {
      */
     displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
         // Get the node from the component tree using its ID
-        var currNode = this.components[currNodeID]
+        var currNode = this.components[currNodeID];
         if (currNode == null)
             this.onXMLError("Error - No component with ID " + currNodeID);
+
+        var poolComponent;
+        if (currNode.componentID == "pool") {
+            poolComponent = true;
+        }
 
         // multiply the current scene transformation matrix by the current component matrix
         //this.scene.multMatrix(currNode.transf);
@@ -1608,6 +1613,10 @@ export class MySceneGraph {
 
         if (display != 0) {
             /* Display component primitives */
+            if (poolComponent) {
+                this.scene.setActiveShader(this.scene.poolShader);
+                this.scene.distortionmap.bind(1);
+            }
             for (var i = 0; i < currNode.primitives.length; i++){
                 let primitive = this.primitives[currNode.primitives[i]];
 
@@ -1627,6 +1636,7 @@ export class MySceneGraph {
                 primitive.display();
                 currAppearence.apply()
             }
+            if (poolComponent) this.scene.setActiveShader(this.scene.defaultShader);
 
             /* Display component children (these are references to other components) */
             for(var j = 0; j < currNode.children.length ; j++){
