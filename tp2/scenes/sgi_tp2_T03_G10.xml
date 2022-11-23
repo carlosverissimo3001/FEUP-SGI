@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp2_T03_G10" axis_length="17"/>
 
-    <views default="Trees">
+    <views default="Jacuzi">
         <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -1098,6 +1098,13 @@
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="80">
+                <translation x="-49" y="-0.75" z="-3" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="-360" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </keyframeanim>
@@ -3500,7 +3507,7 @@
             <children>
                 <componentref id="leg1" />
             </children>
-            <!-- <animation id="legAnimation" /> -->
+            <animation id="legAnimation" />
         </component>
 
         <component id="eyeball1" >
@@ -3574,7 +3581,7 @@
 
         <component id="person" >
             <transformation>
-                <!-- <translate x="38" y="3" z="7" /> -->
+                <translate x="38" y="3" z="7" />
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
@@ -3589,7 +3596,7 @@
                 <componentref id="arm2" />
                 <componentref id="leg2" />
             </children>
-            <!-- <animation id="personAnimation"/> -->
+            <animation id="personAnimation"/>
         </component>
 
         <component id="sgi_tp2_T03_G10">
@@ -3602,7 +3609,7 @@
             </materials>
             <texture id="none" />
             <children>
-                <!-- <componentref id="pool" />
+                <componentref id="pool" />
                 <componentref id="jacuzi" />
                 <componentref id="deck" />
                 <componentref id="soil" />
@@ -3620,7 +3627,7 @@
                 <componentref id="poolHouse" />
                 <componentref id="barrel" />
                 <componentref id="walls" />
-                <componentref id="animatedLeg" /> -->
+                <componentref id="animatedLeg" />
                 <componentref id="person" />
             </children>
         </component>
