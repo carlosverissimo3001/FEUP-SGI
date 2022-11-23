@@ -1,4 +1,4 @@
-import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcameraOrtho } from '../lib/CGF.js';
+import { CGFXMLreader, CGFcamera, CGFappearance, CGFtexture, CGFcameraOrtho, CGFshader } from '../lib/CGF.js';
 
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
@@ -1177,7 +1177,6 @@ export class MySceneGraph {
         this.components = [];
 
         var grandChildren = [];
-        var grandgrandChildren = [];
         var nodeNames = [];
 
         var transf = [];
@@ -1359,26 +1358,27 @@ export class MySceneGraph {
             var highlight = [];
             if (highlightNode != null){
                 var r = this.reader.getFloat(highlightNode, "r");
-                if (!(r != null && !isNaN(r) && r >= 0 && r <= 255))
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1.0))
                     return "unable to parse R component of the highlighted block of component with id: " + componentID;
 
                 var g = this.reader.getFloat(highlightNode, "g");
-                if (!(g != null && !isNaN(g) && g >= 0 && g <= 255))
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1.0))
                     return "unable to parse G component of the highlighted block of component with id: " + componentID;
 
                 var b = this.reader.getFloat(highlightNode, "b");
-                if (!(b != null && !isNaN(b) && b >= 0 && b <= 255))
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1.0))
                     return "unable to parse B component of the highlighted block of component with id: " + componentID;
 
                 var scale_h = this.reader.getFloat(highlightNode, "scale_h");
-                if (!(scale_h != null && !isNaN(scale_h) && scale_h >= 0 && scale_h <= 255))
+                if (!(scale_h != null && !isNaN(scale_h) && scale_h >= 0 && scale_h <= 100))
                     return "unable to parse scale_h component of the highlighted block of component with id: " + componentID;
 
-                highlight.push(r, g, b, scale_h);
+                var shader = new CGFshader(this.scene.gl, 'shaders/pool.vert', 'shaders/pool.frag');
+                shader.setUniformsValues({r:r, g:g, b:b, scale_h:scale_h})
             }
 
             // Save the component and its attributes
-            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, highlight);
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, shader);
             this.components[componentID] = component;
         }
 

@@ -313,13 +313,8 @@
 
         <transformation id="wallTransform">
             <rotate axis="y" angle="90" />
-            <scale x="76.6" y="3.0" z="1" />
-            <translate x="-0.5" y="1" z="0" />
-        </transformation>
-
-        <transformation id="wall2Transform">
-            <scale x="106.45" y="3.0" z="1" />
-            <translate x="0.5" y="1" z="0" />
+            <scale x="38" y="3.0" z="1" />
+            <translate x="-1" y="1.5" z="-3" />
         </transformation>
 
         <transformation id="soilTransform">
@@ -1295,7 +1290,7 @@
                 <material id="light_gray" />
             </materials>
             <children>
-                <primitiveref id="demoRectangle"/>
+                <primitiveref id="rectanglePatch"/>
             </children>
         </component>
 
@@ -1308,7 +1303,7 @@
                 <material id="light_gray" />
             </materials>
             <children>
-                <primitiveref id="demoRectangle"/>
+                <primitiveref id="rectanglePatch"/>
             </children>
         </component>
 
@@ -1348,9 +1343,9 @@
             </materials>
             <children>
                 <componentref id="wall1" />
-                <componentref id="wall2" />
+                <!-- <componentref id="wall2" />
                 <componentref id="wall3" />
-                <componentref id="wall4" />
+                <componentref id="wall4" /> -->
             </children>
         </component>
 
@@ -3016,8 +3011,6 @@
                 <componentref id="shower_button" />
                 <componentref id="shower_fixture" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
-            <highlighted r="255" g="255" b="255" scale_h="1.1" />
         </component>
 
         <component id="patch" >
@@ -3031,7 +3024,6 @@
             <children>
                 <primitiveref id="demoPatch" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="barrelside1" >
@@ -3046,7 +3038,6 @@
             <children>
                 <primitiveref id="1/4barrel" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="barrelside2" >
@@ -3062,7 +3053,6 @@
             <children>
                 <primitiveref id="1/4barrel" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="barrelside3" >
@@ -3077,7 +3067,6 @@
             <children>
                 <primitiveref id="1/4barrel" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="barrelside4" >
@@ -3093,7 +3082,6 @@
             <children>
                 <primitiveref id="1/4barrel" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="barrelCircle1" >
@@ -3109,7 +3097,7 @@
             <children>
                 <primitiveref id="circlePatch" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
+            
         </component>
 
         <component id="barrelCircle2" >
@@ -3124,7 +3112,6 @@
             <children>
                 <primitiveref id="circlePatch" />
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="barrel" >
@@ -3144,7 +3131,6 @@
                 <componentref id="barrelCircle1"/>
                 <componentref id="barrelCircle2"/>
             </children>
-            <!-- <animation id="demoAnimation" /> -->
         </component>
 
         <component id="tentPatch" >
@@ -3169,7 +3155,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -3183,7 +3169,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -3199,7 +3185,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoCylinder" />
             </children>
@@ -3215,7 +3201,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoCylinder" />
             </children>
@@ -3229,7 +3215,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -3242,7 +3228,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="leg1" />
             </children>
@@ -3255,7 +3241,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="demoTexture"/>
             <children>
                 <componentref id="head" />
                 <componentref id="body" />
@@ -3265,6 +3251,7 @@
                 <componentref id="leg2" />
             </children>
             <animation id="personAnimation"/>
+            <highlighted r="1" g="0" b="0" scale_h="1.1" />
         </component>
 
         <component id="sgi_tp2_T03_G10">
