@@ -138,7 +138,6 @@
             <attenuation quadratic="1.0" linear="0.0" constant="0.0"/>
         </omni>
 
-
     </lights>
 
     <textures>
@@ -165,6 +164,7 @@
         <texture id="barrel_texture" file="scenes/images/textures/barrel.png"/>
         <texture id="fabric_texture" file="scenes/images/textures/fabric.jpg"/>
         <texture id="jeans_texture" file="scenes/images/textures/jeans.jpg"/>
+        <texture id="tv_texture" file="scenes/images/textures/tv.jpg"/>
     </textures>
 
     <materials>
@@ -1262,7 +1262,7 @@
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="80">
-                <translation x="-63" y="-0.75" z="-3" />
+                <translation x="-57" y="-0.75" z="-3" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="-360" />
@@ -1467,20 +1467,15 @@
 
         <component id="door">
             <transformation>
-                <scale x="1" y="6" z="4" />
-                <translate x="76" y="0.50" z="13" />
+                <translate x="76" y="5.5" z="51" />
+                <scale x="1" y="12" z="6.6" />
             </transformation>
             <texture id="door" length_s="1" length_t="1" />
             <materials>
                 <material id="inherit" />
             </materials>
             <children>
-                <componentref id="cube_front" />
-                <componentref id="cube_back" />
-                <componentref id="cube_bottom" />
-                <componentref id="cube_right" />
-                <componentref id="cube_left" />
-                <componentref id="cube_top" />
+                <componentref id="cube" />
             </children>
         </component>
 
@@ -3760,13 +3755,27 @@
             <animation id="personAnimation"/>
         </component>
 
+        <component id="tv">
+            <transformation>
+                <translate x="94.5" y="7.45" z="30.5" />
+                <scale x=".1" y="2.5" z="5" />
+            </transformation>
+            <materials>
+                <material id="black" />
+            </materials>
+            <texture id="tv_texture" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
         <component id="sgi_tp2_T03_G10">
             <transformation>
                 <translate x="0" y="0" z="0" />
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="black" />
             </materials>
             <texture id="none" />
             <children>
@@ -3790,6 +3799,7 @@
                 <componentref id="walls" />
                 <componentref id="animatedLeg" />
                 <componentref id="person" />
+                <componentref id="tv" />
             </children>
         </component>
     </components>
