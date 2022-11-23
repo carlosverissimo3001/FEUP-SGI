@@ -702,8 +702,8 @@
             <keyframe instant="15">
                 <translation x="10" y="0" z="0" />
                 <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="15" />
+                <rotation axis="y" angle="90" />
+                <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
@@ -718,7 +718,6 @@
         </keyframeanim>
 
         <keyframeanim id="personAnimation" >
-
             <keyframe instant="0">
                 <translation x="1" y="0" z="0" />
                 <rotation axis="z" angle="0" />
@@ -744,7 +743,7 @@
             </keyframe>
 
             <keyframe instant="9">
-                <translation x="31" y="0" z="10" />
+                <translation x="31" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
@@ -752,38 +751,78 @@
             </keyframe>
 
             <keyframe instant="12">
-                <translation x="41" y="0" z="20" />
+                <translation x="36.5" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
-            <keyframe instant="15">
-                <translation x="45" y="0" z="23" />
+            <keyframe instant="14">
+                <translation x="36.5" y="0" z="0" />
                 <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
+                <rotation axis="y" angle="-90" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
-            </keyframe>~
+            </keyframe>
 
-            <keyframe instant="18">
-                <translation x="51" y="0" z="24" />
+            <keyframe instant="17">
+                <translation x="36.5" y="0" z="8" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="-90" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="20">
+                <translation x="36.5" y="0" z="16" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="-90" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="23">
+                <translation x="36.5" y="0" z="24" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="-90" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="25">
+                <translation x="36.5" y="0" z="24" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
-            <keyframe instant="21">
-                <translation x="56" y="0" z="24" />
+            <keyframe instant="28">
+                <translation x="46.5" y="0" z="24" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
 
+            <keyframe instant="31">
+                <translation x="53.5" y="0" z="24" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+
+            <keyframe instant="32">
+                <translation x="54.5" y="0" z="24" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
         </keyframeanim>
+
 
         <keyframeanim id="ballAnimation" >
 
@@ -1296,7 +1335,8 @@
 
         <component id="wall2">
             <transformation>
-                <transformationref id="wall2Transform" />
+                <!-- <scale x="53.21" y="3.0" z="1" />
+                <translate x="1" y="1.5" z="-3" />  -->
             </transformation>
             <texture id="none"/>
             <materials>
@@ -1309,27 +1349,30 @@
 
         <component id="wall3">
             <transformation>
-                <translate x="106.4" y="0" z="0" />
+                <scale x="53.21" y="3.0" z="1" />
+                <translate x="1" y="1.5" z="-3" /> 
             </transformation>
             <texture id="none"/>
             <materials>
                 <material id="light_gray" />
             </materials>
             <children>
-                <componentref id="wall1" />
+                <primitiveref id="rectanglePatch"/>
             </children>
         </component>
 
         <component id="wall4">
             <transformation>
-                <translate x="0" y="0" z="76.6" />
+                <rotate axis="x" angle="180" />
+                <scale x="53.21" y="3.0" z="1" />
+                <translate x="1" y="-1.5" z="-79" />
             </transformation>
             <texture id="none"/>
             <materials>
                 <material id="light_gray" />
             </materials>
             <children>
-                <componentref id="wall2" />
+                <primitiveref id="rectanglePatch"/>
             </children>
         </component>
 
@@ -1343,9 +1386,9 @@
             </materials>
             <children>
                 <componentref id="wall1" />
-                <!-- <componentref id="wall2" />
+                <componentref id="wall2" /> 
                 <componentref id="wall3" />
-                <componentref id="wall4" /> -->
+                <componentref id="wall4" />
             </children>
         </component>
 
@@ -3041,7 +3084,7 @@
         </component>
 
         <component id="barrelside2" >
-            <transformation>
+            <transformation>shader
                 <translate x="7.5" y="6.0" z="7.0" />
                 <rotate axis="x" angle="-90" />
                 <rotate axis="y" angle="180" />
@@ -3149,8 +3192,8 @@
 
         <component id="head" >
             <transformation>
-                <translate x="36" y="5" z="7" />
                 <scale x=".7" y=".7" z=".7" />
+                <translate x="0" y="2.5" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -3163,7 +3206,6 @@
 
         <component id="body" >
             <transformation>
-                <translate x="36" y="3.2" z="7" />
                 <scale x=".7" y="2.3" z="1.6" />
             </transformation>
             <materials>
@@ -3177,10 +3219,9 @@
 
         <component id="arm1">
             <transformation>
-                <translate x="36" y="3.2" z="8" />
                 <rotate axis="x" angle="60" />
                 <scale x=".3" y=".2" z=".6" />
-                <translate x="0" y="1.1" z="-1.8" />
+                <translate x="0" y="5.1" z="-1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -3193,24 +3234,22 @@
 
         <component id="arm2">
             <transformation>
-                <translate x="36" y="3.2" z="8" />
-                <rotate axis="x" angle="-60" />
-                <scale x=".3" y=".2" z=".6" />
-                <translate x="0" y="9.5" z="-2.9" />
+                <rotate axis="x" angle="60" />
+                <translate x="0" y="-1.1" z="-1.7" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="demoCylinder" />
+                <componentref id="arm1" />
             </children>
         </component>
 
         <component id="leg1">
             <transformation>
-                <translate x="36" y="1.1" z="7.35" />
                 <scale x=".5" y="2" z=".55" />
+                <translate x="0" y="-1" z="0.6" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -3236,21 +3275,22 @@
 
         <component id="person" >
             <transformation>
+                <translate x="38" y="3" z="7" />
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
-                <componentref id="head" />
+               <componentref id="head" /> 
                 <componentref id="body" />
                 <componentref id="arm1" />
                 <componentref id="arm2" />
                 <componentref id="leg1" />
-                <componentref id="leg2" />
+                <componentref id="leg2" /> 
             </children>
-            <animation id="personAnimation"/>
+            <animation id="personAnimation"/> 
             <highlighted r="1" g="0" b="0" scale_h="1.1" />
         </component>
 
@@ -3264,12 +3304,12 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="pool" />
+                <!-- <componentref id="pool" />
                 <componentref id="jacuzi" />
                 <componentref id="deck" />
                 <componentref id="soil" />
                 <componentref id="grass" />
-                <componentref id="walls" />
+                
                 <componentref id="divider" />
                 <componentref id="steps" />
                 <componentref id="lifebuoy" />
@@ -3280,9 +3320,10 @@
                 <componentref id="trees" />
                 <componentref id="lounge_chairs" />
                 <componentref id="shower" />
-                <componentref id="person" />
                 <componentref id="poolHouse" />
                 <componentref id="barrel" />
+                <componentref id="person" /> -->
+                <componentref id="walls" />
             </children>
         </component>
     </components>
