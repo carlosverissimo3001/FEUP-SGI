@@ -36,6 +36,9 @@ export class XMLscene extends CGFscene {
     this.cameraNames = [];
     this.cameraID;
 
+    this.timeElapsed = 0
+    this.hasCameraChanged = false;
+
     this.initCameras();
 
     this.displayAxis = true;
@@ -283,14 +286,13 @@ export class XMLscene extends CGFscene {
 
   update(t) {
     var elapsed;
-
     if (this.sceneInited){
-
       if (this.startTime === null)
         elapsed = 0
       else
         elapsed = t - this.startTime
 
+      this.timeElapsed += elapsed / 1000
       this.startTime = t;
 
       this.checkKeys();
@@ -299,6 +301,12 @@ export class XMLscene extends CGFscene {
         this.graph.kfAnimations[i].update(elapsed / 1000);
 
       this.poolShader.setUniformsValues({ timeFactor: t / 100 % 100 });
+
+      /* if (this.timeElapsed > 25){
+        this.updateCamera("Inside Pool Bar")
+      } */
+
+      console.log(this.timeElapsed)
     }
 
   }
