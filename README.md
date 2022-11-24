@@ -67,7 +67,7 @@ For the second assigment, focusing on graphic techniques, we added a few animati
 
 [Link to the scene file](tp2/scenes/sgi_tp2_T03_G10.xml)
 
-#### Strong point of our project
+#### Strong points of our project
 
 - Complex animations, that include interaction between diffrent objects, for example, a person kicks a ball and it goes into the pool, which then interacts with the pool/jacuzi divider.  
 - We make great use of the newly introduced primitive, the patch. It is used in many configurations, such as a flag, a barrel and even the walls of the scene.
