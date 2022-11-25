@@ -65,6 +65,7 @@ export class MyInterface extends CGFinterface {
         this.addLightsFolder();
         this.addViewsFolder();
         this.createCheckboxes();
+        this.addHighlightedFolder();
     }
 
     addLightsFolder(){
@@ -89,4 +90,19 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
     }
 
+    addHighlightedFolder(){
+        var highlights = this.gui.addFolder('HighLights'); 
+
+        var hl = this.scene.graph.shaders;
+
+        for (const i in hl){
+            if(hl[i]){
+                highlights
+                .add(this.scene.graph.components[i], "isHigh")
+                .name(i)
+                .onChange(this.scene.graph.components[i].changeIsHigh.bind(this.scene))
+            }
+        }
+
+    }
 }
