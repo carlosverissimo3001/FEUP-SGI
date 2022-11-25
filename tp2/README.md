@@ -35,7 +35,7 @@
 - At the beggining, we had some issues understanding what was being asked relative to the shader part of the assignment, but, after talks with the teacher and monitor, everything was cleared up.
 - Had some difficulties building the Barrel.
 
-## Screenshots
+## [Screenshots](scenes/images/screenshots/)
 
 #### **Barrel**
 
