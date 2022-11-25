@@ -25,6 +25,13 @@ var PRIMITIVES_INDEX = 7;
 var ANIMATION_INDEX = 8;
 var COMPONENTS_INDEX = 9;
 
+// Order of operations in keyframes
+var TRANSLATE_INDEX = 0;
+var ROTATION_Z_INDEX = 1;
+var ROTATION_Y_INDEX = 2;
+var ROTATION_X_INDEX = 3;
+var SCALE_INDEX = 4;
+
 /**
  * MySceneGraph class, representing the scene graph.
  */
@@ -602,7 +609,7 @@ export class MySceneGraph {
             // Texture filepath
             tex.file = this.reader.getString(children[i], 'file');
 
-            // TODO: Find a better way to do this verification
+            // Check if texture file exists
             if (!this.doesFileExist(tex.file))
                 this.onXMLError("File: " + tex.file + " does not exist");
 
@@ -759,7 +766,6 @@ export class MySceneGraph {
         this.log("Parsed transformations");
         return null;
     }
-
 
     /**
      * Parses the <primitives> block.
@@ -1037,15 +1043,13 @@ export class MySceneGraph {
             // Get id of the (keyframe) aniamtion
             var kfAnimationId = this.reader.getString(children[i], 'id')
             if (kfAnimationId == null)
-            {
                 return "no ID defined for keyframe animation";
-            }
 
+            // Checks for repeated IDs.
             if (this.kfAnimations[kfAnimationId] != null)
-            {
                 return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
-            }
 
+            // Create new keyframe animation
             var newKfAnim = new MyKeyframeAnimation(this.scene, kfAnimationId);
 
             // Get keyfames of the animation
@@ -1066,6 +1070,7 @@ export class MySceneGraph {
                 var transformations = keyframes[j].children
 
                 // This order is obligatory
+
                 var translation = transformations[0]
                 var rotationZ = transformations[1]
                 var rotationY = transformations[2]
@@ -1284,7 +1289,7 @@ export class MySceneGraph {
             // If textureID is either "inherit" or "none", length_s and lenght_t should not be included
             if (textureID == "inherit" || textureID == "none") {
                 if (length_s != null || length_t != null){
-                    this.onXMLMinorError("When texture ID is " + textureID + " length_s and length_t should not be defined");
+                    this.onXMLMinorError("[COMPONENT:"+componentID+"] -> When texture ID is " + textureID + " length_s and length_t should not be defined");
                     if (textureID == "inherit"){
                         this.onXMLMinorError("Will use the values defined instead of the ones inherited from the parent component");
                         final_length_s = length_s;
@@ -1305,7 +1310,7 @@ export class MySceneGraph {
                     this.onXMLMinorError("No texture for ID : " + textureID)
 
                 if (length_s == null || length_t == null){
-                    this.onXMLMinorError("When textureID is neither 'none' nor 'inherit' length_s and length_t should be defined");
+                    this.onXMLMinorError("[COMPONENT:"+componentID+"] -> When textureID is neither 'none' nor 'inherit' length_s and length_t should be defined");
                     this.onXMLMinorError("Will use 1.0 as a default");
                     final_length_s = 1.0;
                     final_length_t = 1.0;
@@ -1345,7 +1350,7 @@ export class MySceneGraph {
 
 
             // ***** ANIMATIONS *****
-            var animationId;
+            var animationId = null;
             if (animationNode != null){
                 animationId = this.reader.getString(animationNode, "id");
 
@@ -1354,27 +1359,25 @@ export class MySceneGraph {
                     animationId == null;
                 }
             }
-            else
-                animationId = null;
 
             // ***** HIGHLIGHTED BLOCK*****
             var highlighted = null;
             if (highlightNode != null){
+                // Parse highlighted block
                 highlighted = this.parseComponentHighlight(highlightNode);
             }
             var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, highlighted, false);
             this.components[componentID] = component;
 
-            if(highlighted) this.shaders[componentID] = true;
-            else this.shaders[componentID] = false;
+            this.shaders[componentID] = (highlighted) ? true : false;
         }
 
         this.log("Parsed components")
     }
 
     /**
-     * Parses a new tranformation
-     * @param {transformation block element} tranformationNode
+     * Parses a new highlight block
+     * @param {highlight block element} highlightNode
      */
     parseComponentHighlight(highlightNode) {
         const r = this.reader.getFloat(highlightNode, "r");
@@ -1567,13 +1570,11 @@ export class MySceneGraph {
         if (currNode == null)
             this.onXMLError("Error - No component with ID " + currNodeID);
 
+        // Check if the pool shader is gonna be applied
         var poolComponent;
         if (currNode.componentID == "pool" || currNode.componentID == "river") {
             poolComponent = true;
         }
-
-        // multiply the current scene transformation matrix by the current component matrix
-        //this.scene.multMatrix(currNode.transf);
 
         // If the material ID is "inherit" then it should not change the the current material and should pass it onto the children nodes as well
         var matID = (currNode.materialID != "inherit" ? currNode.materialID : prevMaterialID)
@@ -1611,16 +1612,20 @@ export class MySceneGraph {
         this.scene.multMatrix(currNode.transf)
 
         var display;
+
+        /* If the current component has an animation, apply it*/
         if(currNode.animationId != null){
             display = this.kfAnimations[currNode.animationId].apply()
         }
 
+        /* If the animation has not started or has no frames, it won't be dispalyed*/
         if (display != 0) {
-            /* Display component primitives */
+            /* If this is a water component, then apply the pool shader */
             if (poolComponent) {
                 this.scene.setActiveShader(this.scene.poolShader);
                 this.scene.distortionmap.bind(1);
             }
+            /* Check is this component has a shader */
             if (this.shaders[currNodeID] && currNode.isHigh) {
                 this.scene.pulseShader.setUniformsValues({
                     r: currNode.highlighted.r,
@@ -1631,6 +1636,7 @@ export class MySceneGraph {
                 this.scene.setActiveShader(this.scene.pulseShader);
                 this.textures[texID].bind();
             }
+            /* Display component primitives */
             for (var i = 0; i < currNode.primitives.length; i++){
                 let primitive = this.primitives[currNode.primitives[i]];
 
@@ -1667,6 +1673,11 @@ export class MySceneGraph {
 
     }
 
+    /**
+     * Checks if the given file exists
+     * @param {string} urlToFile
+     * @returns {boolean} True if the file exists, false otherwise
+     */
     doesFileExist(urlToFile) {
         var xhr = new XMLHttpRequest();
         xhr.open('HEAD', urlToFile, false);

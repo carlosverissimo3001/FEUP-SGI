@@ -1,5 +1,3 @@
-import { CGFscene } from "../../lib/CGF.js";
-
 export class MyAnimation {
     constructor(scene) {
         this.scene = scene;

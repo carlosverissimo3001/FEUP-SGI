@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp2_T03_G10" axis_length="17"/>
 
-    <views default="Passage">
+    <views default="Bottom Left">
         <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -2148,12 +2148,12 @@
             <highlighted r="0.5" g="0.0" b="0.0" scale_h="1.1" />
         </component>
 
-        <component id="ball_1">
+        <component id="ball1">
             <transformation>
                 <scale x="1" y="1" z="1" />
                 <translate x="9.0" y="0" z="45.0" />
             </transformation>
-            <texture id="ballTexture" />
+            <texture id="inherit" />
             <materials>
                 <material id="red" />
                 <material id="white" />
@@ -2166,12 +2166,12 @@
             <highlighted r="0.2" g="0.0" b="0.2" scale_h="1.1" />
         </component>
 
-        <component id="ball_2">
+        <component id="ball2">
             <transformation>
                 <scale x="1" y="1" z="1" />
                 <translate x="65.0" y="1" z="35.0" />
             </transformation>
-            <texture id="ballTexture" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <materials>
                 <material id="white" />
             </materials>
@@ -2180,6 +2180,20 @@
             </children>
             <animation id="ball2Animation"/>
             <highlighted r="0.0" g="0.0" b="0.3" scale_h="1.1" />
+        </component>
+
+        <component id="balls">
+            <transformation>
+                <transformationref id="demoTransform" />
+            </transformation>
+            <texture id="ballTexture" length_s="1" length_t="1"/>
+            <materials>
+                <material id="white" />
+            </materials>
+            <children>
+                <componentref id="ball1" />
+                <componentref id="ball2" />
+            </children>
         </component>
 
         <component id="tabletop">
@@ -3825,8 +3839,8 @@
         <component id="river">
             <transformation>
                 <rotate axis="x" angle="90" />
-                <translate x="101" y="38.34" z="-0.11" />
-                <scale x="1.1" y="38.48" z="1.0" />
+                <translate x="101" y="38.33" z="-0.11" />
+                <scale x="1.1" y="38.43" z="1.0" />
             </transformation>
             <texture id="waterTexture" length_s="1" length_t="1"/>
             <materials>
@@ -3837,7 +3851,7 @@
             </children>
         </component>
 
-        <component id="viaduto1" >
+        <component id="passage1" >
             <transformation>
                 <translate x="1.0" y="0" z="-0.5" />
                 <scale x="1.0" y="1.0" z="1" />
@@ -3859,7 +3873,7 @@
             </children>
         </component>
 
-        <component id="viaduto2">
+        <component id="passage2">
             <transformation>
                 <translate x="0" y="0" z="48" />
                 <scale x="1" y="1" z="1.19" />
@@ -3869,21 +3883,21 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="viaduto1" />
+                <componentref id="passage1" />
             </children>
         </component>
 
-        <component id="viadutos">
+        <component id="passage">
             <transformation>
                <scale x="1.0" y="1.0" z="1.0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="barrel_texture" length_s="1" length_t="1"/>
             <children>
-                <componentref id="viaduto1" />
-                <componentref id="viaduto2" />
+                <componentref id="passage1" />
+                <componentref id="passage2" />
                 <componentref id="river" />
             </children>
         </component>
@@ -4520,20 +4534,6 @@
             </children>
         </component>
 
-        <component id="flag" >
-            <transformation>
-                <scale x="1" y="1.5" z="1" />
-                <rotate axis="y" angle="90" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <primitiveref id="flag" />
-            </children>
-        </component>
-
         <component id="sgi_tp2_T03_G10">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -4552,8 +4552,7 @@
                 <componentref id="divider" />
                 <componentref id="steps" />
                 <componentref id="lifebuoy" />
-                <componentref id="ball_1" />
-                <componentref id="ball_2" />
+                <componentref id="balls" />
                 <componentref id="table_and_chairs" />
                 <componentref id="board" />
                 <componentref id="trees" />
@@ -4561,7 +4560,7 @@
                 <componentref id="shower" />
                 <componentref id="poolHouse" />
                 <componentref id="barrel" />
-                <componentref id="viadutos" />
+                <componentref id="passage" />
                 <componentref id="walls" />
                 <componentref id="animatedLeg" />
                 <componentref id="people" />

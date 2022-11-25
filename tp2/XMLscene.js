@@ -294,11 +294,14 @@ export class XMLscene extends CGFscene {
 
       this.checkKeys();
 
+      /* Update animations */
       for (var i in this.graph.kfAnimations)
         this.graph.kfAnimations[i].update(elapsed / 1000);
 
+      /* Update pool shader */
       this.poolShader.setUniformsValues({ timeFactor: t / 100 % 100 });
 
+      /* Update pulse shader */
       this.pulseShader.setUniformsValues({ timeFactor: t / 100 % 100 });
 
     }
