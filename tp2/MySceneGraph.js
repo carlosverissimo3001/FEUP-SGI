@@ -1172,6 +1172,8 @@ export class MySceneGraph {
 
             this.kfAnimations[kfAnimationId] = newKfAnim
         }
+        this.log("Parsed animations");
+        return null;
     }
 
     /**
