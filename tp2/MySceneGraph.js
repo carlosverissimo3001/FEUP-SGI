@@ -1568,7 +1568,7 @@ export class MySceneGraph {
             this.onXMLError("Error - No component with ID " + currNodeID);
 
         var poolComponent;
-        if (currNode.componentID == "pool" || currNode.componentID == "water") {
+        if (currNode.componentID == "pool" || currNode.componentID == "river") {
             poolComponent = true;
         }
 
@@ -1630,7 +1630,7 @@ export class MySceneGraph {
                 });
                 this.scene.setActiveShader(this.scene.pulseShader);
                 this.textures[texID].bind();
-            } 
+            }
             for (var i = 0; i < currNode.primitives.length; i++){
                 let primitive = this.primitives[currNode.primitives[i]];
 

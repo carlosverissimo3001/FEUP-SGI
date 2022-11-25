@@ -18,11 +18,16 @@
   - [A person jumps to the pool from a board](#person-jumping-into-the-pool)
 - Shaders
   - Using shaders, we highlighted objects in the scene, through a periodical change in size and color of that object.
-    - [Example](#)
-  - Water shader can be visualized at [this animation](#person-jumping-into-the-pool)
-- Other
+    - [Lifebuoy](#highlights)
+    - [Balls](#highlights)
+  - A simple water shader was implemented using a [distortion map](scenes/images/textures/distortionmap.png) and can be visualized with detail at this [animation](#person-jumping-into-the-pool).
+- New patch primtive
+  - Used to create a [barrel](#barrel) by the side of the bar, and a tent-shaped river viaduct, that guides a river outside the bar.
+    - Details of the river and viaduct can be seen [here](#river-viaduct-outside)
   - Replaced walls with retangle patch to improve visibility.
+- Other
   - Added a tv inside the bar
+  - Minor fixes
 
 ----
 ## Issues/Problems
@@ -32,26 +37,67 @@
 
 ## Screenshots
 
-#### Barrel
+#### **Barrel**
 
-![Barrel](scenes/images//screenshots/barrel.png)
+<img src="scenes/images/screenshots/barrel.png" height="500" >
 
-#### Tent
+#### **River Viaduct (Outside)**
 
-<!-- ![Tent](scenes/images/screenshots/tent.png) -->
+![River-Outside](scenes/images/screenshots/river-viaduct-outside.png)
 
-#### Overview of the scene, after the addition of the tent and the barrel
+#### **River Viaduct (Inside)**
 
-<!-- ![Overview](scenes/images/screenshots/overview-before.png) -->
+![River-Inside](scenes/images/screenshots/river-viaduct-inside.png)
 
-#### Overview of the scene, after the animations were completed
+#### **Overview of the scene, at the start of the animations**
 
-<!-- ![Overview](scenes/images/screenshots/overview-after.png) -->
+![Overview](scenes/images/screenshots/overview-before.png)
+
+#### **Overview of the scene, after the animations were completed**
+
+![Overview](scenes/images/screenshots/overview-after.png)
 
 Even though it was not asked, we decided to include some videos demostrating the created animations and shaders, since screenshots won't don't do them justice.
 
-#### Person kicking the ball into the pool
+#### **Person kicking the ball into the pool**
 
-#### Person jumping into the pool
+<!-- blank line -->
+<figure class="video_container">
+  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/kick.png">
+    <source src="scenes/videos/kick.mp4" type="video/mp4">
+  </video>
+</figure>
+<!-- blank line -->
 
-#### Highlights
+#### **Person jumping into the pool**
+
+<!-- blank line -->
+<figure class="video_container">
+  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/jump.png">
+    <source src="scenes/videos/jump.mp4" type="video/mp4">
+  </video>
+</figure>
+<!-- blank line -->
+
+#### **Highlights**
+
+**Lifebuoy**
+
+<!-- blank line -->
+<figure class="video_container">
+  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/highlights-lifebuoy.png">
+    <source src="scenes/videos/highlights-lifebuoy.mp4" type="video/mp4">
+  </video>
+</figure>
+<!-- blank line -->
+
+**Balls**
+
+<!-- blank line -->
+<figure class="video_container">
+  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/highlights-balls.png">
+    <source src="scenes/videos/highlights-balls.mp4" type="video/mp4">
+  </video>
+</figure>
+<!-- blank line -->
+

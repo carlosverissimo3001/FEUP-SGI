@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp2_T03_G10" axis_length="17"/>
 
-    <views default="Board">
+    <views default="Bottom Left">
         <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -52,15 +52,25 @@
             <to x="100" y="5" z="32" />
         </perspective>
 
-        <perspective id="Inside Pool Bar" near="0.1" far="500" angle="65">
-            <from x="101" y="5" z="30" />
-            <to x="0" y="4" z="30" />
+        <perspective id="Inside Pool Bar" near="0.1" far="1000000" angle="70">
+            <from x="103" y="6" z="25" />
+            <to x="80" y="-2" z="50" />
         </perspective>
 
         <ortho id="Ball Ortho" near="0.1" far="500" left="-10" right="10" top="5" bottom="-2.5">
             <from x="79.9" y="2.65" z="44"/>
             <to x="0" y="2.5" z="5"/>
         </ortho>
+
+        <perspective id="Jump" near="0.1" far="500" angle="45">
+            <from x="50" y="6" z="50" />
+            <to x="10" y="0" z="50" />
+        </perspective>
+
+        <perspective id="Kick" near="0.1" far="500" angle="60">
+            <from x="50" y="10" z="75" />
+            <to x="50" y="10" z="20" />
+        </perspective>
     </views>
 
     <ambient>
@@ -315,7 +325,7 @@
 
         <transformation id="wallTransform">
             <rotate axis="y" angle="90" />
-            <scale x="38" y="3.0" z="1" />
+            <scale x="38.3" y="3.0" z="1" />
             <translate x="-1" y="1.5" z="-3" />
         </transformation>
 
@@ -542,7 +552,7 @@
                 <controlpoint x="1.0" y="1.5" z="3.0" />
                 <controlpoint x="2.0" y="1.5" z="-3.0" />
                 <controlpoint x="3.0" y="1.5" z="3.0" />
-            
+
             </patch>
 
         </primitive>
@@ -1148,14 +1158,14 @@
                 <translation x="-49" y="-0.25" z="-3" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
+                <rotation axis="x" angle="-90" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="72">
                 <translation x="-53" y="-0.5" z="-3" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
+                <rotation axis="x" angle="-180" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="80">
@@ -1595,8 +1605,8 @@
 
         <component id="door">
             <transformation>
-                <translate x="76" y="5.5" z="51" />
-                <scale x="1" y="12" z="6.6" />
+                <translate x="76.5" y="5.5" z="51" />
+                <scale x="1.5" y="12" z="6.6" />
             </transformation>
             <texture id="door" length_s="1" length_t="1" />
             <materials>
@@ -1682,7 +1692,7 @@
 
         <component id="poolHouse">
             <transformation>
-                <translate x="55.92" y="0.2" z="12" />
+                <translate x="55.92" y="0.1" z="12" />
                 <scale x="0.5" y="0.6" z="0.6" />
             </transformation>
             <texture id="none" />
@@ -1838,8 +1848,8 @@
         <component id="wall2">
             <transformation>
                 <rotate axis="y" angle="-90" />
-                <scale x="38" y="3" z="1" />
-                <translate x="1" y="1.5" z="-109.415" />
+                <scale x="38.3" y="3" z="1" />
+                <translate x="1.0" y="1.5" z="-109.415" />
             </transformation>
             <texture id="none"/>
             <materials>
@@ -1868,7 +1878,7 @@
             <transformation>
                 <rotate axis="x" angle="180" />
                 <scale x="53.21" y="3.0" z="1" />
-                <translate x="1" y="-1.5" z="-79" />
+                <translate x="1" y="-1.5" z="-79.58" />
             </transformation>
             <texture id="none"/>
             <materials>
@@ -3670,7 +3680,7 @@
 
         <component id="barrel" >
             <transformation>
-                <translate x="90.5" y="-1.0" z="44.0" />
+                <translate x="90.5" y="-1.0" z="44.5" />
                 <scale x="0.8" y="0.8" z="0.8" />
             </transformation>
             <materials>
@@ -3696,7 +3706,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3711,7 +3721,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3726,7 +3736,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3741,7 +3751,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3756,7 +3766,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3771,7 +3781,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3786,7 +3796,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
@@ -3801,17 +3811,17 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="tentPatch" />
             </children>
         </component>
 
-        <component id="water">
+        <component id="river">
             <transformation>
-                <scale x="1.0" y="1.0" z="23.0" />
                 <rotate axis="x" angle="90" />
-                <translate x="100.0" y="1.01" z="-1.0" />
+                <translate x="101" y="38.34" z="-0.11" />
+                <scale x="1.1" y="38.29" z="1.0" />
             </transformation>
             <texture id="waterTexture" length_s="1" length_t="1"/>
             <materials>
@@ -3822,15 +3832,15 @@
             </children>
         </component>
 
-        <component id="viaduto" >
+        <component id="viaduto1" >
             <transformation>
-                <scale x="1" y="1" z="1" />
-                <translate x="0.0" y="0.0" z="-0.7" />
+                <translate x="1.0" y="0" z="-0.5" />
+                <scale x="1.0" y="1.0" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="barrel_texture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="tentPatch1" />
                 <componentref id="tentPatch2" />
@@ -3841,7 +3851,431 @@
                 <componentref id="tentPatch7" />
                 <componentref id="tentPatch8" />
                 <componentref id="tentPatch8" />
-                <componentref id="water" />
+            </children>
+        </component>
+
+        <component id="viaduto2">
+            <transformation>
+                <translate x="0" y="0" z="48" />
+                <scale x="1" y="1" z="1.19" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="viaduto1" />
+            </children>
+        </component>
+
+        <component id="viadutos">
+            <transformation>
+               <scale x="1.0" y="1.0" z="1.0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <componentref id="viaduto1" />
+                <componentref id="viaduto2" />
+                <componentref id="river" />
+            </children>
+        </component>
+
+        <component id="grate01">
+            <transformation>
+                <translate x="100.75" y="-0.05" z="24" />
+                <scale x=".2" y=".2" z="8" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="grate02">
+            <transformation>
+                <translate x="0.55" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate01" />
+            </children>
+        </component>
+
+        <component id="grate2">
+            <transformation>
+                <translate x="101.04" y="0.05" z="24" />
+                <scale x=".8" y=".1" z=".05" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+
+        <component id="grate3">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate2" />
+            </children>
+        </component>
+
+        <component id="grate4">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate3" />
+            </children>
+        </component>
+
+        <component id="grate5">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate4" />
+            </children>
+        </component>
+
+        <component id="grate6">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate5" />
+            </children>
+        </component>
+
+        <component id="grate7">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate6" />
+            </children>
+        </component>
+
+        <component id="grate8">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate7" />
+            </children>
+        </component>
+
+        <component id="grate9">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate8" />
+            </children>
+        </component>
+
+        <component id="grate10">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate9" />
+            </children>
+        </component>
+
+        <component id="grate11">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate10" />
+            </children>
+        </component>
+
+        <component id="grate12">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate11" />
+            </children>
+        </component>
+
+        <component id="grate13">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate12" />
+            </children>
+        </component>
+
+        <component id="grate14">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate13" />
+            </children>
+        </component>
+
+        <component id="grate15">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate14" />
+            </children>
+        </component>
+
+        <component id="grate16">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate15" />
+            </children>
+        </component>
+
+        <component id="grate17">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate16" />
+            </children>
+        </component>
+
+        <component id="grate18">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate17" />
+            </children>
+        </component>
+
+        <component id="grate19">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate18" />
+            </children>
+        </component>
+
+        <component id="grate20">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate19" />
+            </children>
+        </component>
+
+        <component id="grate21">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate20" />
+            </children>
+        </component>
+
+        <component id="grate22">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate21" />
+            </children>
+        </component>
+
+        <component id="grate23">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate22" />
+            </children>
+        </component>
+
+        <component id="grate24">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate23" />
+            </children>
+        </component>
+
+        <component id="grate25">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate24" />
+            </children>
+        </component>
+
+        <component id="grate26">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="metal" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="grate25" />
+            </children>
+        </component>
+
+        <component id="grate" >
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <!-- Horizontal Grate-->
+                <componentref id="grate01" />
+                <componentref id="grate02" />
+                <!-- Vertical Grate-->
+                <componentref id="grate2" />
+                <componentref id="grate3" />
+                <componentref id="grate4" />
+                <componentref id="grate5" />
+                <componentref id="grate6" />
+                <componentref id="grate7" />
+                <componentref id="grate8" />
+                <componentref id="grate9" />
+                <componentref id="grate10" />
+                <componentref id="grate11" />
+                <componentref id="grate12" />
+                <componentref id="grate13" />
+                <componentref id="grate14" />
+                <componentref id="grate15" />
+                <componentref id="grate16" />
+                <componentref id="grate17" />
+                <componentref id="grate18" />
+                <componentref id="grate19" />
+                <componentref id="grate20" />
+                <componentref id="grate21" />
+                <componentref id="grate22" />
+                <componentref id="grate23" />
+                <componentref id="grate24" />
+                <componentref id="grate25" />
+                <componentref id="grate26" />
             </children>
         </component>
 
@@ -4053,6 +4487,19 @@
             <animation id="person2Animation"/>
         </component>
 
+        <component id="people">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="person" />
+                <componentref id="person2" />
+            </children>
+        </component>
 
         <component id="tv">
             <transformation>
@@ -4109,12 +4556,12 @@
                 <componentref id="shower" />
                 <componentref id="poolHouse" />
                 <componentref id="barrel" />
-                <componentref id="viaduto" />
+                <componentref id="viadutos" />
                 <componentref id="walls" />
                 <componentref id="animatedLeg" />
-                <componentref id="person" />
-                <componentref id="person2" />
+                <componentref id="people" />
                 <componentref id="tv" />
+                <componentref id="grate" />
             </children>
         </component>
     </components>
