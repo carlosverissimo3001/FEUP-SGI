@@ -22,8 +22,8 @@
     - [Balls](#highlights)
   - A simple water shader was implemented using a [distortion map](scenes/images/textures/distortionmap.png) and can be visualized with detail at this [animation](#person-jumping-into-the-pool).
 - New patch primtive
-  - Used to create a [barrel](#barrel) by the side of the bar, and a tent-shaped river viaduct, that guides a river outside the bar.
-    - Details of the river and viaduct can be seen [here](#river-viaduct-outside)
+  - Used to create a [barrel](#barrel) by the side of the bar, and a tent-shaped river passage, that guides a river outside the bar.
+    - Details of the river and passage can be seen [here](#river-passage-outside)
   - Replaced walls with retangle patch to improve visibility.
 - Other
   - Added a tv inside the bar
@@ -41,13 +41,13 @@
 
 <img src="scenes/images/screenshots/barrel.png" height="500" >
 
-#### **River Viaduct (Outside)**
+#### **River Passage (Outside)**
 
-![River-Outside](scenes/images/screenshots/river-viaduct-outside.png)
+![River-Outside](scenes/images/screenshots/river-passage-outside.png)
 
-#### **River Viaduct (Inside)**
+#### **River Passage (Inside)**
 
-![River-Inside](scenes/images/screenshots/river-viaduct-inside.png)
+![River-Inside](scenes/images/screenshots/river-passage-inside.png)
 
 #### **Overview of the scene, at the start of the animations**
 

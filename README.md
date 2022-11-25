@@ -87,7 +87,7 @@ For the second assigment, focusing on graphic techniques, we added a few animati
 
 Outside the bar            |  Inside the bar
 :-------------------------:|:-------------------------:
-![](tp2/scenes/images/screenshots/river-viaduct-outside.png)  |  ![](tp2/scenes/images/screenshots/river-viaduct-inside.png)
+![](tp2/scenes/images/screenshots/river-passage-outside.png)  |  ![](tp2/scenes/images/screenshots/river-passage-inside.png)
 
 
 
