@@ -27,7 +27,7 @@ export class XMLscene extends CGFscene {
     this.sceneInited = false;
     this.graphLoaded = false;
 
-    this.setUpdatePeriod(100);
+    this.setUpdatePeriod(20);
     this.startTime = null;
 
     this.enableTextures(true);
