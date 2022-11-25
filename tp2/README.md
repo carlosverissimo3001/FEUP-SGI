@@ -16,8 +16,9 @@
 - Animations
   - [A person kicks a football into the pool after a trip to the bar](#person-kicking-the-ball-into-the-pool)
   - [A person jumps to the pool from a board](#person-jumping-into-the-pool)
-  - [Waving flag](#waving-flag)
 - Shaders
+  - Using shaders, we highlighted objects in the scene, through a periodical change in size and color of that object.
+    - [Example](#)
   - Water shader can be visualized at [this animation](#person-jumping-into-the-pool)
 - Other
   - Replaced walls with retangle patch to improve visibility.
@@ -47,11 +48,10 @@
 
 <!-- ![Overview](scenes/images/screenshots/overview-after.png) -->
 
-Even though it was not asked, we decided to include some videos demostrating the created animations, since screenshots won't don't do them justice.
+Even though it was not asked, we decided to include some videos demostrating the created animations and shaders, since screenshots won't don't do them justice.
 
 #### Person kicking the ball into the pool
 
 #### Person jumping into the pool
 
-
-#### Waving flag
+#### Highlights
