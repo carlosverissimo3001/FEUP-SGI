@@ -1568,7 +1568,7 @@ export class MySceneGraph {
             this.onXMLError("Error - No component with ID " + currNodeID);
 
         var poolComponent;
-        if (currNode.componentID == "pool") {
+        if (currNode.componentID == "pool" || currNode.componentID == "water") {
             poolComponent = true;
         }
 
