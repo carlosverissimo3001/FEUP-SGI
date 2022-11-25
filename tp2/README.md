@@ -61,43 +61,18 @@ Even though it was not asked, we decided to include some videos demostrating the
 
 #### **Person kicking the ball into the pool**
 
-<!-- blank line -->
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/kick.png">
-    <source src="scenes/videos/kick.mp4" type="video/mp4">
-  </video>
-</figure>
-<!-- blank line -->
+![](scenes/videos/kick.mp4)
 
 #### **Person jumping into the pool**
 
-<!-- blank line -->
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/jump.png">
-    <source src="scenes/videos/jump.mp4" type="video/mp4">
-  </video>
-</figure>
-<!-- blank line -->
+![](scenes/videos/jump.mp4)
 
 #### **Highlights**
 
 **Lifebuoy**
 
-<!-- blank line -->
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/highlights-lifebuoy.png">
-    <source src="scenes/videos/highlights-lifebuoy.mp4" type="video/mp4">
-  </video>
-</figure>
-<!-- blank line -->
+![](scenes/videos/highlights-lifebuoy.mp4)
 
 **Balls**
 
-<!-- blank line -->
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="scenes/videos/thumbnails/highlights-balls.png">
-    <source src="scenes/videos/highlights-balls.mp4" type="video/mp4">
-  </video>
-</figure>
-<!-- blank line -->
-
+![](scenes/videos/highlights-balls.mp4)
