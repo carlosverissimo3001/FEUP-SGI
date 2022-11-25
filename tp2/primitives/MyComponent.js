@@ -14,7 +14,7 @@ import { CGFobject } from "../../lib/CGF.js";
  */
 
 export class MyComponent extends CGFobject {
-  constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t, animationId, higlighted)
+  constructor(scene, componentID, transf, materials, textureID, children, primtives, length_s, length_t, animationId, highlighted, isHigh)
   {
     super(scene);
     this.componentID = componentID;
@@ -30,7 +30,8 @@ export class MyComponent extends CGFobject {
     this.matIndex = 0;
 
     this.animationId = animationId;
-    this.higlighted = higlighted
+    this.highlighted = highlighted;
+    this.isHigh = isHigh;
 
     this.transformation = mat4.create();
     mat4.identity(this.transformation);
@@ -43,6 +44,10 @@ export class MyComponent extends CGFobject {
       this.matIndex = 0;
 
     this.materialID = this.materials[this.matIndex];
+  }
+
+  changeIsHigh(){
+    this.isHigh = !this.isHigh;
   }
 
 }

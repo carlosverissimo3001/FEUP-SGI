@@ -56,6 +56,8 @@ export class XMLscene extends CGFscene {
 		this.poolShader.setUniformsValues({ uSampler: 0 });
 
 		this.distortionmap = new CGFtexture(this, "scenes/images/textures/distortionmap.png");
+
+    this.pulseShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
   }
 
   /**
@@ -297,6 +299,8 @@ export class XMLscene extends CGFscene {
 
       this.poolShader.setUniformsValues({ timeFactor: t / 100 % 100 });
 
+      this.pulseShader.setUniformsValues({ timeFactor: t / 100 % 100 });
+
     }
 
   }
@@ -356,4 +360,5 @@ export class XMLscene extends CGFscene {
       }
     }
   }
+
 }

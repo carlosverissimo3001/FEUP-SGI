@@ -1172,6 +1172,9 @@ export class MySceneGraph {
    * @param {components block element} componentsNode
    */
     parseComponents(componentsNode) {
+
+        this.shaders = {};
+
         var children = componentsNode.children;
 
         this.components = [];
@@ -1355,35 +1358,36 @@ export class MySceneGraph {
                 animationId = null;
 
             // ***** HIGHLIGHTED BLOCK*****
-            var highlight = [];
+            var highlighted = null;
             if (highlightNode != null){
-                var r = this.reader.getFloat(highlightNode, "r");
-                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1.0))
-                    return "unable to parse R component of the highlighted block of component with id: " + componentID;
-
-                var g = this.reader.getFloat(highlightNode, "g");
-                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1.0))
-                    return "unable to parse G component of the highlighted block of component with id: " + componentID;
-
-                var b = this.reader.getFloat(highlightNode, "b");
-                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1.0))
-                    return "unable to parse B component of the highlighted block of component with id: " + componentID;
-
-                var scale_h = this.reader.getFloat(highlightNode, "scale_h");
-                if (!(scale_h != null && !isNaN(scale_h) && scale_h >= 0 && scale_h <= 100))
-                    return "unable to parse scale_h component of the highlighted block of component with id: " + componentID;
-
-                var shader = new CGFshader(this.scene.gl, 'shaders/pool.vert', 'shaders/pool.frag');
-                shader.setUniformsValues({r:r, g:g, b:b, scale_h:scale_h})
+                highlighted = this.parseComponentHighlight(highlightNode);
             }
-
-            // Save the component and its attributes
-            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, shader);
+            var component = new MyComponent(this.scene, componentID, transf, materialID, textureID, childs, primitives, final_length_s , final_length_t, animationId, highlighted, false);
             this.components[componentID] = component;
+
+            if(highlighted) this.shaders[componentID] = true;
+            else this.shaders[componentID] = false;
         }
 
         this.log("Parsed components")
     }
+
+    /**
+     * Parses a new tranformation
+     * @param {transformation block element} tranformationNode
+     */
+    parseComponentHighlight(highlightNode) {
+        const r = this.reader.getFloat(highlightNode, "r");
+        const g = this.reader.getFloat(highlightNode, "g");
+        const b = this.reader.getFloat(highlightNode, "b");
+        const scale_h = this.reader.getFloat(highlightNode, "scale_h");
+        return {
+          r: r,
+          g: g,
+          b: b,
+          scale_h: scale_h,
+        };
+      }
 
     /**
      * Parses a new tranformation
@@ -1409,7 +1413,6 @@ export class MySceneGraph {
                     if(!Array.isArray(coordinates))
                         return coordinates;
 
-                    //console.log(coordinates);
                     transf = mat4.scale(transf, transf, coordinates);
                     break;
 
@@ -1560,11 +1563,12 @@ export class MySceneGraph {
     displayComponent(currNodeID, prevMaterialID, prevTextureID, prev_length_s, prev_length_t) {
         // Get the node from the component tree using its ID
         var currNode = this.components[currNodeID];
+
         if (currNode == null)
             this.onXMLError("Error - No component with ID " + currNodeID);
 
         var poolComponent;
-        if (currNode.componentID == "pool") {
+        if (currNode.componentID == "pool" || currNode.componentID == "water") {
             poolComponent = true;
         }
 
@@ -1617,6 +1621,16 @@ export class MySceneGraph {
                 this.scene.setActiveShader(this.scene.poolShader);
                 this.scene.distortionmap.bind(1);
             }
+            if (this.shaders[currNodeID] && currNode.isHigh) {
+                this.scene.pulseShader.setUniformsValues({
+                    r: currNode.highlighted.r,
+                    g: currNode.highlighted.g,
+                    b: currNode.highlighted.b,
+                    scale_h: currNode.highlighted.scale_h,
+                });
+                this.scene.setActiveShader(this.scene.pulseShader);
+                this.textures[texID].bind();
+            } 
             for (var i = 0; i < currNode.primitives.length; i++){
                 let primitive = this.primitives[currNode.primitives[i]];
 
@@ -1637,6 +1651,10 @@ export class MySceneGraph {
                 currAppearence.apply()
             }
             if (poolComponent) this.scene.setActiveShader(this.scene.defaultShader);
+
+            if (this.shaders[currNodeID] && currNode.isHigh) {
+                this.scene.setActiveShader(this.scene.defaultShader);
+            }
 
             /* Display component children (these are references to other components) */
             for(var j = 0; j < currNode.children.length ; j++){

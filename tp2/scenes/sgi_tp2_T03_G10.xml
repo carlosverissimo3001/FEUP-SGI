@@ -526,34 +526,23 @@
 
         </primitive>
 
-        <primitive id="cup">
-            <patch degree_u="3" parts_u="100" degree_v="3" parts_v="20" >
-                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+        <primitive id="flag">
+            <patch degree_u="2" parts_u="20" degree_v="2" parts_v="20" >
 
                 <!-- U = 0 // V = 0..2 -->
-                <controlpoint x="0.15" y="0.0" z="0.0" w="1.0"/>
-                <controlpoint x="-0,173333333" y="0.0" z="0,333333333" w="1.0"/>
-                <controlpoint x="-0,173333333" y="0.0" z="0,666666667" w="1.0"/>
-                <controlpoint x="0.15" y="0.0" z="1.0" w="1.0"/>
+                <controlpoint x="1.0" y="1.5" z="3.0" />
+                <controlpoint x="2.0" y="1.5" z="-3.0" />
+                <controlpoint x="3.0" y="1.5" z="3.0" />
 
                 <!-- U = 1 // V = 0..2 -->
-                <controlpoint x="0.15" y="0.20" z="0.0" w="1.0"/>
-                <controlpoint x="-0,173333333" y="-0,031111111" z="0,333333333" w="1.0"/>
-                <controlpoint x="-0,173333333" y="-0,031111111" z="0,666666667" w="1.0"/>
-                <controlpoint x="0.15" y="0.20" z="1.0" w="1.0"/>
+                <controlpoint x="1.0" y="-1.5" z="3.0" />
+                <controlpoint x="2.0" y="-1.5" z="-3.0" />
+                <controlpoint x="3.0" y="-1.5" z="3.0" />
 
-                <!-- U = 1 // V = 0..2 -->
-                <controlpoint x="-0.15" y="0.20" z="0.0" w="1.0"/>
-                <controlpoint x="0,126666667" y="-0,031111111" z="0,333333333" w="1.0"/>
-                <controlpoint x="0,126666667" y="-0,031111111" z="0,666666667" w="1.0"/>
-                <controlpoint x="-0.15" y="0.20" z="1.0" w="1.0"/>
-
-                <!-- U = 0 // V = 0..2 -->
-                <controlpoint x="-0.15" y="0.0" z="0.0" w="1.0"/>
-                <controlpoint x="0,126666667" y="0.0" z="0,333333333" w="1.0"/>
-                <controlpoint x="0,126666667" y="0.0" z="0,666666667" w="1.0"/>
-                <controlpoint x="-0.15" y="0.0" z="1.0" w="1.0"/>
-
+                <controlpoint x="1.0" y="1.5" z="3.0" />
+                <controlpoint x="2.0" y="1.5" z="-3.0" />
+                <controlpoint x="3.0" y="1.5" z="3.0" />
+            
             </patch>
 
         </primitive>
@@ -2141,6 +2130,7 @@
             <children>
                 <primitiveref id="demoTorus"/>
             </children>
+            <highlighted r="0.5" g="0.0" b="0.0" scale_h="1.1" />
         </component>
 
         <component id="ball_1">
@@ -2148,7 +2138,7 @@
                 <scale x="1" y="1" z="1" />
                 <translate x="9.0" y="0" z="45.0" />
             </transformation>
-            <texture id="none" />
+            <texture id="ballTexture" />
             <materials>
                 <material id="red" />
                 <material id="white" />
@@ -2158,6 +2148,7 @@
                 <primitiveref id="demoSphere" />
             </children>
             <animation id="ballAnimation"/>
+            <highlighted r="0.2" g="0.0" b="0.2" scale_h="1.1" />
         </component>
 
         <component id="ball_2">
@@ -2173,6 +2164,7 @@
                 <primitiveref id="demoSphere" />
             </children>
             <animation id="ball2Animation"/>
+            <highlighted r="0.0" g="0.0" b="0.3" scale_h="1.1" />
         </component>
 
         <component id="tabletop">
@@ -3695,17 +3687,161 @@
             </children>
         </component>
 
-        <component id="tentPatch" >
+        <component id="tentPatch1" >
             <transformation>
                 <scale x="1" y="1" z="1" />
-                <translate x="0.0" y="2.0" z="0.0" />
+                <translate x="98.0" y="-1.0" z="2.0" />
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="barrel_texture"/>
             <children>
                 <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch2" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="5.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch3" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="8.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch4" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="11.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch5" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="14.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch6" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="17.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch7" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="20.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="tentPatch8" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="98.0" y="-1.0" z="23.0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <primitiveref id="tentPatch" />
+            </children>
+        </component>
+
+        <component id="water">
+            <transformation>
+                <scale x="1.0" y="1.0" z="23.0" />
+                <rotate axis="x" angle="90" />
+                <translate x="100.0" y="1.01" z="-1.0" />
+            </transformation>
+            <texture id="waterTexture" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="viaduto" >
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <translate x="0.0" y="0.0" z="-0.7" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="barrel_texture"/>
+            <children>
+                <componentref id="tentPatch1" />
+                <componentref id="tentPatch2" />
+                <componentref id="tentPatch3" />
+                <componentref id="tentPatch4" />
+                <componentref id="tentPatch5" />
+                <componentref id="tentPatch6" />
+                <componentref id="tentPatch7" />
+                <componentref id="tentPatch8" />
+                <componentref id="tentPatch8" />
+                <componentref id="water" />
             </children>
         </component>
 
@@ -3932,6 +4068,20 @@
             </children>
         </component>
 
+        <component id="flag" >
+            <transformation>
+                <scale x="1" y="1.5" z="1" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="flag" />
+            </children>
+        </component>
+
         <component id="sgi_tp2_T03_G10">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -3959,6 +4109,7 @@
                 <componentref id="shower" />
                 <componentref id="poolHouse" />
                 <componentref id="barrel" />
+                <componentref id="viaduto" />
                 <componentref id="walls" />
                 <componentref id="animatedLeg" />
                 <componentref id="person" />
