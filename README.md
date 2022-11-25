@@ -75,15 +75,19 @@ For the second assigment, focusing on graphic techniques, we added a few animati
 - Besided the water shader, we also implemented shaders that highlight objects in the scene, through a periodical change in size and color of that object.
 - We also took the opportunity to organize the folders and files in a more organized way, which makes it easier to navigate through the project.
 
-##### Video showing a person diving into the pool
+##### **Implementation of a barrel, using NURBS**
+
+<img src="tp2/scenes/images/screenshots/barrel.png" height="500" >
+
+##### **Video showing a person diving into the pool**
 
 ![](tp2/scenes/videos/jump.mp4)
 
-##### Using shaders to highlight objects
+##### **Using shaders to highlight objects**
 
 ![](tp2/scenes/videos/highlights-balls.mp4)
 
-##### Using the patch to make a river passage
+##### **Using the patch to make a river passage, in the form of a tent**
 
 Outside the bar            |  Inside the bar
 :-------------------------:|:-------------------------:
