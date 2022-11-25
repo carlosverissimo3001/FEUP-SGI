@@ -541,27 +541,6 @@
 
         </primitive>
 
-        <primitive id="flag">
-            <patch degree_u="2" parts_u="20" degree_v="2" parts_v="20" >
-
-                <!-- U = 0 // V = 0..2 -->
-                <controlpoint x="1.0" y="1.5" z="3.0" />
-                <controlpoint x="2.0" y="1.5" z="-3.0" />
-                <controlpoint x="3.0" y="1.5" z="3.0" />
-
-                <!-- U = 1 // V = 0..2 -->
-                <controlpoint x="1.0" y="-1.5" z="3.0" />
-                <controlpoint x="2.0" y="-1.5" z="-3.0" />
-                <controlpoint x="3.0" y="-1.5" z="3.0" />
-
-                <controlpoint x="1.0" y="1.5" z="3.0" />
-                <controlpoint x="2.0" y="1.5" z="-3.0" />
-                <controlpoint x="3.0" y="1.5" z="3.0" />
-
-            </patch>
-
-        </primitive>
-
         <primitive id="1/4barrel">
             <patch degree_u="3" parts_u="100" degree_v="3" parts_v="20" >
                 <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
