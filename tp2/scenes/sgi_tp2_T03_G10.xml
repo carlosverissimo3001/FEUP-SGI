@@ -1,7 +1,7 @@
 <sxs>
     <scene root="sgi_tp2_T03_G10" axis_length="17"/>
 
-    <views default="Bottom Left">
+    <views default="Passage">
         <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
@@ -70,6 +70,11 @@
         <perspective id="Kick" near="0.1" far="500" angle="60">
             <from x="50" y="10" z="75" />
             <to x="50" y="10" z="20" />
+        </perspective>
+
+        <perspective id="Passage" near="0.1" far="500" angle="60">
+            <from x="101" y="3" z="-4" />
+            <to x="101" y="1" z="6" />
         </perspective>
     </views>
 
@@ -3821,7 +3826,7 @@
             <transformation>
                 <rotate axis="x" angle="90" />
                 <translate x="101" y="38.34" z="-0.11" />
-                <scale x="1.1" y="38.29" z="1.0" />
+                <scale x="1.1" y="38.48" z="1.0" />
             </transformation>
             <texture id="waterTexture" length_s="1" length_t="1"/>
             <materials>

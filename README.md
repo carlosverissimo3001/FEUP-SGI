@@ -69,14 +69,28 @@ For the second assigment, focusing on graphic techniques, we added a few animati
 
 #### Strong points of our project
 
-- Complex animations, that include interaction between diffrent objects, for example, a person kicks a ball and it goes into the pool, which then interacts with the pool/jacuzi divider.  
+- Complex animations, that include interaction between diffrent objects, for example, a person kicks a ball and it goes into the pool, which then interacts with the pool/jacuzi divider.
 - We make great use of the newly introduced primitive, the patch. It is used in many configurations, such as a flag, a barrel and even the walls of the scene.
 - We took the opportunity to add a water shader to the pool, which is a very interesting effect.
+- Besided the water shader, we also implemented shaders that highlight objects in the scene, through a periodical change in size and color of that object.
 - We also took the opportunity to organize the folders and files in a more organized way, which makes it easier to navigate through the project.
 
-#### Video showing a person diving into the pool
+##### Video showing a person diving into the pool
 
-<!-- ![Person diving into the pool](tp2/scenes/videos/person-diving.mp4) -->
+![](tp2/scenes/videos/jump.mp4)
+
+##### Using shaders to highlight objects
+
+![](tp2/scenes/videos/highlights-balls.mp4)
+
+##### Using the patch to make a river passage
+
+Outside the bar            |  Inside the bar
+:-------------------------:|:-------------------------:
+![](tp2/scenes/images/screenshots/river-viaduct-outside.png)  |  ![](tp2/scenes/images/screenshots/river-viaduct-inside.png)
+
+
+
 
 ----
 
