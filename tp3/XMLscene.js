@@ -7,6 +7,7 @@ import {
   CGFtexture,
 } from "../lib/CGF.js";
 import { MyViewAnimation } from "./animation/MyViewAnimation.js";
+import { MyChecker } from "./game/board/MyChecker.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -264,6 +265,8 @@ export class XMLscene extends CGFscene {
 
     this.initLights();
 
+    this.testChecker = new MyChecker(this, "black");
+
     this.sceneInited = true;
   }
 
@@ -305,6 +308,8 @@ export class XMLscene extends CGFscene {
 
       this.interface.setActiveCamera(this.camera);
 
+      this.testChecker.display();
+
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
     }
@@ -317,12 +322,8 @@ export class XMLscene extends CGFscene {
     let elapsed;
 
     if (this.sceneInited) {
-
-      if (this.startTime == null)
-        elapsed = 0;
-
-      else
-        elapsed = t - this.startTime;
+      if (this.startTime == null) elapsed = 0;
+      else elapsed = t - this.startTime;
 
       this.startTime = t;
 
