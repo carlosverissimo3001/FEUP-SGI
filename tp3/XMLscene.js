@@ -265,7 +265,7 @@ export class XMLscene extends CGFscene {
 
     this.initLights();
 
-    this.testChecker = new MyChecker(this, "black");
+    /* this.testChecker = new MyChecker(this, "black"); */
 
     this.sceneInited = true;
   }
@@ -308,7 +308,7 @@ export class XMLscene extends CGFscene {
 
       this.interface.setActiveCamera(this.camera);
 
-      this.testChecker.display();
+      /* this.testChecker.display(); */
 
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();

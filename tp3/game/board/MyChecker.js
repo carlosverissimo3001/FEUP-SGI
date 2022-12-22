@@ -1,21 +1,42 @@
 import { CGFobject, CGFappearance, CGFtexture } from "../../../lib/CGF.js";
 import { MySphere } from "../../primitives/MySphere.js";
+import { MyTorus } from "../../primitives/MyTorus.js";
 
 export class MyChecker extends CGFobject {
   constructor(scene, color) {
     super(scene);
 
+    /*
+      The checker piece will be composed by 4 parts:
+      - 2 torus
+        - 1 outer torus
+        - 1 inner torus
+      - 2 spheres
+        - 1 outer sphere
+        - 1 sphere where all the pieces will be placed
+    */
+
     this.parts = [];
-    this.parts.push(new MySphere(scene, "none", 1, 15, 15));
-    this.parts.push(new MySphere(scene, "none", 1, 15, 15));
-    this.x = 20;
+
+    // Outer torus
+    this.parts.push(new MyTorus(scene, "none", 0.1, 1, 40, 40));
+    // Whole sphere
+    this.parts.push(new MySphere(scene, "none", 1, 40, 40));
+    // Inner torus
+    this.parts.push(new MyTorus(scene, "none", 0.1, 1, 40, 40));
+    // Inner sphere
+    this.parts.push(new MySphere(scene, "none", 1, 40, 40));
+
+
+    /* this.parts.push(new MySphere(scene, "none", 1, 15, 15)); */
+    this.x = 15;
     this.y = 2;
-    this.z = 40;
+    this.z = 47;
 
     this.checkerMaterial = new CGFappearance(scene);
 
-    this.whiteTexture = new CGFtexture(scene, "scenes/images/textures/white-house.jpg");
-    this.blackTexture = new CGFtexture(scene, "scenes/images/textures/soil.png");
+    this.whiteTexture = new CGFtexture(scene, "scenes/images/textures/white.png");
+    this.blackTexture = new CGFtexture(scene, "scenes/images/textures/grey.png");
 
     this.color = color;
   }
@@ -33,46 +54,93 @@ export class MyChecker extends CGFobject {
   }
 
   display() {
-    console.log("displaying checker");
     this.scene.pushMatrix();
 
     if (this.color == "white") {
+      /* Outer torus */
       this.scene.pushMatrix();
+
+      this.checkerMaterial.setTexture(this.whiteTexture);
+      this.checkerMaterial.apply();
+
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI/2, 1, 0, 0)
-      this.scene.scale(.1, .1, .025);
-      this.checkerMaterial.setTexture(this.whiteTexture);
-      this.checkerMaterial.apply();
+      this.scene.scale(.1, .1, .2);
       this.parts[0].display();
+
       this.scene.popMatrix();
 
+      /* Whole sphere */
       this.scene.pushMatrix();
-      this.scene.translate(this.x, this.y+0.02, this.z);
+
+      this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI/2, 1, 0, 0)
-      this.scene.scale(.07, .07, .025);
-      this.checkerMaterial.setTexture(this.whiteTexture);
-      this.checkerMaterial.apply();
+      this.scene.scale(.1, .1, .015);
       this.parts[1].display();
+
+      this.scene.popMatrix();
+
+      /* Inner torus */
+      this.scene.pushMatrix();
+
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI/2, 1, 0, 0)
+      this.scene.scale(.065, .065, .2);
+      this.parts[2].display();
+
+      this.scene.popMatrix();
+
+      /* Inner sphere */
+      this.scene.pushMatrix();
+
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI/2, 1, 0, 0)
+      this.scene.scale(.055, .055, .02);
+      this.parts[3].display();
+
       this.scene.popMatrix();
     }
 
     else if (this.color == "black") {
+
+      /* Outer torus */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI/2, 1, 0, 0)
-      this.scene.scale(.1, .1, .025);
+      this.scene.scale(.1, .1, .2);
       this.checkerMaterial.setTexture(this.blackTexture);
       this.checkerMaterial.apply();
       this.parts[0].display();
       this.scene.popMatrix();
 
+      /* Whole sphere */
       this.scene.pushMatrix();
-      this.scene.translate(this.x, this.y+0.02, this.z);
+      this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI/2, 1, 0, 0)
-      this.scene.scale(.07, .07, .025);
+      this.scene.scale(.1, .1, .015);
       this.checkerMaterial.setTexture(this.blackTexture);
       this.checkerMaterial.apply();
       this.parts[1].display();
+      this.scene.popMatrix();
+
+      /* Inner torus */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI/2, 1, 0, 0)
+      this.scene.scale(.065, .065, .2);
+      this.checkerMaterial.setTexture(this.blackTexture);
+      this.checkerMaterial.apply();
+      this.parts[2].display();
+      this.scene.popMatrix();
+
+      /* Inner sphere */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI/2, 1, 0, 0)
+      this.scene.scale(.055, .055, .02);
+      this.checkerMaterial.setTexture(this.blackTexture);
+      this.checkerMaterial.apply();
+      this.parts[3].display();
       this.scene.popMatrix();
     }
 
