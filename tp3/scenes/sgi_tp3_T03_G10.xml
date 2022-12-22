@@ -22,6 +22,10 @@
             <from x="15" y="7" z="47.5" />
             <to x="15" y="1" z="47.4" />
         </perspective>
+        <perspective id="Checker" near="0.1" far="500" angle="60">
+            <from x="15" y="5" z="50" />
+            <to x="15" y="2" z="45" />
+        </perspective>
 
     </views>
 
