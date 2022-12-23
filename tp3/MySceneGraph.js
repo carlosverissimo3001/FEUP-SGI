@@ -44,7 +44,7 @@ export class MySceneGraph {
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graph = this;
+        scene.graphs.push(this);
 
         this.nodes = [];
 
@@ -1555,7 +1555,7 @@ export class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-     displayScene() {
+    displayScene() {
         this.displayComponent(this.idRoot, null, null, 1, 1);
 	}
 

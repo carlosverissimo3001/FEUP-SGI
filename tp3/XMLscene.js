@@ -9,6 +9,7 @@ import {
 import { MyViewAnimation } from "./animation/MyViewAnimation.js";
 import { MyChecker } from "./game/board-elements/MyChecker.js";
 import { MyGameOrchestrator } from "./game/orchestrator/MyGameOrchestrator.js";
+import { MySceneGraph } from "./MySceneGraph.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -42,12 +43,28 @@ export class XMLscene extends CGFscene {
 
     this.enableTextures(true);
 
+    /* ***************** Game Elements ***************** */
+
+    this.gameOrchestrator = new MyGameOrchestrator(this);
+
+    // Themes
+    this.themes = ["Day", "Night"];
+    this.theme = "Day";
+    this.loadedThemes = 0;
+
+    /* ************************************************** */
+
+
+    /* ***************** Cameras ***************** */
+
     this.cameraList = [];
     this.cameraNames = [];
     this.cameraID;
     this.intermediateCamera = null;
-
     this.initCameras();
+
+    /* ************************************************** */
+
 
     this.displayAxis = true;
     this.showLights = false;
@@ -80,16 +97,28 @@ export class XMLscene extends CGFscene {
       "shaders/pulse.vert",
       "shaders/pulse.frag"
     );
+  }
 
+  changeTheme() {
+    //
+  }
 
-    // Game variables
-    this.gameOrchestrator = new MyGameOrchestrator(this);
+  start() {
+    this.graphs = [];
+
+    /* Create scene graphs
+      - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
+    */
+    var day = new MySceneGraph("themes/pool_day.xml", this);
+    var night = new MySceneGraph("themes/pool_night.xml", this);
   }
 
   /**
    * Initializes the scene views/cameras with the values read from the XML file.
    */
   createXMLCameras() {
+    var themeIndex = this.themes.indexOf(this.theme);
+
     var i = 0;
     // Views index
 
@@ -100,8 +129,8 @@ export class XMLscene extends CGFscene {
     var c;
 
     // Reads the views from the scene graph
-    for (var key in this.graph.views) {
-      var view = this.graph.views[key];
+    for (var key in this.graphs[themeIndex].views) {
+      var view = this.graphs[themeIndex].views[key];
 
       /* Commom attributes of both cameras */
       (near = view[0]), (far = view[1]);
@@ -159,11 +188,15 @@ export class XMLscene extends CGFscene {
    * Initializes the scene cameras.
    */
   initCameras() {
+    var themeIndex = this.themes.indexOf(this.theme);
+
     if (this.graphLoaded) {
-      if (this.graph.defaultCameraID != null) {
-        var index = this.cameraNames.indexOf(this.graph.defaultCameraID);
+      if (this.graphs[themeIndex].defaultCameraID != null) {
+        var index = this.cameraNames.indexOf(
+          this.graphs[themeIndex].defaultCameraID
+        );
         this.camera = this.cameraList[index];
-        this.cameraID = this.graph.defaultCameraID;
+        this.cameraID = this.graphs[themeIndex].defaultCameraID;
       }
     } else {
       this.camera = new CGFcamera(
@@ -186,14 +219,15 @@ export class XMLscene extends CGFscene {
    */
   initLights() {
     var i = 0;
+    var themeIndex = this.themes.indexOf(this.theme);
     // Lights index.
 
     // Reads the lights from the scene graph.
-    for (var key in this.graph.lights) {
+    for (var key in this.graphs[themeIndex].lights) {
       if (i >= 8) break; // Only eight lights allowed by WebGL.
 
-      if (this.graph.lights.hasOwnProperty(key)) {
-        var light = this.graph.lights[key];
+      if (this.graphs[themeIndex].lights.hasOwnProperty(key)) {
+        var light = this.graphs[themeIndex].lights[key];
 
         this.lights[i].setPosition(
           light[2][0],
@@ -257,23 +291,23 @@ export class XMLscene extends CGFscene {
    * As loading is asynchronous, this may be called already after the application has started the run loop
    */
   onGraphLoaded() {
-    this.axis = new CGFaxis(this, this.graph.referenceLength);
+    if (this.loadedThemes > 0) {
+      let themeIndex = this.themes.indexOf(this.theme);
 
-    this.gl.clearColor(...this.graph.background);
+      this.axis = new CGFaxis(this, this.graphs[themeIndex].referenceLength);
+      this.gl.clearColor(...this.graphs[themeIndex].background);
+      this.setGlobalAmbientLight(...this.graphs[themeIndex].ambient);
+      this.createXMLCameras();
+      this.initCameras();
+      this.interface.createInterface();
+      this.initLights();
 
-    this.setGlobalAmbientLight(...this.graph.ambient);
-
-    this.createXMLCameras();
-
-    this.initCameras();
-
-    this.interface.createInterface();
-
-    this.initLights();
-
-    this.testChecker = new MyChecker(this, "black");
-
-    this.sceneInited = true;
+      this.gameOrchestrator.init(this.graphs[themeIndex]);
+      
+      this.sceneInited = true;
+    } else {
+      this.loadedThemes++;
+    }
   }
 
   /**
@@ -301,8 +335,6 @@ export class XMLscene extends CGFscene {
 
     this.pushMatrix();
 
-    if (this.displayAxis) this.axis.display();
-
     for (var i = 0; i < this.lights.length; i++) {
       this.lights[i].setVisible(this.showLights);
       this.lights[i].update();
@@ -310,14 +342,13 @@ export class XMLscene extends CGFscene {
 
     if (this.sceneInited) {
       // Draw axis
+      if (this.displayAxis) this.axis.display();
+
+      // Sets the default appearance
       this.setDefaultAppearance();
 
-      this.interface.setActiveCamera(this.camera);
-
-      this.testChecker.display();
-
-      // Displays the scene (MySceneGraph function).
-      this.graph.displayScene();
+      // Display
+      this.gameOrchestrator.display();
     }
 
     this.popMatrix();
@@ -326,6 +357,7 @@ export class XMLscene extends CGFscene {
 
   update(t) {
     let elapsed;
+    var themeIndex = this.themes.indexOf(this.theme);
 
     if (this.sceneInited) {
       if (this.startTime == null) elapsed = 0;
@@ -336,8 +368,8 @@ export class XMLscene extends CGFscene {
       this.checkKeys();
 
       /* Update animations */
-      for (let i in this.graph.kfAnimations)
-        this.graph.kfAnimations[i].update(elapsed / 1000);
+      for (let i in this.graphs[themeIndex].kfAnimations)
+        this.graphs[themeIndex].kfAnimations[i].update(elapsed / 1000);
 
       /* Animate Camera*/
       if (this.intermediateCamera != null)
@@ -355,42 +387,7 @@ export class XMLscene extends CGFscene {
   }
 
   checkKeys() {
-    let text = "Keys pressed: ";
-    let keysPressed = false;
-
-    if (this.gui.isKeyPressed("KeyM")) {
-      this.updateMaterials();
-      text += "M ";
-      keysPressed = true;
-    }
-
-    if (keysPressed) console.log(text);
-  }
-
-  updateMaterials() {
-    if (!this.sceneInited) return;
-
-    var components = this.graph.components;
-
-    /* Transverse the scene tree */
-    for (var i in components) {
-      var currComp = components[i];
-
-      /* If there are more than two materials declared for a component, cycle through them */
-      if (currComp.materials.length > 1) {
-        /* Update the material */
-        currComp.changeMaterial();
-
-        /* Display the component after changing the material*/
-        this.graph.displayComponent(
-          currComp.componentID,
-          currComp.textureID,
-          currComp.materialID,
-          currComp.length_s,
-          currComp.length_t
-        );
-      }
-    }
+    //
   }
 
   setLights() {
