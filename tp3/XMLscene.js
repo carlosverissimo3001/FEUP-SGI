@@ -7,7 +7,8 @@ import {
   CGFtexture,
 } from "../lib/CGF.js";
 import { MyViewAnimation } from "./animation/MyViewAnimation.js";
-import { MyChecker } from "./game/board/MyChecker.js";
+import { MyChecker } from "./game/board-elements/MyChecker.js";
+import { MyGameOrchestrator } from "./game/orchestrator/MyGameOrchestrator.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -36,6 +37,7 @@ export class XMLscene extends CGFscene {
     this.graphLoaded = false;
 
     this.setUpdatePeriod(20);
+    this.setPickEnabled(true);
     this.startTime = null;
 
     this.enableTextures(true);
@@ -78,6 +80,10 @@ export class XMLscene extends CGFscene {
       "shaders/pulse.vert",
       "shaders/pulse.frag"
     );
+
+
+    // Game variables
+    this.gameOrchestrator = new MyGameOrchestrator(this);
   }
 
   /**
@@ -265,7 +271,7 @@ export class XMLscene extends CGFscene {
 
     this.initLights();
 
-    /* this.testChecker = new MyChecker(this, "black"); */
+    this.testChecker = new MyChecker(this, "black");
 
     this.sceneInited = true;
   }
@@ -308,7 +314,7 @@ export class XMLscene extends CGFscene {
 
       this.interface.setActiveCamera(this.camera);
 
-      /* this.testChecker.display(); */
+      this.testChecker.display();
 
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
@@ -342,6 +348,9 @@ export class XMLscene extends CGFscene {
 
       /* Update pulse shader */
       this.pulseShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      /* Update game orchestrator */
+      this.gameOrchestrator.update(elapsed / 1000);
     }
   }
 

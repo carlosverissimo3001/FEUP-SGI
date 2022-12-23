@@ -30,7 +30,7 @@ function main() {
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
 
     //var filename=getUrlVars()['file'] || "pool.xml";
-    var filename=getUrlVars()['file'] || "sgi_tp3_T03_G10.xml";
+    var filename=getUrlVars()['file'] || "pool_day.xml";
 
 	// create and load graph, and associate it to scene.
 	// Check console for loading errors
