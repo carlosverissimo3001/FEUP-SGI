@@ -3,7 +3,7 @@ import { MySphere } from "../../primitives/MySphere.js";
 import { MyTorus } from "../../primitives/MyTorus.js";
 
 export class MyChecker extends CGFobject {
-  constructor(scene, color, x, y, z) {
+  constructor(scene, color, row, col, board) {
     super(scene);
 
     /*
@@ -26,9 +26,13 @@ export class MyChecker extends CGFobject {
     // Inner sphere
     this.parts.push(new MySphere(scene, "none", 1, 40, 40));
 
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.row = row;
+    this.col = col;
+    this.board = board;
+
+    this.x = board.x + col;
+    this.y = 0.1;
+    this.z = board.z + row;
 
     this.checkerMaterial = new CGFappearance(scene);
 

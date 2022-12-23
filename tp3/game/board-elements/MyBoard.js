@@ -1,12 +1,42 @@
-import { MyChecker } from "./MyChecker";
-import { MyTile } from "./MyTile";
+import { MyChecker } from "./MyChecker.js";
+import { MyTile } from "./MyTile.js";
 
-export class Board {
-    constructor(scene){
+export class MyBoard {
+    constructor(scene, size, x, y, z){
         this.scene = scene;
 
         this.board = [];
+        this.size = size;
 
+        this.x = x;
+        this.y = y;
+        this.z = z;
+
+    }
+
+    /**
+     * Initializes the board
+     * @param {MyTile[][]} tiles 1D array of tiles
+     */
+    init(tiles) {
+        for (let i = 0; i < this.size; i++){
+            this.board.push([]);
+            for (let j = 0; j < this.size; j++){
+                this.board[i].push(tiles[i*this.size + j]);
+            }
+        }
+
+        console.log(this.board)
+    }
+
+    /**
+     * Add a tile to the board
+     * @param {MyTile} tile tile to be added
+     * @throws {Error} if the tile is already in the board
+     */
+    addTile(tile){
+        console.log(tile);
+        this.board[tile.row][tile.col] = tile;
     }
 
     /**

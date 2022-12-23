@@ -16,6 +16,7 @@ export class MyTile {
         /* this.tile = new MyCube(scene, 1, 0.1, 1); */
 
         this.hasChecker = checker != null;
+
         this.checker = (this.hasChecker) ? checker : null;
 
         this.material = new CGFappearance(scene);
@@ -29,8 +30,8 @@ export class MyTile {
      * Set the checker of the tile
      * @param {MyChecker} cheker
      */
-    set(cheker){
-        this.checker = cheker;
+    set(checker){
+        this.checker = checker;
         this.hasChecker = true;
     }
 

@@ -110,7 +110,7 @@ export class XMLscene extends CGFscene {
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
     var day = new MySceneGraph("themes/pool_day.xml", this);
-    var night = new MySceneGraph("themes/pool_night.xml", this);
+    var night = new MySceneGraph("themes/pool_day.xml", this);
   }
 
   /**
@@ -303,7 +303,7 @@ export class XMLscene extends CGFscene {
       this.initLights();
 
       this.gameOrchestrator.init(this.graphs[themeIndex]);
-      
+
       this.sceneInited = true;
     } else {
       this.loadedThemes++;

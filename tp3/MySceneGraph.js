@@ -9,7 +9,9 @@ import { MyComponent} from './primitives/MyComponent.js';
 import { MyPatch } from './primitives/MyPatch.js'
 import { MyKeyframeAnimation} from './animation/MyKeyframeAnimation.js'
 import { MyKeyframe } from './animation/MyKeyframe.js'
-
+import { MyBoard } from './game/board-elements/MyBoard.js'
+import { MyTile } from './game/board-elements/MyTile.js';
+import { MyChecker } from './game/board-elements/MyChecker.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -23,7 +25,8 @@ var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var ANIMATION_INDEX = 8;
-var COMPONENTS_INDEX = 9;
+var BOARD_INDEX = 9;
+var COMPONENTS_INDEX = 10;
 
 // Order of operations in keyframes
 var TRANSLATION_INDEX = 0;
@@ -215,6 +218,18 @@ export class MySceneGraph {
 
             //Parse animations block
             if ((error = this.parseAnimations(nodes[index])) != null)
+                return error;
+        }
+
+        // <board>
+        if ((index = nodeNames.indexOf("board")) == -1)
+            return "tag <board> missing";
+        else {
+            if (index != BOARD_INDEX)
+                this.onXMLMinorError("tag <board> out of order");
+
+            //Parse board block
+            if ((error = this.parseBoard(nodes[index])) != null)
                 return error;
         }
 
@@ -1174,6 +1189,72 @@ export class MySceneGraph {
         }
         this.log("Parsed animations");
         return null;
+    }
+
+    /**
+     * Parses the <board> block.
+     * @param {board block element} boardNode
+     */
+    parseBoard(boardNode) {
+        var x = this.reader.getFloat(boardNode, 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x-coordinate of the board";
+
+        var y = this.reader.getFloat(boardNode, 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y-coordinate of the board";
+
+        var z = this.reader.getFloat(boardNode, 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z-coordinate of the board";
+
+        var size = this.reader.getInteger(boardNode, 'size');
+        if (!(size != null && !isNaN(size)))
+            return "unable to parse size of the board";
+
+        var tilesNode = boardNode.children;
+
+        if (tilesNode.length != size*size)
+            return "number of tiles does not match the size of the board, got " +
+            tilesNode.length + " tiles and expected " + size*size + "";
+
+        var board = new MyBoard(this.scene, size, x, y, z);
+        var tiles = []
+
+        for (var i = 0; i < tilesNode.length; i++){
+            var tileNode = tilesNode[i];
+
+            var row = this.reader.getInteger(tileNode, 'row');
+            if (!(row != null && !isNaN(row)))
+                return "unable to parse row of tile " + i;
+
+            var col = this.reader.getInteger(tileNode, 'col');
+            if (!(col != null && !isNaN(col)))
+                return "unable to parse col of tile " + i;
+
+            var color = this.reader.getString(tileNode, 'color');
+            if (color == null || (color != "light" && color != "dark"))
+                return "unable to parse color of tile " + i;
+            var id = row+","+col;
+
+            var children = tileNode.children;
+            var checker = null;
+
+            /* Check if the tile has a piece */
+            if (children.length > 0){
+                var checkerColor = this.reader.getString(children[0], 'color');
+                if (checkerColor == null || (checkerColor != "white" && checkerColor != "black"))
+                    return "unable to parse color of checker of tile " + i;
+
+                checker = new MyChecker(this.scene, checkerColor, row, col, board)
+            }
+
+            var tile = new MyTile(this.scene, id, board, row, col, color, checker);
+
+            tiles.push(tile);
+        }
+
+        board.init(tiles);
     }
 
     /**

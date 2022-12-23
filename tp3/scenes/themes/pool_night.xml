@@ -585,6 +585,185 @@
         </keyframeanim>
     </animations>
 
+    <board x="15" y="0.1" z="45" size="8" >
+        <tile row="0" column="0" color="light"/>
+
+        <tile row="0" column="1" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="0" column="2" color="light"/>
+
+        <tile row="0" column="3" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="0" column="4" color="light"/>
+
+        <tile row="0" column="5" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="0" column="6" color="light"/>
+
+        <tile row="0" column="7" color="dark">
+            <checker color="black" />
+        </tile>
+
+
+
+        <tile row="1" column="0" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="1" column="1" color="light">/
+
+        <tile row="1" column="2" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="1" column="3" color="light"/>
+
+        <tile row="1" column="4" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="1" column="5" color="light"/>
+
+        <tile row="1" column="6" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="1" column="7" color="light"/>
+
+
+
+        <tile row="2" column="0" color="light"/>
+
+        <tile row="2" column="1" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="2" column="2" color="light"/>
+
+        <tile row="2" column="3" color="dark">
+            <checker color="black" />
+        </tile>
+
+        <tile row="2" column="4" color="light"/>
+
+        <tile row="2" column="5" color="dark">
+            <checker color="black" />
+
+        </tile>
+
+        <tile row="2" column="6" color="light"/>
+
+        <tile row="2" column="7" color="dark">
+            <checker color="black" />
+        </tile>
+
+
+
+        <tile row="3" column="0" color="dark"/>
+        <tile row="3" column="1" color="light"/>
+        <tile row="3" column="2" color="dark"/>
+        <tile row="3" column="3" color="light"/>
+        <tile row="3" column="4" color="dark"/>
+        <tile row="3" column="5" color="light"/>
+        <tile row="3" column="6" color="dark"/>
+        <tile row="3" column="7" color="light"/>
+
+
+
+        <tile row="4" column="0" color="light"/>
+        <tile row="4" column="1" color="dark"/>
+        <tile row="4" column="2" color="light"/>
+        <tile row="4" column="3" color="dark"/>
+        <tile row="4" column="4" color="light"/>
+        <tile row="4" column="5" color="dark"/>
+        <tile row="4" column="6" color="light"/>
+        <tile row="4" column="7" color="dark"/>
+
+
+
+        <tile row="5" column="0" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="5" column="1" color="light"/>
+
+        <tile row="5" column="2" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="5" column="3" color="light"/>
+
+        <tile row="5" column="4" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="5" column="5" color="light"/>
+
+        <tile row="5" column="6" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="5" column="7" color="light"/>
+
+
+
+        <tile row="6" column="0" color="light"/>
+
+        <tile row="6" column="1" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="6" column="2" color="light"/>
+
+        <tile row="6" column="3" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="6" column="4" color="light"/>
+
+        <tile row="6" column="5" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="6" column="6" color="light"/>
+
+        <tile row="6" column="7" color="dark">
+            <checker color="white" />
+        </tile>
+
+
+
+        <tile row="7" column="0" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="7" column="1" color="light"/>
+
+        <tile row="7" column="2" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="7" column="3" color="light"/>
+
+        <tile row="7" column="4" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="7" column="5" color="light"/>
+
+        <tile row="7" column="6" color="dark">
+            <checker color="white" />
+        </tile>
+
+        <tile row="7" column="7" color="light"/>
+    </board>
+
     <components>
         <component id="cube_front">
             <transformation>
