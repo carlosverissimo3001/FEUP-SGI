@@ -56,6 +56,8 @@ export class MySceneGraph {
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
 
+        this.myBoard = new MyBoard(this.scene, 8, 0, 0, 0);
+
         // File reading
         this.reader = new CGFXMLreader();
 
@@ -802,7 +804,7 @@ export class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'board')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)"
             }
 
@@ -1011,28 +1013,6 @@ export class MySceneGraph {
                 var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes);
 
                 this.primitives[primitiveId] = patch;
-            }
-
-            else if (primitiveType == 'board'){
-                var width = this.reader.getFloat(grandChildren[0], 'width');
-                if (!(inner != null && !isNaN(inner)))
-                    return "unable to parse inner of the primitive attributes for ID = " + primitiveId;
-
-                var x = this.reader.getFloat(grandChildren[0], 'x');
-                if (!(outer != null && !isNaN(outer)))
-                    return "unable to parse outer of the primitive attributes for ID = " + primitiveId;
-
-                var y = this.reader.getFloat(grandChildren[0], 'y');
-                if (!(slices != null && !isNaN(slices)))
-                    return "unable to parse slices of the primitive attributes for ID = " + primitiveId;
-
-                var z = this.reader.getFloat(grandChildren[0], 'z');
-                if (!(loops != null && !isNaN(loops)))
-                    return "unable to parse loops of the primitive attributes for ID = " + primitiveId;
-
-                var board = new MyBoard(this.scene, primitiveId, width, x, y, z);
-
-                this.primitives[primitiveId] = board;
             }
 
             else {
@@ -1580,6 +1560,7 @@ export class MySceneGraph {
      */
      displayScene() {
         this.displayComponent(this.idRoot, null, null, 1, 1);
+        this.myBoard.display();
 	}
 
     /**

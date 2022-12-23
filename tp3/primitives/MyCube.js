@@ -23,15 +23,14 @@ export class MyCube extends CGFobject {
 	init() {
 
 
-		this.quad = new MyRectangle(this.scene,0, this.x, this.x + 5, this.z, this.z + 5);
+		this.quad = new MyRectangle(this.scene,0, 1, 0, 1, 0);
 
 		this.quadMaterial = new CGFappearance(this.scene);
 		this.quadMaterial.setAmbient(this.r, this.g, this.b, 1.0);
         this.quadMaterial.setDiffuse(this.r, this.g, this.b, 1.0);
         this.quadMaterial.setSpecular(this.r, this.g, this.b, 1.0);
-        this.quadMaterial.setEmission(1,1,1,1);
+        this.quadMaterial.setEmission(0,0,0,1);
 		this.quadMaterial.setShininess(10);
-		this.quadMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
 
 	}
@@ -42,10 +41,14 @@ export class MyCube extends CGFobject {
 
 	display() {
 
+
+		this.scene.pushMatrix();
+
+		this.scene.translate(this.x,this.y,this.z);
+		
 		//back
 		this.quadMaterial.setTexture(this.texture);
 		this.scene.pushMatrix();
-		this.scene.translate(0,0,-0.5);
 		this.quadMaterial.apply();
 		this.quad.display();
 		this.scene.popMatrix();
@@ -54,8 +57,6 @@ export class MyCube extends CGFobject {
 		this.quadMaterial.setTexture(this.texture);
 		this.scene.pushMatrix();
 		this.scene.translate(0, 0, 1);
-		this.scene.translate(0,0,-0.5);
-		this.scene.rotate(-Math.PI, 0, 1, 0);
 		this.quadMaterial.apply();
 		this.quad.display();
 		this.scene.popMatrix();
@@ -63,7 +64,7 @@ export class MyCube extends CGFobject {
 		//bottom
 		this.quadMaterial.setTexture(this.texture);
 		this.scene.pushMatrix();
-		this.scene.translate(0, -0.5, 0);
+		this.scene.translate(0, 0, 1);
 		this.scene.rotate(-Math.PI/2,1,0,0);
 		this.quadMaterial.apply();
 		this.quad.display();
@@ -72,8 +73,7 @@ export class MyCube extends CGFobject {
 		//top
 		this.quadMaterial.setTexture(this.texture);
 		this.scene.pushMatrix();
-		this.scene.translate(0, 0.5, 0.5);
-		this.scene.translate(0,0,-0.5);
+		this.scene.translate(0, 1, 0);
 		this.scene.rotate(Math.PI/2, 1, 0, 0);
 		this.quadMaterial.apply();
 		this.quad.display();
@@ -83,8 +83,7 @@ export class MyCube extends CGFobject {
 		this.quadMaterial.setTexture(this.texture);
 		this.quadMaterial.apply();
 		this.scene.pushMatrix();
-		this.scene.translate(0.5, 0, 0.5);
-		this.scene.translate(0,0,-0.5);
+		this.scene.translate(1.0, 0, 0);
 		this.scene.rotate(Math.PI/2, 0, 1, 0);
 		this.scene.rotate(Math.PI, 0, 1, 0);
 		this.quad.display();
@@ -93,11 +92,12 @@ export class MyCube extends CGFobject {
 		//left
 		this.quadMaterial.setTexture(this.texture);
 		this.scene.pushMatrix();
-		this.scene.translate(-0.5, 0, 0.5);
-		this.scene.translate(0,0,-0.5);
+		this.scene.translate(0, 0, 1);
 		this.scene.rotate( Math.PI / 2, 0, 1, 0); 
 		this.quadMaterial.apply();
 		this.quad.display();
+		this.scene.popMatrix();
+
 		this.scene.popMatrix();
 	}
 }

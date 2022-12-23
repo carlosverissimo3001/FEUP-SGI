@@ -12,10 +12,9 @@ import { MyCube } from './MyCube.js';
  * @param slices - number of divisions around axis
  */
 export class MyBoard extends CGFobject {
-	constructor(scene, id, width, x, y , z) {
+	constructor(scene, width, x, y , z) {
         super(scene);
         this.width = width;
-        this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -25,11 +24,11 @@ export class MyBoard extends CGFobject {
     }
 
     initBuffers() {
-
         for (let i = this.z; i < this.z + this.width; i++){
             if(i%2==0) this.color = false;
             else this.color= true;
             for (let j = this.x; j < this.x + this.width; j++) {
+                console.log(i);
                 if(this.color){
                     let cube = new MyCube(this.scene, 0, 0, 0, j, 0, i);
                     this.color = false;
@@ -44,18 +43,14 @@ export class MyBoard extends CGFobject {
             
         }
 
-        for (let x = 0; x < this.cubes.length; x++) {
-            this.cubes[x].display();
-        }
-
     }
 
     /**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the cylinder
-	 * @param {Array} coords - Array of texture coordinates
+	 * @method display
 	 */
-	updateTexCoords(u, v) {
-		//
+	display() {
+        for (let x = 0; x < this.cubes.length; x++) {
+            this.cubes[x].display();
+        }
 	}
 }
