@@ -2,6 +2,7 @@ import { CGFapplication } from '../lib/CGF.js';
 import { XMLscene } from './XMLscene.js';
 import { MyInterface } from './MyInterface.js';
 import { MySceneGraph } from './MySceneGraph.js';
+import { MyGameOrchestrator } from './game/orchestrator/MyGameOrchestrator.js';
 
 function getUrlVars() {
     var vars = {};
@@ -26,15 +27,7 @@ function main() {
 
     myInterface.setActiveCamera(myScene.camera);
 
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
-
-    //var filename=getUrlVars()['file'] || "pool.xml";
-    var filename=getUrlVars()['file'] || "sgi_tp3_T03_G10.xml";
-
-	// create and load graph, and associate it to scene.
-	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
+    myScene.start();
 
 	// start
     app.run();

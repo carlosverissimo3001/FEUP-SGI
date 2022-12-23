@@ -9,7 +9,9 @@ import { MyComponent} from './primitives/MyComponent.js';
 import { MyPatch } from './primitives/MyPatch.js'
 import { MyKeyframeAnimation} from './animation/MyKeyframeAnimation.js'
 import { MyKeyframe } from './animation/MyKeyframe.js'
-
+import { MyBoard } from './game/board-elements/MyBoard.js'
+import { MyTile } from './game/board-elements/MyTile.js';
+import { MyChecker } from './game/board-elements/MyChecker.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -44,7 +46,7 @@ export class MySceneGraph {
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graph = this;
+        scene.graphs.push(this);
 
         this.nodes = [];
 
@@ -1555,7 +1557,7 @@ export class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-     displayScene() {
+    displayScene() {
         this.displayComponent(this.idRoot, null, null, 1, 1);
 	}
 
