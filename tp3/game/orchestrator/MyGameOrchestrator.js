@@ -1,7 +1,7 @@
 import { MyGameSequence } from "./game-sequence/MyGameSequence.js";
 import { MyAnimator } from "../MyAnimator.js";
 import { MySceneGraph } from "../../MySceneGraph.js";
-/* import { MyBoard } from "../board-elements/MyBoard.js"; */
+import { MyBoard } from "../board-elements/MyBoard.js";
 
 export class MyGameOrchestrator {
     constructor(scene) {
@@ -9,6 +9,7 @@ export class MyGameOrchestrator {
 
         this.gameSequence = new MyGameSequence();
         this.animator = new MyAnimator();
+        this.board = new MyBoard(scene, 8);
 
         this.theme = null;
     }
@@ -27,6 +28,9 @@ export class MyGameOrchestrator {
     display() {
         // Display the scene graph
         this.displayComponent(this.theme.idRoot, null, null, 1, 1);
+
+        this.board.display();
+
     }
 
      /**

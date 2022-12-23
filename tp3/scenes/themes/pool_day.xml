@@ -7,20 +7,20 @@
             <to x="20" y="0" z="20" />
         </perspective>
         <perspective id="Public" near="0.1" far="500" angle="60">
-            <from x="1" y="10" z="50" />
-            <to x="8" y="5" z="50" />
+            <from x="4" y="10" z="46" />
+            <to x="10" y="5" z="46" />
         </perspective>
         <perspective id="Player 1 View" near="0.1" far="500" angle="60">
-            <from x="15" y="5" z="50" />
-            <to x="15" y="2" z="45" />
+            <from x="15" y="6" z="53" />
+            <to x="15" y="2" z="49" />
         </perspective>
         <perspective id="Player 2 View" near="0.1" far="500" angle="60">
-            <from x="15" y="5" z="45" />
-            <to x="15" y="2" z="50" />
+            <from x="15" y="6" z="39" />
+            <to x="15" y="2" z="43" />
         </perspective>
-        <perspective id="Board View" near="0.1" far="500" angle="70">
-            <from x="15" y="7" z="47.5" />
-            <to x="15" y="1" z="47.4" />
+        <perspective id="Top View" near="0.1" far="500" angle="70">
+            <from x="15" y="7" z="46" />
+            <to x="15" y="1" z="46.01" />
         </perspective>
         <perspective id="Checker" near="0.1" far="500" angle="60">
             <from x="15" y="5" z="50" />
@@ -584,184 +584,6 @@
 
         </keyframeanim>
     </animations>
-
-    <board x="15" y="0.1" z="45" size="8" >
-        <tile row="0" col="0" color="light"/>
-
-        <tile row="0" col="1" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="0" col="2" color="light"/>
-
-        <tile row="0" col="3" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="0" col="4" color="light"/>
-
-        <tile row="0" col="5" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="0" col="6" color="light"/>
-
-        <tile row="0" col="7" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <!-- ROW 1 -->
-        <tile row="1" col="0" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="1" col="1" color="light"/>
-
-        <tile row="1" col="2" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="1" col="3" color="light"/>
-
-        <tile row="1" col="4" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="1" col="5" color="light"/>
-
-        <tile row="1" col="6" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="1" col="7" color="light"/>
-
-        <tile row="2" col="0" color="light"/>
-
-        <tile row="2" col="1" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="2" col="2" color="light"/>
-
-        <tile row="2" col="3" color="dark">
-            <checker color="black" />
-        </tile>
-
-        <tile row="2" col="4" color="light"/>
-
-        <tile row="2" col="5" color="dark">
-            <checker color="black" />
-
-        </tile>
-
-        <tile row="2" col="6" color="light"/>
-
-        <tile row="2" col="7" color="dark">
-            <checker color="black" />
-        </tile>
-
-
-
-        <tile row="3" col="0" color="dark"/>
-        <tile row="3" col="1" color="light"/>
-        <tile row="3" col="2" color="dark"/>
-        <tile row="3" col="3" color="light"/>
-        <tile row="3" col="4" color="dark"/>
-        <tile row="3" col="5" color="light"/>
-        <tile row="3" col="6" color="dark"/>
-        <tile row="3" col="7" color="light"/>
-
-
-
-        <tile row="4" col="0" color="light"/>
-        <tile row="4" col="1" color="dark"/>
-        <tile row="4" col="2" color="light"/>
-        <tile row="4" col="3" color="dark"/>
-        <tile row="4" col="4" color="light"/>
-        <tile row="4" col="5" color="dark"/>
-        <tile row="4" col="6" color="light"/>
-        <tile row="4" col="7" color="dark"/>
-
-
-
-        <tile row="5" col="0" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="5" col="1" color="light"/>
-
-        <tile row="5" col="2" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="5" col="3" color="light"/>
-
-        <tile row="5" col="4" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="5" col="5" color="light"/>
-
-        <tile row="5" col="6" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="5" col="7" color="light"/>
-
-
-
-        <tile row="6" col="0" color="light"/>
-
-        <tile row="6" col="1" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="6" col="2" color="light"/>
-
-        <tile row="6" col="3" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="6" col="4" color="light"/>
-
-        <tile row="6" col="5" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="6" col="6" color="light"/>
-
-        <tile row="6" col="7" color="dark">
-            <checker color="white" />
-        </tile>
-
-
-
-        <tile row="7" col="0" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="7" col="1" color="light"/>
-
-        <tile row="7" col="2" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="7" col="3" color="light"/>
-
-        <tile row="7" col="4" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="7" col="5" color="light"/>
-
-        <tile row="7" col="6" color="dark">
-            <checker color="white" />
-        </tile>
-
-        <tile row="7" col="7" color="light"/>
-
-    </board>
-
 
     <components>
         <component id="cube_front">
