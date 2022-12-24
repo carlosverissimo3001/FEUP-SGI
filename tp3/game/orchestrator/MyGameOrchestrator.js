@@ -60,6 +60,7 @@ export class MyGameOrchestrator {
             else if (obj instanceof MyChecker) {
               console.log("You picked a " + obj.color + " checker, with id: " + obj.id);
             }
+            // If the object is not a Tile, nor a checker, do nothing.
           }
         }
         this.scene.pickResults.splice(0, this.scene.pickResults.length); // clear the pick results
