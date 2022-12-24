@@ -10,6 +10,7 @@ export class MyTile {
         this.row = row;
         this.column = column;
 
+        // Pointer to the board
         this.board = board;
         this.color = color;
 
@@ -22,6 +23,7 @@ export class MyTile {
 
         this.hasChecker = checker != null;
 
+        // Pointer to the checker in the tile, if there is one
         this.checker = (this.hasChecker) ? checker : null;
 
         this.material = new CGFappearance(scene);
@@ -33,7 +35,7 @@ export class MyTile {
     }
 
     /**
-     * Set the checker of the tile
+     * Set a checker in the tile
      * @param {MyChecker} cheker
      */
     set(checker){
@@ -76,6 +78,8 @@ export class MyTile {
         this.material.apply();
         this.tile.display();
         if (this.hasChecker) {
+            var checkerId = this.row * this.board.size + this.column;
+            this.scene.registerForPick(checkerId, this.checker);
             this.checker.display();
         }
         this.scene.popMatrix();

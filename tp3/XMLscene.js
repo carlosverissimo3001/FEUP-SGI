@@ -38,7 +38,11 @@ export class XMLscene extends CGFscene {
     this.graphLoaded = false;
 
     this.setUpdatePeriod(20);
+
+    // the activation of picking capabilities in WebCGF
+    // will use a shader for picking purposes (lib\shaders\picking\vertex.glsl and lib\shaders\picking\fragment.glsl)
     this.setPickEnabled(true);
+    
     this.startTime = null;
 
     this.enableTextures(true);
@@ -315,6 +319,8 @@ export class XMLscene extends CGFscene {
    */
   display() {
     // ---- BEGIN Background, camera and axis setup
+
+    this.gameOrchestrator.orchestrate();
 
     // Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
