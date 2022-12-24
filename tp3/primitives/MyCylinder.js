@@ -11,7 +11,7 @@ import { CGFobject } from '../../lib/CGF.js';
  * @param slices - number of divisions around axis
  */
 export class MyCylinder extends CGFobject {
-	constructor(scene, id, height, topRadius, bottomRadius, stacks, slices) {
+	constructor(scene, id,  height, topRadius, bottomRadius, stacks, slices) {
         super(scene);
         this.bottomRadius = bottomRadius;
         this.topRadius = topRadius;

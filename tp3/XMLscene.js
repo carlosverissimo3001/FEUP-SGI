@@ -1,5 +1,14 @@
 import { CGFscene } from "../lib/CGF.js";
-import { CGFaxis, CGFcamera, CGFcameraOrtho, CGFshader, CGFtexture } from "../lib/CGF.js";
+import {
+  CGFaxis,
+  CGFcamera,
+  CGFcameraOrtho,
+  CGFshader,
+  CGFtexture,
+} from "../lib/CGF.js";
+import { MyViewAnimation } from "./animation/MyViewAnimation.js";
+import { MyChecker } from "./game/board-elements/MyChecker.js";
+import { MyGameOrchestrator } from "./game/orchestrator/MyGameOrchestrator.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -28,6 +37,7 @@ export class XMLscene extends CGFscene {
     this.graphLoaded = false;
 
     this.setUpdatePeriod(20);
+    this.setPickEnabled(true);
     this.startTime = null;
 
     this.enableTextures(true);
@@ -35,6 +45,7 @@ export class XMLscene extends CGFscene {
     this.cameraList = [];
     this.cameraNames = [];
     this.cameraID;
+    this.intermediateCamera = null;
 
     this.initCameras();
 
@@ -50,14 +61,29 @@ export class XMLscene extends CGFscene {
 
     this.axis = new CGFaxis(this);
 
-    this.poolShader = new CGFshader(this.gl, "shaders/pool.vert", "shaders/pool.frag");
+    this.poolShader = new CGFshader(
+      this.gl,
+      "shaders/pool.vert",
+      "shaders/pool.frag"
+    );
 
     this.poolShader.setUniformsValues({ uSampler2: 1 });
-		this.poolShader.setUniformsValues({ uSampler: 0 });
+    this.poolShader.setUniformsValues({ uSampler: 0 });
 
-		this.distortionmap = new CGFtexture(this, "scenes/images/textures/distortionmap.png");
+    this.distortionmap = new CGFtexture(
+      this,
+      "scenes/images/textures/distortionmap.png"
+    );
 
-    this.pulseShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
+    this.pulseShader = new CGFshader(
+      this.gl,
+      "shaders/pulse.vert",
+      "shaders/pulse.frag"
+    );
+
+
+    // Game variables
+    this.gameOrchestrator = new MyGameOrchestrator(this);
   }
 
   /**
@@ -114,15 +140,18 @@ export class XMLscene extends CGFscene {
    * Update the current camera
    */
   updateCamera(newCameraID) {
-    // Update the camera id
+    var nextCamera = this.cameraList[this.cameraNames.indexOf(newCameraID)];
+
+    this.intermediateCamera = new MyViewAnimation(
+      this,
+      this.camera,
+      nextCamera,
+      2
+    );
+
+    // Set the new camera and its id, and update the interface
+    this.camera = nextCamera;
     this.cameraID = newCameraID;
-
-    // Find index of the camera id
-    var index = this.cameraNames.indexOf(this.cameraID);
-
-    // Set the new camera
-    this.camera = this.cameraList[index];
-
     this.interface.setActiveCamera(this.camera);
   }
 
@@ -136,9 +165,14 @@ export class XMLscene extends CGFscene {
         this.camera = this.cameraList[index];
         this.cameraID = this.graph.defaultCameraID;
       }
-    }
-    else{
-      this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(50, 20, 50), vec3.fromValues(0, 0, 0));
+    } else {
+      this.camera = new CGFcamera(
+        0.4,
+        0.1,
+        500,
+        vec3.fromValues(50, 20, 50),
+        vec3.fromValues(0, 0, 0)
+      );
       this.cameraNames.push("CGFDefault");
       this.cameraList.push(this.camera);
       this.cameraID = "CGFDefault";
@@ -196,7 +230,6 @@ export class XMLscene extends CGFscene {
           );
         }
 
-
         this.lights[i].setVisible(true);
 
         if (this.showLights) {
@@ -238,6 +271,8 @@ export class XMLscene extends CGFscene {
 
     this.initLights();
 
+    this.testChecker = new MyChecker(this, "black");
+
     this.sceneInited = true;
   }
 
@@ -255,10 +290,14 @@ export class XMLscene extends CGFscene {
     this.updateProjectionMatrix();
     this.loadIdentity();
 
+    this.setLights();
+
+    if (this.intermediateCamera != null) {
+      this.intermediateCamera.apply();
+    }
+
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
-
-    this.setLights();
 
     this.pushMatrix();
 
@@ -275,6 +314,8 @@ export class XMLscene extends CGFscene {
 
       this.interface.setActiveCamera(this.camera);
 
+      this.testChecker.display();
+
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
     }
@@ -284,33 +325,38 @@ export class XMLscene extends CGFscene {
   }
 
   update(t) {
-    var elapsed;
-    if (this.sceneInited){
-      if (this.startTime === null)
-        elapsed = 0
-      else
-        elapsed = t - this.startTime
+    let elapsed;
+
+    if (this.sceneInited) {
+      if (this.startTime == null) elapsed = 0;
+      else elapsed = t - this.startTime;
+
       this.startTime = t;
 
       this.checkKeys();
 
       /* Update animations */
-      for (var i in this.graph.kfAnimations)
+      for (let i in this.graph.kfAnimations)
         this.graph.kfAnimations[i].update(elapsed / 1000);
 
+      /* Animate Camera*/
+      if (this.intermediateCamera != null)
+        this.intermediateCamera.update(elapsed / 1000);
+
       /* Update pool shader */
-      this.poolShader.setUniformsValues({ timeFactor: t / 100 % 100 });
+      this.poolShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       /* Update pulse shader */
-      this.pulseShader.setUniformsValues({ timeFactor: t / 100 % 100 });
+      this.pulseShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
+      /* Update game orchestrator */
+      this.gameOrchestrator.update(elapsed / 1000);
     }
-
   }
 
   checkKeys() {
-    var text = "Keys pressed: ";
-    var keysPressed = false;
+    let text = "Keys pressed: ";
+    let keysPressed = false;
 
     if (this.gui.isKeyPressed("KeyM")) {
       this.updateMaterials();
@@ -353,8 +399,7 @@ export class XMLscene extends CGFscene {
     for (var key in this.lightsVal) {
       if (this.lightsVal.hasOwnProperty(key)) {
         this.lights[i].setVisible(this.showLights);
-        if (this.lightsVal[key])
-          this.lights[i].enable();
+        if (this.lightsVal[key]) this.lights[i].enable();
         else this.lights[i].disable();
 
         this.lights[i].update();
@@ -363,5 +408,4 @@ export class XMLscene extends CGFscene {
       }
     }
   }
-
 }
