@@ -8,9 +8,10 @@ import { MyTorus } from './primitives/MyTorus.js';
 import { MyComponent} from './primitives/MyComponent.js';
 import { MyPatch } from './primitives/MyPatch.js'
 import { MyKeyframeAnimation} from './animation/MyKeyframeAnimation.js'
-import { MyKeyframe } from './animation/MyKeyframe.js';
-import { MyBoard } from './primitives/MyBoard.js';
-
+import { MyKeyframe } from './animation/MyKeyframe.js'
+import { MyBoard } from './game/board-elements/MyBoard.js'
+import { MyTile } from './game/board-elements/MyTile.js';
+import { MyChecker } from './game/board-elements/MyChecker.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -45,7 +46,7 @@ export class MySceneGraph {
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graph = this;
+        scene.graphs.push(this);
 
         this.nodes = [];
 
@@ -55,8 +56,6 @@ export class MySceneGraph {
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
-
-        this.myBoard = new MyBoard(this.scene, 8, 0, 0, 0);
 
         // File reading
         this.reader = new CGFXMLreader();
@@ -1050,7 +1049,7 @@ export class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.kfAnimations[kfAnimationId] != null)
-                return "ID must be unique for each animation (conflict: ID = " + kfAnimationId + ")";
+                return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
 
             // Create new keyframe animation
             var newKfAnim = new MyKeyframeAnimation(this.scene, kfAnimationId);
@@ -1558,9 +1557,8 @@ export class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-     displayScene() {
+    displayScene() {
         this.displayComponent(this.idRoot, null, null, 1, 1);
-        this.myBoard.display();
 	}
 
     /**

@@ -1,12 +1,96 @@
-import { MyChecker } from "./MyChecker";
-import { MyTile } from "./MyTile";
+import { MyChecker } from "./MyChecker.js";
+import { MyTile } from "./MyTile.js";
 
-export class Board {
-    constructor(scene){
+export class MyBoard {
+    constructor(scene, size){
         this.scene = scene;
 
         this.board = [];
+        this.size = size;
 
+        this.x = 10.75;
+        this.y = 0.1;
+        this.z = 42;
+
+        // Initialize the board
+        this.initBoard()
+
+    }
+
+    /**
+     * Initializes the board
+     * Alternates between light and dark tiles, starting with light
+     */
+    initBoard(){
+        let light = true;
+        let row = 0;
+        let col = 0;
+        let tiles = [];
+
+        for (let i = 0; i < this.size; i++){
+            for (let j = 0; j < this.size; j++){
+                var id = i + "," + j;
+                tiles.push(new MyTile(this.scene, id,  this, row, col, light, null));
+                light = !light;
+                col++;
+            }
+            light = !light;
+            row++;
+            col = 0;
+        }
+
+        this.initTiles(tiles);
+
+        this.initCheckers();
+
+    }
+    /**
+     * Given a 1D array of tiles, initializes the board with them, in the correct order
+     * @param {MyTile[]} tiles 1D array of tiles
+     */
+    initTiles(tiles) {
+        for (let i = 0; i < this.size; i++){
+            this.board.push([]);
+            for (let j = 0; j < this.size; j++){
+                this.board[i].push(tiles[i*this.size + j]);
+            }
+        }
+    }
+
+    /**
+     * Initializes the checkers
+     * Rows 0, 1, 2, 5, 6, 7 have checkers, with a distance of 1 between them
+     * Rows 3 and 4 are empty
+     * */
+    initCheckers(){
+        for (var row = 0; row < this.size; row++){
+            for (var col = 0; col < this.size; col++){
+                /* Row 3 and 4 are empty */
+                if (row < 3 || row > 4){
+                    /* Checkers are placed with a distance of 1 between them */
+                    if (col % 2 == 0 && row % 2 != 0 || col % 2 != 0 && row % 2 == 0){
+                        let color = "white";
+                        if (row < 3)
+                            color = "black";
+
+                        let checker = new MyChecker(this.scene, color, row, col, this, row + "," + col);
+                        this.addChecker(row + "," + col, checker);
+                    }
+                }
+            }
+        }
+        console.log(this.board)
+    }
+
+
+    /**
+     * Add a tile to the board
+     * @param {MyTile} tile tile to be added
+     * @throws {Error} if the tile is already in the board
+     */
+    addTile(tile){
+        console.log(tile);
+        this.board[tile.row][tile.col] = tile;
     }
 
     /**

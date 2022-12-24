@@ -66,12 +66,16 @@ export class MyInterface extends CGFinterface {
         this.addViewsFolder();
         this.createCheckboxes();
         this.addHighlightedFolder();
+        this.initTheme();
+        this.initGameElements();
     }
 
     addLightsFolder(){
+        var themeIndex = this.scene.themes.indexOf(this.scene.theme);
+
         var lightsFolder = this.gui.addFolder('Lights');
 
-        var lights = this.scene.graph.lights;
+        var lights = this.scene.graphs[themeIndex].lights;
 
         for (var i in lights){
             if(lights.hasOwnProperty(i)){
@@ -91,18 +95,34 @@ export class MyInterface extends CGFinterface {
     }
 
     addHighlightedFolder(){
-        var highlights = this.gui.addFolder('HighLights'); 
+        var themeIndex = this.scene.themes.indexOf(this.scene.theme);
+        var highlights = this.gui.addFolder('HighLights');
 
-        var hl = this.scene.graph.shaders;
+        var hl = this.scene.graphs[themeIndex].shaders;
 
         for (const i in hl){
             if(hl[i]){
                 highlights
-                .add(this.scene.graph.components[i], "isHigh")
+                .add(this.scene.graphs[themeIndex].components[i], "isHigh")
                 .name(i)
-                .onChange(this.scene.graph.components[i].changeIsHigh.bind(this.scene))
+                .onChange(this.scene.graphs[themeIndex].components[i].changeIsHigh.bind(this.scene))
             }
         }
+
+    }
+
+    initTheme(){
+        this.themes = this.gui.addFolder('Themes');
+
+        this.themes.add(this.scene, 'theme', this.scene.themes).name('Theme').onChange(this.scene.changeTheme.bind(this.scene));
+    }
+
+    initGameElements(){
+        this.gameFolder = this.gui.addFolder('Game');
+
+        /* this.gameFolder.add(this.scene, 'undo').name('Undo');
+        this.gameFolder.add(this.scene, 'reset').name('Reset');
+        this.gameFolder.add(this.scene, 'replay').name('Replay'); */
 
     }
 }

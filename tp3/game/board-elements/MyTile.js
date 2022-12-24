@@ -1,6 +1,6 @@
-import { CGFappearance } from "../../../lib/CGF.js";
+import { CGFappearance, CGFtexture } from "../../../lib/CGF.js";
 import {MyChecker} from "./MyChecker.js";
-/* import {MyCube} from ".." */
+import {MyCube} from "../../primitives/MyCube.js";
 
 export class MyTile {
     constructor(scene, id, board, row, column, color, checker) {
@@ -13,24 +13,31 @@ export class MyTile {
         this.board = board;
         this.color = color;
 
-        /* this.tile = new MyCube(scene, 1, 0.1, 1); */
+        // Each tile is separated by 0.1 unit
+        this.x = this.board.x + this.column;
+        this.y = 0.1;
+        this.z = this.board.z + this.row;
+
+        this.tile = new MyCube(this.scene);
 
         this.hasChecker = checker != null;
+
         this.checker = (this.hasChecker) ? checker : null;
 
         this.material = new CGFappearance(scene);
 
-        this.texture = (color == "light") ? "light_wood.png" : "dark_wood.png";
+        var textureID = (color) ? "light_wood.png" : "dark_wood.png";
+        var texture = new CGFtexture(scene, "scenes/images/textures/" + textureID);
 
-        this.material.setTexture("scenes/images/textures/" + this.texture);
+        this.material.setTexture(texture);
     }
 
     /**
      * Set the checker of the tile
      * @param {MyChecker} cheker
      */
-    set(cheker){
-        this.checker = cheker;
+    set(checker){
+        this.checker = checker;
         this.hasChecker = true;
     }
 
@@ -65,9 +72,12 @@ export class MyTile {
     display(){
         this.scene.pushMatrix();
         this.scene.translate(this.x, this.y, this.z);
-        /* this.scene.scale(1, 0.1, 1); */
+        this.scene.scale(1, 0.1, 1);
         this.material.apply();
         this.tile.display();
+        if (this.hasChecker) {
+            this.checker.display();
+        }
         this.scene.popMatrix();
     }
 }
