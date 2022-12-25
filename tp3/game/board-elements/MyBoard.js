@@ -79,7 +79,7 @@ export class MyBoard {
                 }
             }
         }
-        console.log(this.board)
+
     }
 
 
@@ -89,7 +89,8 @@ export class MyBoard {
      * @throws {Error} if the tile is already in the board
      */
     addTile(tile){
-        console.log(tile);
+        if (this.board[tile.row][tile.col] != null)
+            console.error("Tile already in the board");
         this.board[tile.row][tile.col] = tile;
     }
 
@@ -198,10 +199,16 @@ export class MyBoard {
         this.addChecker(newTile.id, checker);
     }
 
+    /**
+     * Displays the board
+     * */
     display(){
+        var id = 0;
         for (let i = 0; i < this.board.length; i++){
             for (let j = 0; j < this.board[i].length; j++){
+                this.scene.registerForPick(id, this.board[i][j]);
                 this.board[i][j].display();
+                id++;
             }
         }
     }

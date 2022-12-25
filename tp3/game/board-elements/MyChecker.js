@@ -29,11 +29,13 @@ export class MyChecker extends CGFobject {
     this.row = row;
     this.col = col;
     this.board = board;
+    this.id = row + "," + col;
 
     this.x = 0.5;
     this.y = 1.1;
     this.z = 0.5;
 
+    // Pointer to the tile where the checker is placed
     this.tileID = tileID;
 
     this.checkerMaterial = new CGFappearance(scene);

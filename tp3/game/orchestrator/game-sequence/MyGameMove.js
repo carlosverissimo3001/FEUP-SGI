@@ -1,6 +1,12 @@
-import { MyChecker } from "../../board-elements/MyChecker.js";
-import { MyTile } from "../../board-elements/MyTile.js";
-
+/**
+ * MyGameMove
+ * @constructor
+ * @param {MySceneGraph} scene - Reference to MyGameOrchestrator object
+ * @param {MyChecker} checker - Checker that is being moved
+ * @param {MyTile} oldTile - Tile where the checker is being moved from
+ * @param {MyTile} newTile - Tile where the checker is being moved to
+ * @param {MyBoard} oldBoard - Board before the move
+ */
 export class MyGameMove {
     constructor(scene, checker, oldTile, newTile, oldBoard) {
         this.scene = scene;
