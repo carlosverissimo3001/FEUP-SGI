@@ -5,8 +5,6 @@ import { MyRectangle } from './MyRectangle.js';
  * MyRectangle
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
  */
 export class MyCube extends CGFobject {
     constructor(scene) {

@@ -42,7 +42,7 @@ export class XMLscene extends CGFscene {
     // the activation of picking capabilities in WebCGF
     // will use a shader for picking purposes (lib\shaders\picking\vertex.glsl and lib\shaders\picking\fragment.glsl)
     this.setPickEnabled(true);
-    
+
     this.startTime = null;
 
     this.enableTextures(true);
