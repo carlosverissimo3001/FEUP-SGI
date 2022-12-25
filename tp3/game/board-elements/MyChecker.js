@@ -36,7 +36,9 @@ export class MyChecker extends CGFobject {
     this.z = 0.5;
 
     // Pointer to the tile where the checker is placed
-    this.tileID = tileID;
+    var tileID = tileID;
+
+    this.tile = this.board.getTile(tileID.split(",")[0], tileID.split(",")[1]);
 
     this.checkerMaterial = new CGFappearance(scene);
 
@@ -53,18 +55,6 @@ export class MyChecker extends CGFobject {
 
   }
 
-  /**
-   * Update the position of the checker
-   * @param {Integer} newX new x position
-   * @param {Integer} newY new y position
-   * @param {Integer} newZ new z position
-   */
-  updatePosition(newX, newY, newZ) {
-    this.x = newX;
-    this.y = newY;
-    this.z = newZ;
-  }
-
   display() {
     this.scene.pushMatrix();
 
@@ -77,7 +67,7 @@ export class MyChecker extends CGFobject {
 
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.1*3, 0.1*3, 10);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 10);
       this.parts[0].display();
 
       this.scene.popMatrix();
@@ -87,11 +77,10 @@ export class MyChecker extends CGFobject {
 
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.1*3, 0.1*3, 0.75);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
       this.parts[1].display();
 
       // whats the result of 0.015*50?
-
 
       this.scene.popMatrix();
 
@@ -100,7 +89,7 @@ export class MyChecker extends CGFobject {
 
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.065*3, 0.065*3, 10);
+      this.scene.scale(0.065 * 3, 0.065 * 3, 10);
       this.parts[2].display();
 
       this.scene.popMatrix();
@@ -110,17 +99,16 @@ export class MyChecker extends CGFobject {
 
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.055*3, 0.055*3, 1);
+      this.scene.scale(0.055 * 3, 0.055 * 3, 1);
       this.parts[3].display();
 
       this.scene.popMatrix();
-
     } else if (this.color == "black") {
       /* Outer torus */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.1*3, 0.1*3, 10);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 10);
       this.checkerMaterial.setTexture(this.blackTexture);
       this.checkerMaterial.apply();
       this.parts[0].display();
@@ -130,7 +118,7 @@ export class MyChecker extends CGFobject {
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.1*3, 0.1*3, 0.75);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
       this.checkerMaterial.setTexture(this.blackTexture);
       this.checkerMaterial.apply();
       this.parts[1].display();
@@ -140,7 +128,7 @@ export class MyChecker extends CGFobject {
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.065*3, 0.065*3, 10);
+      this.scene.scale(0.065 * 3, 0.065 * 3, 10);
       this.checkerMaterial.setTexture(this.blackTexture);
       this.checkerMaterial.apply();
       this.parts[2].display();
@@ -150,7 +138,7 @@ export class MyChecker extends CGFobject {
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.055*3, 0.055*3, 1);
+      this.scene.scale(0.055 * 3, 0.055 * 3, 1);
       this.checkerMaterial.setTexture(this.blackTexture);
       this.checkerMaterial.apply();
       this.parts[3].display();
@@ -162,5 +150,35 @@ export class MyChecker extends CGFobject {
 
   updateTexCoords(length_s, length_t) {
     //
+  }
+
+  // If a checker is selected, the material will change to  green
+  setSelected() {
+    this.checkerMaterial.setAmbient(0, 255 / 255, 0, 1);
+    this.checkerMaterial.setDiffuse(0, 255 / 255, 0, 1);
+    this.checkerMaterial.setSpecular(0, 255 / 255, 0, 1);
+  }
+
+  unsetSelected(){
+    this.checkerMaterial = new CGFappearance(this.scene);
+    if (this.color == "black")
+      this.checkerMaterial.setTexture(this.blackTexture);
+    else
+      this.checkerMaterial.setTexture(this.whiteTexture);
+  }
+
+  // If a checker is selected, the material will change to a light green
+  setAvaliable(){
+    this.checkerMaterial.setAmbient(144 / 255, 238 / 255, 144 / 255, 1);
+    this.checkerMaterial.setDiffuse(144 / 255, 238 / 255, 144 / 255, 1);
+    this.checkerMaterial.setSpecular(144 / 255, 238 / 255, 144 / 255, 1);
+  }
+
+  unsetAvaliable(){
+    this.checkerMaterial = new CGFappearance(this.scene);
+    if (this.color == "black")
+      this.checkerMaterial.setTexture(this.blackTexture);
+    else
+      this.checkerMaterial.setTexture(this.whiteTexture);
   }
 }
