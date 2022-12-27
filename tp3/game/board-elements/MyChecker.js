@@ -35,6 +35,10 @@ export class MyChecker extends CGFobject {
     this.y = 1.1;
     this.z = 0.5;
 
+    this.x_eat = 0;
+    this.y_eat = 0;
+    this.z_eat = 0;
+
     // Pointer to the tile where the checker is placed
     var tileID = tileID;
 
@@ -66,6 +70,8 @@ export class MyChecker extends CGFobject {
   display() {
     this.scene.pushMatrix();
 
+    this.scene.translate(this.x_eat,this.y_eat,this.z_eat);
+    console.log(this.x_eat,this.y_eat,this.z_eat);
     if (this.color == "white") {
       /* Outer torus */
       this.scene.pushMatrix();
@@ -234,7 +240,6 @@ export class MyChecker extends CGFobject {
       this.parts[3].display();
       this.scene.popMatrix();
     }
-
     this.scene.popMatrix();
   }
 
@@ -259,9 +264,9 @@ export class MyChecker extends CGFobject {
 
   // If a checker is selected, the material will change to a light green
   setAvaliable(){
-    this.checkerMaterial.setAmbient(144 / 255, 238 / 255, 144 / 255, 1);
-    this.checkerMaterial.setDiffuse(144 / 255, 238 / 255, 144 / 255, 1);
-    this.checkerMaterial.setSpecular(144 / 255, 238 / 255, 144 / 255, 1);
+    this.checkerMaterial.setAmbient(1, 1, 0, 1);
+    this.checkerMaterial.setDiffuse(1, 1, 0, 1);
+    this.checkerMaterial.setSpecular(1, 1, 0, 1);
   }
 
   unsetAvaliable(){

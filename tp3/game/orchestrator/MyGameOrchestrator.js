@@ -22,7 +22,7 @@ export class MyGameOrchestrator {
     this.hasLoaded = false;
 
     // Game state
-    this.gameState = new MyGameStateTurn();
+    this.gameState = new MyGameStateTurn(scene, this, this.board);
 
     this.turn = "Player 1";
 
@@ -36,6 +36,10 @@ export class MyGameOrchestrator {
         color: "blue",
       },
     }
+
+    this.player1Eat = [];
+
+    this.player2Eat = [];
   }
 
   /** Initializes the scene graph
@@ -132,6 +136,7 @@ export class MyGameOrchestrator {
           for (var i = 0; i < availableTiles.length; i++) {
             availableTiles[i].unsetAvailable();
           }
+          this.eatCheckers();
           this.changePlayerTurn();
         }
         else{
@@ -144,6 +149,30 @@ export class MyGameOrchestrator {
 
   chooseScene() {
     this.menu.checkScene();
+  }
+
+  eatCheckers() {
+    this.board.player1MarkerNumber = this.player1Eat.length;
+    if (this.player1Eat.length > 0) {
+      for (let i = 0; i < this.player1Eat.length; i++) {
+        this.player1Eat[i].x_eat = 7 - this.player1Eat[i].row;
+        this.player1Eat[i].y_eat = 0.2+i;
+        this.player1Eat[i].z_eat = 7 - this.player1Eat[i].col;
+        this.player1Eat[i].tile.checker = null;
+        this.player1Eat[i].tile.hasChecker = false;
+      }
+    }
+    this.board.player2MarkerNumber = this.player2Eat.length;
+    if (this.player2Eat.length > 0) {
+      for (let i = 0; i < this.player2Eat.length; i++) {
+        this.player2Eat[i].x_eat = -7 + this.player2Eat[i].row;
+        this.player2Eat[i].y_eat = 0.2+i;
+        this.player2Eat[i].z_eat = -7 + this.player2Eat[i].col;
+        this.player2Eat[i].tile.checker = null;
+        this.player2Eat[i].tile.hasChecker = false;
+        this.player2Eat[i].display();
+      }
+    }
   }
 
 

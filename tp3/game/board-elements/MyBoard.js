@@ -1,6 +1,7 @@
 import { MyCube } from "../../primitives/MyCube.js";
 import { MyChecker } from "./MyChecker.js";
 import { MyTile } from "./MyTile.js";
+import { MyRectangle } from "../../primitives/MyRectangle.js";
 import { CGFtexture, CGFappearance } from "../../../lib/CGF.js";
 
 export class MyBoard {
@@ -14,7 +15,15 @@ export class MyBoard {
 
     this.player1CaptureZone = new MyCube(scene);
     this.player2CaptureZone = new MyCube(scene);
+    this.player1MarkerZone = new MyCube(scene);
+    this.player2MarkerZone = new MyCube(scene);
+    this.player1Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
+    this.player2Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
 
+    this.appearance = new CGFappearance(scene);
+
+    this.fontTexture = new CGFtexture(scene, "scenes/images/textures/oolite-font.trans.png");
+    this.appearance.setTexture(this.fontTexture);
 
     this.border = [];
     this.border.push(new MyCube(scene));
@@ -54,6 +63,9 @@ export class MyBoard {
     this.x = 10.75;
     this.y = 0.1;
     this.z = 42;
+
+    this.player1MarkerNumber = 0;
+    this.player2MarkerNumber = 0;
 
     // Initialize the board
     this.initBoard();
@@ -116,7 +128,6 @@ export class MyBoard {
             this.color = "blue";
             if (row >= 3) {
               this.color = "red";
-              console.log("3\n");
             }
 
             let checker = new MyChecker(
@@ -266,6 +277,52 @@ export class MyBoard {
     this.player2CaptureZoneMaterial.apply();
     this.player2CaptureZone.display();
     this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x + 9, this.y, this.z + 5);
+    this.scene.scale(1, 0.15, 1)
+    this.player1CaptureZoneMaterial.apply();
+    this.player1MarkerZone.display();
+    this.scene.setActiveShader(this.scene.textShader);
+
+    this.scene.pushMatrix();
+
+    this.appearance.apply();
+
+    this.scene.translate(0.4,0,1.5);
+    this.scene.rotate(Math.PI/2,0,1,0);
+    this.scene.scale(3, 8, 3);
+
+    this.scene.textShader.setUniformsValues({'charCoords': [this.player1MarkerNumber,3]});
+    this.player1Marker.display();
+    this.scene.popMatrix();
+
+    // reactivate default shader
+    this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x - 2, this.y, this.z + 2  );
+    this.scene.scale(1, 0.15, 1)
+    this.player2CaptureZoneMaterial.apply();
+    this.player2MarkerZone.display();
+    this.scene.setActiveShader(this.scene.textShader);
+
+    this.scene.pushMatrix();
+
+    this.appearance.apply();
+
+    this.scene.translate(1,0,0);
+    this.scene.rotate(-Math.PI/2,0,1,0);
+    this.scene.scale(3, 8, 3);
+
+    this.scene.textShader.setUniformsValues({'charCoords': [this.player2MarkerNumber,3]});
+    this.player2Marker.display();
+    this.scene.popMatrix();
+
+    // reactivate default shader
+    this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.popMatrix();
   }
 
   displayBorder(){
@@ -305,8 +362,6 @@ export class MyBoard {
   display() {
     this.displayBorder();
 
-    this.displayCaptureZone();
-
     var id = 0;
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
@@ -315,6 +370,8 @@ export class MyBoard {
         id++;
       }
     }
+
+    this.displayCaptureZone();
   }
 
   /**

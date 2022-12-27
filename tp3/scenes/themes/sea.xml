@@ -1,7 +1,11 @@
 <sxs>
     <scene root="menu" axis_length="17"/>
 
-    <views default="Menu">
+    <views default="Jacuzzi">
+        <perspective id="Jacuzi" near="0.1" far="500" angle="23">
+            <from x="60" y="50" z="60" />
+            <to x="20" y="0" z="20" />
+        </perspective>
         <perspective id="Menu" near="0.1" far="500" angle="60">
             <from x="7" y="-25" z="-12.5" />
             <to x="0" y="-25" z="-12.5" />
