@@ -46,9 +46,17 @@ export class MyChecker extends CGFobject {
       scene,
       "scenes/images/textures/white.png"
     );
+    this.redTexture = new CGFtexture(
+      scene,
+      "scenes/images/textures/red.jpg"
+    );
     this.blackTexture = new CGFtexture(
       scene,
       "scenes/images/textures/grey.png"
+    );
+    this.blueTexture = new CGFtexture(
+      scene,
+      "scenes/images/textures/blue.jpg"
     );
 
     this.color = color;
@@ -103,6 +111,47 @@ export class MyChecker extends CGFobject {
       this.parts[3].display();
 
       this.scene.popMatrix();
+
+    }  else if (this.color == "red") {
+      /* Outer torus */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 10);
+      this.checkerMaterial.setTexture(this.redTexture);
+      this.checkerMaterial.apply();
+      this.parts[0].display();
+      this.scene.popMatrix();
+
+      /* Whole sphere */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
+      this.checkerMaterial.setTexture(this.redTexture);
+      this.checkerMaterial.apply();
+      this.parts[1].display();
+      this.scene.popMatrix();
+
+      /* Inner torus */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.065 * 3, 0.065 * 3, 10);
+      this.checkerMaterial.setTexture(this.redTexture);
+      this.checkerMaterial.apply();
+      this.parts[2].display();
+      this.scene.popMatrix();
+
+      /* Inner sphere */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.055 * 3, 0.055 * 3, 1);
+      this.checkerMaterial.setTexture(this.redTexture);
+      this.checkerMaterial.apply();
+      this.parts[3].display();
+      this.scene.popMatrix();
     } else if (this.color == "black") {
       /* Outer torus */
       this.scene.pushMatrix();
@@ -144,6 +193,47 @@ export class MyChecker extends CGFobject {
       this.parts[3].display();
       this.scene.popMatrix();
     }
+    else if (this.color == "blue") {
+      /* Outer torus */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 10);
+      this.checkerMaterial.setTexture(this.blueTexture);
+      this.checkerMaterial.apply();
+      this.parts[0].display();
+      this.scene.popMatrix();
+
+      /* Whole sphere */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
+      this.checkerMaterial.setTexture(this.blueTexture);
+      this.checkerMaterial.apply();
+      this.parts[1].display();
+      this.scene.popMatrix();
+
+      /* Inner torus */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.065 * 3, 0.065 * 3, 10);
+      this.checkerMaterial.setTexture(this.blueTexture);
+      this.checkerMaterial.apply();
+      this.parts[2].display();
+      this.scene.popMatrix();
+
+      /* Inner sphere */
+      this.scene.pushMatrix();
+      this.scene.translate(this.x, this.y, this.z);
+      this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.scene.scale(0.055 * 3, 0.055 * 3, 1);
+      this.checkerMaterial.setTexture(this.blueTexture);
+      this.checkerMaterial.apply();
+      this.parts[3].display();
+      this.scene.popMatrix();
+    }
 
     this.scene.popMatrix();
   }
@@ -161,7 +251,7 @@ export class MyChecker extends CGFobject {
 
   unsetSelected(){
     this.checkerMaterial = new CGFappearance(this.scene);
-    if (this.color == "black")
+    if (this.color == "blue")
       this.checkerMaterial.setTexture(this.blackTexture);
     else
       this.checkerMaterial.setTexture(this.whiteTexture);
@@ -176,7 +266,7 @@ export class MyChecker extends CGFobject {
 
   unsetAvaliable(){
     this.checkerMaterial = new CGFappearance(this.scene);
-    if (this.color == "black")
+    if (this.color == "blue")
       this.checkerMaterial.setTexture(this.blackTexture);
     else
       this.checkerMaterial.setTexture(this.whiteTexture);

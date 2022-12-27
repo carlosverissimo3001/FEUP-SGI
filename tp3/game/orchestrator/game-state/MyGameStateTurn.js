@@ -52,7 +52,7 @@ export class MyGameStateTurn extends MyGameState {
   /** */
   validChecker(checker, turn) {
     // Checker color
-    var checkerColor = turn == "Player 1" ? "white" : "black";
+    var checkerColor = turn == "Player 1" ? "red" : "blue";
 
     // Check if the checker belongs to the player
     if (checker.color == checkerColor) {

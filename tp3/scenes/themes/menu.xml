@@ -1,27 +1,7 @@
 <sxs>
-    <scene root="pool_day" axis_length="17"/>
+    <scene root="menu" axis_length="17"/>
 
-    <views default="Player 1 View">
-        <perspective id="Jacuzi" near="0.1" far="500" angle="23">
-            <from x="60" y="50" z="60" />
-            <to x="20" y="0" z="20" />
-        </perspective>
-        <perspective id="Public" near="0.1" far="500" angle="60">
-            <from x="4" y="10" z="46" />
-            <to x="10" y="5" z="46" />
-        </perspective>
-        <perspective id="Player 1 View" near="0.1" far="500" angle="60">
-            <from x="15" y="6" z="53" />
-            <to x="15" y="2" z="49" />
-        </perspective>
-        <perspective id="Player 2 View" near="0.1" far="500" angle="60">
-            <from x="15" y="6" z="39" />
-            <to x="15" y="2" z="43" />
-        </perspective>
-        <perspective id="Top View" near="0.1" far="500" angle="70">
-            <from x="15" y="7" z="46" />
-            <to x="15" y="1" z="46.01" />
-        </perspective>
+    <views default="Menu">
         <perspective id="Menu" near="0.1" far="500" angle="60">
             <from x="7" y="-25" z="-12.5" />
             <to x="0" y="-25" z="-12.5" />
@@ -59,8 +39,7 @@
         </omni>
 
     </lights>
-
-    <textures>
+<textures>
         <texture id="trunkTexture" file="scenes/images/textures/trunk-image.jpg" />
         <texture id="demoTexture" file="scenes/images/textures/vidral.jpg" />
         <texture id="waterTexture2" file="scenes/images/textures/waterTex2.jpg" />

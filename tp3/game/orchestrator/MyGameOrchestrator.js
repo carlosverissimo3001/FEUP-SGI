@@ -6,6 +6,7 @@ import { MyGameState } from "./game-state/MyGameState.js";
 import { MyChecker } from "../board-elements/MyChecker.js";
 import { MyTile } from "../board-elements/MyTile.js";
 import { MyGameStateTurn } from "./game-state/MyGameStateTurn.js";
+import { MyMenu } from "./MyMenu.js";
 
 export class MyGameOrchestrator {
   constructor(scene) {
@@ -14,6 +15,7 @@ export class MyGameOrchestrator {
     this.gameSequence = new MyGameSequence();
     this.animator = new MyAnimator(scene, this, this.gameSequence);
     this.board = new MyBoard(scene, 8);
+    this.menu = new MyMenu(scene);
 
     // Scene graph
     this.theme = null;
@@ -27,11 +29,11 @@ export class MyGameOrchestrator {
     this.players = {
       "Player 1": {
         score: 0,
-        color: "white",
+        color: "red",
       },
       "Player 2": {
         score: 0,
-        color: "black",
+        color: "blue",
       },
     }
   }
@@ -43,7 +45,7 @@ export class MyGameOrchestrator {
     this.theme = sceneGraph;
     this.hasLoaded = true;
 
-    // Set the cameras
+    // Set the camera´s
     this.player1Camera = "Player 1 View";
     this.player2Camera = "Player 2 View";
   }
@@ -59,11 +61,17 @@ export class MyGameOrchestrator {
 
     this.scene.clearPickRegistration();
 
+    this.scene.clearPickRegistration();
+
     // Display the scene graph
     this.theme.displayScene();
 
+    // // Display the menu
+    // this.menu.display();
+
     // Display the board
     this.board.display();
+
   }
 
   /** Changes the game state
@@ -132,6 +140,10 @@ export class MyGameOrchestrator {
           return
         }
       }
+  }
+
+  chooseScene() {
+    this.menu.checkScene();
   }
 
 

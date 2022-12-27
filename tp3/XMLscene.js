@@ -5,11 +5,14 @@ import {
   CGFcameraOrtho,
   CGFshader,
   CGFtexture,
+  CGFappearance
 } from "../lib/CGF.js";
 import { MyViewAnimation } from "./animation/MyViewAnimation.js";
 import { MyChecker } from "./game/board-elements/MyChecker.js";
 import { MyGameOrchestrator } from "./game/orchestrator/MyGameOrchestrator.js";
 import { MySceneGraph } from "./MySceneGraph.js";
+import { MyRectangle } from "./primitives/MyRectangle.js";
+import { MyCube } from "./primitives/MyCube.js";
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -52,7 +55,7 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Day", "Night"];
+    this.themes = ["Day", "Night", "Menu"];
     this.theme = "Day";
     this.loadedThemes = 0;
 
@@ -101,6 +104,15 @@ export class XMLscene extends CGFscene {
       "shaders/pulse.vert",
       "shaders/pulse.frag"
     );
+
+    this.textShader = new CGFshader(
+      this.gl,
+      "shaders/font.vert",
+      "shaders/font.frag"
+    );
+
+    // set number of rows and columns in font texture
+    this.textShader.setUniformsValues({'dims': [16, 16]});
   }
 
   changeTheme() {
@@ -115,6 +127,7 @@ export class XMLscene extends CGFscene {
     */
     var day = new MySceneGraph("themes/pool_day.xml", this);
     var night = new MySceneGraph("themes/pool_night.xml", this);
+    var menu = new MySceneGraph("themes/menu.xml", this);
   }
 
   /**
@@ -359,6 +372,7 @@ export class XMLscene extends CGFscene {
 
     this.popMatrix();
     // ---- END Background, camera and axis setup
+
   }
 
   update(t) {
