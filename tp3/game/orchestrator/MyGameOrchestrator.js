@@ -166,30 +166,30 @@ export class MyGameOrchestrator {
   }
 
   eatCheckers() {
+    console.log("Player 1 has eaten " + this.player1Eat.length + " checkers")
+    console.log("Player 2 has eaten " + this.player2Eat.length + " checkers")
     this.board.player1MarkerNumber = this.player1Eat.length;
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
         if (!this.player1Eat[i].wasEaten) {
-          this.player1Eat[i].y_eat = 0.2 + i;
+          this.player1Eat[i].y_eat += 0.17 * i;
           this.player1Eat[i].tile.checker = null;
           this.player1Eat[i].tile.hasChecker = false;
           this.player1Eat[i].wasEaten = true;
         }
         this.player1Eat[i].display();
-        console.log("Player 1 has eaten a checker");
       }
     }
     this.board.player2MarkerNumber = this.player2Eat.length;
     if (this.player2Eat.length > 0) {
       for (let i = 0; i < this.player2Eat.length; i++) {
-        if (!this.player1Eat[i].wasEaten) {
-          this.player2Eat[i].y_eat = 0.2 + i;
+        if (!this.player2Eat[i].wasEaten) {
+          this.player2Eat[i].y_eat += 0.17 * i;
           this.player2Eat[i].tile.checker = null;
           this.player2Eat[i].tile.hasChecker = false;
           this.player2Eat[i].wasEaten = true;
         }
         this.player2Eat[i].display();
-        console.log("Player 2 has eaten a checker");
       }
     }
   }

@@ -35,7 +35,7 @@ export class MyChecker extends CGFobject {
     this.y = 1.1;
     this.z = 0.5;
 
-    this.y_eat = 0;
+    this.y_eat = 0.27;
 
     this.wasEaten = false;
 
@@ -61,6 +61,7 @@ export class MyChecker extends CGFobject {
   }
 
   displayEaten() {
+    this.scaleFactor = 0.4;
     this.scene.pushMatrix();
     switch (this.color) {
       case "white":
@@ -86,10 +87,10 @@ export class MyChecker extends CGFobject {
     // Outer torus
     (this.color == "blue")
     ? this.scene.translate(20.27, this.y_eat, 49.5)
-    : this.scene.translate(10.27, this.y_eat, 40.5);
+    : this.scene.translate(9.27, this.y_eat, 42.5);
 
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.scene.scale(.3, .3, 1.75);
+    this.scene.scale(.3, .3, 1.75 * this.scaleFactor);
     this.parts[0].display();
     this.scene.popMatrix();
 
@@ -97,8 +98,8 @@ export class MyChecker extends CGFobject {
     this.scene.pushMatrix();
     (this.color == "blue")
     ? this.scene.translate(20.27, this.y_eat, 49.5)
-    : this.scene.translate(10.27, this.y_eat, 40.5);
-    this.scene.scale(0.32, 0.18, 0.32);
+    : this.scene.translate(9.27, this.y_eat, 42.5);
+    this.scene.scale(0.32, 0.16 * this.scaleFactor, 0.32);
     this.parts[1].display();
     this.scene.popMatrix();
 
@@ -107,9 +108,9 @@ export class MyChecker extends CGFobject {
     this.scene.pushMatrix();
     (this.color == "blue")
     ? this.scene.translate(20.27, this.y_eat, 49.5)
-    : this.scene.translate(10.27, this.y_eat, 40.5);
+    : this.scene.translate(9.27, this.y_eat, 42.5);
     this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.scene.scale(0.2, 0.2, 2);
+    this.scene.scale(0.2, 0.2, 2 * this.scaleFactor);
     this.parts[2].display();
     this.scene.popMatrix();
 
@@ -117,10 +118,11 @@ export class MyChecker extends CGFobject {
     this.scene.pushMatrix();
     (this.color == "blue")
     ? this.scene.translate(20.27, this.y_eat, 49.5)
-    : this.scene.translate(10.27, this.y_eat, 40.5);
-    this.scene.scale(0.18, 0.21, .18);
+    : this.scene.translate(9.27, this.y_eat, 42.5);
+    this.scene.scale(0.18, 0.21 * this.scaleFactor, .18);
     this.parts[3].display();
     this.scene.popMatrix();
+
 
   }
 
