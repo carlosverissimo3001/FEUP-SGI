@@ -33,6 +33,7 @@ export class MyTile {
         // Pointer to the checker in the tile, if there is one
         this.checker = (this.hasChecker) ? checker : null;
 
+
         this.avaliable = false;
 
         // Create a bright green material for the border

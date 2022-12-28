@@ -192,7 +192,7 @@ export class XMLscene extends CGFscene {
       this,
       this.camera,
       nextCamera,
-      2
+      0.5
     );
 
     // Set the new camera and its id, and update the interface

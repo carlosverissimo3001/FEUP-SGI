@@ -41,6 +41,7 @@ export class MyGameStateTurn extends MyGameState {
     if (obj instanceof MyTile) {
       this.destinationTile = obj;
       this.checkEatenCheckers(this.checker, this.destinationTile, [], turn, turn == "Player 1" ? "red" : "blue");
+
     } else if (obj instanceof MyChecker) {
       // If a checker has already been picked, unset its material. The second condition is to avoid a glitch where the checker would be unset when the player clicked on the same checker twice
       if (this.checker != null && this.checker != obj) {
@@ -60,13 +61,12 @@ export class MyGameStateTurn extends MyGameState {
       checker.col,
       color
     );
-    if (diagonalTiles["left"] == destination || diagonalTiles["right"] == destination) {  
+    if (diagonalTiles["left"] == destination || diagonalTiles["right"] == destination) {
       if(player == "Player 1") {
         for (let i = 0; i < eaten.length; i++) {
           this.orchestrator.player1Eat.push(eaten[i]);
         }
       } else {
-        console.log(eaten);
         for (let i = 0; i < eaten.length; i++) {
           this.orchestrator.player2Eat.push(eaten[i]);
         }

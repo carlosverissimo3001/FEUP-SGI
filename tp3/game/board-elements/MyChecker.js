@@ -35,9 +35,9 @@ export class MyChecker extends CGFobject {
     this.y = 1.1;
     this.z = 0.5;
 
-    this.x_eat = 0;
     this.y_eat = 0;
-    this.z_eat = 0;
+
+    this.wasEaten = false;
 
     // Pointer to the tile where the checker is placed
     var tileID = tileID;
@@ -50,28 +50,89 @@ export class MyChecker extends CGFobject {
       scene,
       "scenes/images/textures/white.png"
     );
-    this.redTexture = new CGFtexture(
-      scene,
-      "scenes/images/textures/red.jpg"
-    );
+    this.redTexture = new CGFtexture(scene, "scenes/images/textures/red.jpg");
     this.blackTexture = new CGFtexture(
       scene,
       "scenes/images/textures/grey.png"
     );
-    this.blueTexture = new CGFtexture(
-      scene,
-      "scenes/images/textures/blue.jpg"
-    );
+    this.blueTexture = new CGFtexture(scene, "scenes/images/textures/blue.jpg");
 
     this.color = color;
+  }
+
+  displayEaten() {
+    this.scene.pushMatrix();
+    switch (this.color) {
+      case "white":
+        this.checkerMaterial.setTexture(this.whiteTexture);
+        this.checkerMaterial.apply();
+        break;
+      case "red":
+        this.checkerMaterial.setTexture(this.redTexture);
+        this.checkerMaterial.apply();
+        break;
+      case "black":
+        this.checkerMaterial.setTexture(this.blackTexture);
+        this.checkerMaterial.apply();
+        break;
+      case "blue":
+        this.checkerMaterial.setTexture(this.blueTexture);
+        this.checkerMaterial.apply();
+        break;
+      default:
+        break;
+    }
+
+    // Outer torus
+    (this.color == "blue")
+    ? this.scene.translate(20.27, this.y_eat, 49.5)
+    : this.scene.translate(10.27, this.y_eat, 40.5);
+
+    this.scene.rotate(Math.PI / 2, 1, 0, 0);
+    this.scene.scale(.3, .3, 1.75);
+    this.parts[0].display();
+    this.scene.popMatrix();
+
+    // Whole sphere
+    this.scene.pushMatrix();
+    (this.color == "blue")
+    ? this.scene.translate(20.27, this.y_eat, 49.5)
+    : this.scene.translate(10.27, this.y_eat, 40.5);
+    this.scene.scale(0.32, 0.18, 0.32);
+    this.parts[1].display();
+    this.scene.popMatrix();
+
+
+    // Inner torus
+    this.scene.pushMatrix();
+    (this.color == "blue")
+    ? this.scene.translate(20.27, this.y_eat, 49.5)
+    : this.scene.translate(10.27, this.y_eat, 40.5);
+    this.scene.rotate(Math.PI / 2, 1, 0, 0);
+    this.scene.scale(0.2, 0.2, 2);
+    this.parts[2].display();
+    this.scene.popMatrix();
+
+    // Inner sphere
+    this.scene.pushMatrix();
+    (this.color == "blue")
+    ? this.scene.translate(20.27, this.y_eat, 49.5)
+    : this.scene.translate(10.27, this.y_eat, 40.5);
+    this.scene.scale(0.18, 0.21, .18);
+    this.parts[3].display();
+    this.scene.popMatrix();
 
   }
 
   display() {
     this.scene.pushMatrix();
 
-    this.scene.translate(this.x_eat,this.y_eat,this.z_eat);
-    console.log(this.x_eat,this.y_eat,this.z_eat);
+    if (this.wasEaten) {
+      this.displayEaten();
+      return
+    }
+
+
     if (this.color == "white") {
       /* Outer torus */
       this.scene.pushMatrix();
@@ -80,6 +141,7 @@ export class MyChecker extends CGFobject {
       this.checkerMaterial.apply();
 
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 10);
       this.parts[0].display();
@@ -88,13 +150,12 @@ export class MyChecker extends CGFobject {
 
       /* Whole sphere */
       this.scene.pushMatrix();
-
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
       this.parts[1].display();
 
-      // whats the result of 0.015*50?
 
       this.scene.popMatrix();
 
@@ -102,6 +163,7 @@ export class MyChecker extends CGFobject {
       this.scene.pushMatrix();
 
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.065 * 3, 0.065 * 3, 10);
       this.parts[2].display();
@@ -112,16 +174,21 @@ export class MyChecker extends CGFobject {
       this.scene.pushMatrix();
 
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.055 * 3, 0.055 * 3, 1);
       this.parts[3].display();
 
       this.scene.popMatrix();
 
-    }  else if (this.color == "red") {
+    }
+
+    else if (this.color == "red") {
       /* Outer torus */
       this.scene.pushMatrix();
+
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 10);
       this.checkerMaterial.setTexture(this.redTexture);
@@ -132,6 +199,7 @@ export class MyChecker extends CGFobject {
       /* Whole sphere */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
       this.checkerMaterial.setTexture(this.redTexture);
@@ -142,6 +210,7 @@ export class MyChecker extends CGFobject {
       /* Inner torus */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.065 * 3, 0.065 * 3, 10);
       this.checkerMaterial.setTexture(this.redTexture);
@@ -152,15 +221,20 @@ export class MyChecker extends CGFobject {
       /* Inner sphere */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.055 * 3, 0.055 * 3, 1);
       this.checkerMaterial.setTexture(this.redTexture);
       this.checkerMaterial.apply();
       this.parts[3].display();
       this.scene.popMatrix();
-    } else if (this.color == "black") {
+
+    }
+
+    else if (this.color == "black") {
       /* Outer torus */
       this.scene.pushMatrix();
+
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 10);
@@ -172,6 +246,7 @@ export class MyChecker extends CGFobject {
       /* Whole sphere */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
       this.checkerMaterial.setTexture(this.blackTexture);
@@ -182,6 +257,7 @@ export class MyChecker extends CGFobject {
       /* Inner torus */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.065 * 3, 0.065 * 3, 10);
       this.checkerMaterial.setTexture(this.blackTexture);
@@ -192,6 +268,7 @@ export class MyChecker extends CGFobject {
       /* Inner sphere */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.055 * 3, 0.055 * 3, 1);
       this.checkerMaterial.setTexture(this.blackTexture);
@@ -199,12 +276,14 @@ export class MyChecker extends CGFobject {
       this.parts[3].display();
       this.scene.popMatrix();
     }
+
     else if (this.color == "blue") {
       /* Outer torus */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
-      this.scene.rotate(Math.PI / 2, 1, 0, 0);
-      this.scene.scale(0.1 * 3, 0.1 * 3, 10);
+      this.wasEaten ? null : this.scene.rotate(Math.PI / 2, 1, 0, 0);
+      this.wasEaten ? null : this.scene.scale(0.1 * 3, 0.1 * 3, 10);
+
       this.checkerMaterial.setTexture(this.blueTexture);
       this.checkerMaterial.apply();
       this.parts[0].display();
@@ -213,6 +292,7 @@ export class MyChecker extends CGFobject {
       /* Whole sphere */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
       this.checkerMaterial.setTexture(this.blueTexture);
@@ -223,6 +303,7 @@ export class MyChecker extends CGFobject {
       /* Inner torus */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.065 * 3, 0.065 * 3, 10);
       this.checkerMaterial.setTexture(this.blueTexture);
@@ -233,6 +314,7 @@ export class MyChecker extends CGFobject {
       /* Inner sphere */
       this.scene.pushMatrix();
       this.scene.translate(this.x, this.y, this.z);
+
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.055 * 3, 0.055 * 3, 1);
       this.checkerMaterial.setTexture(this.blueTexture);
@@ -240,6 +322,7 @@ export class MyChecker extends CGFobject {
       this.parts[3].display();
       this.scene.popMatrix();
     }
+
     this.scene.popMatrix();
   }
 
@@ -254,26 +337,24 @@ export class MyChecker extends CGFobject {
     this.checkerMaterial.setSpecular(0, 255 / 255, 0, 1);
   }
 
-  unsetSelected(){
+  unsetSelected() {
     this.checkerMaterial = new CGFappearance(this.scene);
     if (this.color == "blue")
       this.checkerMaterial.setTexture(this.blackTexture);
-    else
-      this.checkerMaterial.setTexture(this.whiteTexture);
+    else this.checkerMaterial.setTexture(this.whiteTexture);
   }
 
   // If a checker is selected, the material will change to a light green
-  setAvaliable(){
+  setAvaliable() {
     this.checkerMaterial.setAmbient(1, 1, 0, 1);
     this.checkerMaterial.setDiffuse(1, 1, 0, 1);
     this.checkerMaterial.setSpecular(1, 1, 0, 1);
   }
 
-  unsetAvaliable(){
+  unsetAvaliable() {
     this.checkerMaterial = new CGFappearance(this.scene);
     if (this.color == "blue")
       this.checkerMaterial.setTexture(this.blackTexture);
-    else
-      this.checkerMaterial.setTexture(this.whiteTexture);
+    else this.checkerMaterial.setTexture(this.whiteTexture);
   }
 }
