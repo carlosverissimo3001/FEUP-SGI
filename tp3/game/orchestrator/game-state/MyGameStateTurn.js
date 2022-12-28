@@ -24,8 +24,8 @@ export class MyGameStateTurn extends MyGameState {
 
     this.board = board;
 
-    // Has the checker been validated?
-    this.isCheckerValidated = false;
+    // Was this checker picked after another one
+    this.isNewChecker = false;
 
     this.orchestrator = orchestrator;
   }
@@ -48,6 +48,13 @@ export class MyGameStateTurn extends MyGameState {
         this.checker.unsetSelected();
       }
       if (this.validChecker(obj, turn)) {
+        // If the checker is different from the previous one, set the new checker as the selected one
+        if (this.checker != obj) {
+          this.isNewChecker = true;
+        }
+        else {
+          this.isNewChecker = false;
+        }
         this.checker = obj;
         this.originTile = obj.tile;
         // Change the checker's material to the selected one

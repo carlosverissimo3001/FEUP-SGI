@@ -15,12 +15,6 @@ export class MyTile {
         this.board = board;
         this.color = color;
 
-        this.border = [];
-        this.border.push(new MyRectangle(scene, "none", 0, 1, 0, 1));
-        this.border.push(new MyRectangle(scene, "none", 0, 1, 0, 1));
-        this.border.push(new MyRectangle(scene, "none", 0, 1, 0, 1));
-        this.border.push(new MyRectangle(scene, "none", 0, 1, 0, 1));
-
         // Each tile is separated by 0.1 unit
         this.x = this.board.x + this.col;
         this.y = 0.1;

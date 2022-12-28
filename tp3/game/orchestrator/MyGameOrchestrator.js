@@ -40,6 +40,10 @@ export class MyGameOrchestrator {
     this.player1Eat = [];
 
     this.player2Eat = [];
+
+    this.newChecker = false;
+
+    this.lastAvaliableTiles = [];
   }
 
   /** Initializes the scene graph
@@ -128,16 +132,25 @@ export class MyGameOrchestrator {
         this.gameState.checker,
         this.players[this.turn].color
       );
+
       if (availableTiles.length == 0) {
         alert("This checker cannot move");
         this.gameState.checker = null;
         return;
       }
 
-      for (var i = 0; i < availableTiles.length; i++) {
-        // Set available tiles, with a white hue
-        availableTiles[i].setAvailable();
+      if (this.gameState.isNewChecker) {
+        for (var i = 0; i < this.lastAvaliableTiles.length; i++) {
+          this.lastAvaliableTiles[i].unsetAvailable();
+        }
+
+        for (var i = 0; i < availableTiles.length; i++) {
+          availableTiles[i].setAvailable();
+        }
       }
+
+      this.lastAvaliableTiles = availableTiles;
+
       // Sets the selected checker, with a green hue
       this.gameState.checker.setSelected();
     }
@@ -166,8 +179,8 @@ export class MyGameOrchestrator {
   }
 
   eatCheckers() {
-    console.log("Player 1 has eaten " + this.player1Eat.length + " checkers")
-    console.log("Player 2 has eaten " + this.player2Eat.length + " checkers")
+    console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
+    console.log("Player 2 has eaten " + this.player2Eat.length + " checkers");
     this.board.player1MarkerNumber = this.player1Eat.length;
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
