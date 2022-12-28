@@ -55,8 +55,8 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Day", "Night", "Menu"];
-    this.theme = "Day";
+    this.themes = ["UnderSea", "Day", "Night"];
+    this.theme = "UnderSea";
     this.loadedThemes = 0;
 
     /* ************************************************** */
@@ -113,10 +113,26 @@ export class XMLscene extends CGFscene {
 
     // set number of rows and columns in font texture
     this.textShader.setUniformsValues({'dims': [16, 16]});
+
+    this.sandShader = new CGFshader(this.gl, "shaders/sand.vert", "shaders/sand.frag");
+    this.sandShader.setUniformsValues({ uSampler2: 1 });
+		this.sandShader.setUniformsValues({ USampler: 0 });
+
+    this.sandtexture = new CGFappearance(this);
+    this.sandtexture.setAmbient(1.0,1.0,1.0,1);
+    this.sandtexture.setDiffuse(1.0,1.0,1.0,1);
+    this.sandtexture.setDiffuse(1.0,1.0,1.0,1);
+    this.sandtexture.setShininess(10);
+
+    this.texture = new CGFtexture(this, "scenes/images/textures/sand.png");
+    this.sandtexture.setTexture(this.texture);
+    this.sandtexture.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.texture2 = new CGFtexture(this, "scenes/images/textures/sandMap.png");
   }
 
-  changeTheme() {
-    //
+  changeTheme(newTheme) {
+    this.theme = newTheme;
   }
 
   start() {
@@ -125,9 +141,9 @@ export class XMLscene extends CGFscene {
     /* Create scene graphs
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
+    var under_sea = new MySceneGraph("themes/under_sea.xml", this);
     var day = new MySceneGraph("themes/pool_day.xml", this);
     var night = new MySceneGraph("themes/pool_night.xml", this);
-    var menu = new MySceneGraph("themes/menu.xml", this);
   }
 
   /**

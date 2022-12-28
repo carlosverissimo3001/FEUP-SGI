@@ -12,6 +12,7 @@ import { MyKeyframe } from './animation/MyKeyframe.js'
 import { MyBoard } from './game/board-elements/MyBoard.js'
 import { MyTile } from './game/board-elements/MyTile.js';
 import { MyChecker } from './game/board-elements/MyChecker.js';
+import { MySeaFloor } from './extra/MySeaFloor.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -803,7 +804,7 @@ export class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'seaFloor')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)"
             }
 
@@ -1012,6 +1013,13 @@ export class MySceneGraph {
                 var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes);
 
                 this.primitives[primitiveId] = patch;
+            }
+
+            else if (primitiveType == 'seaFloor'){
+
+                var seaFloor = new MySeaFloor(this.scene);
+
+                this.primitives[primitiveId] = seaFloor;
             }
 
             else {

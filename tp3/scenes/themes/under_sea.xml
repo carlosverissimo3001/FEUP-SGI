@@ -1,10 +1,26 @@
 <sxs>
     <scene root="menu" axis_length="17"/>
 
-    <views default="Jacuzzi">
+    <views default="Player 1 View">
         <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
+        </perspective>
+        <perspective id="Public" near="0.1" far="500" angle="60">
+            <from x="4" y="10" z="46" />
+            <to x="10" y="5" z="46" />
+        </perspective>
+        <perspective id="Player 1 View" near="0.1" far="500" angle="60">
+            <from x="15" y="6" z="53" />
+            <to x="15" y="2" z="49" />
+        </perspective>
+        <perspective id="Player 2 View" near="0.1" far="500" angle="60">
+            <from x="15" y="6" z="39" />
+            <to x="15" y="2" z="43" />
+        </perspective>
+        <perspective id="Top View" near="0.1" far="500" angle="70">
+            <from x="15" y="7" z="46" />
+            <to x="15" y="1" z="46.01" />
         </perspective>
         <perspective id="Menu" near="0.1" far="500" angle="60">
             <from x="7" y="-25" z="-12.5" />
@@ -69,6 +85,7 @@
         <texture id="jeans_texture" file="scenes/images/textures/jeans.jpg"/>
         <texture id="tv_texture" file="scenes/images/textures/tv.jpg"/>
         <texture id="text_texture" file="scenes/images/textures/oolite-font.trans.png"/>
+        <texture id="sandTexture" file="scenes/images/textures/sand.png"/>
     </textures>
 
     <materials>
@@ -225,8 +242,7 @@
 
         <transformation id="poolTransform">
             <rotate axis="x" angle="-90" />
-            <scale x="20" y="19" z="1" />
-            <translate x="0.75" y="-2.64" z="0.1" />
+            <scale x="40" y="19" z="1" />
         </transformation>
 
         <transformation id="jacuziTransform">
@@ -504,6 +520,10 @@
             </patch>
         </primitive>
 
+        <primitive id="seaFloor">
+            <seaFloor />
+        </primitive>
+
     </primitives>
 
     <animations>
@@ -728,6 +748,18 @@
             </materials>
             <children>
                 <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="seaFloor">
+            <transformation>
+            </transformation>
+            <texture id="none" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="seaFloor"/>
             </children>
         </component>
 
@@ -2482,24 +2514,7 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="pool" />
-                <componentref id="jacuzi" />
-                <componentref id="deck" />
-                <componentref id="soil" />
-                <componentref id="grass" />
-                <componentref id="divider" />
-                <componentref id="steps" />
-                <componentref id="lifebuoy" />
-                <componentref id="balls" />
-                <componentref id="table_and_chairs" />
-                <componentref id="barrel" />
-                <componentref id="board" />
-                <componentref id="trees" />
-                <componentref id="lounge_chairs" />
-                <componentref id="shower" />
-                <componentref id="walls" />
-                <componentref id="door" />
-                <componentref id="menu" />
+                <componentref id="seaFloor" />
             </children>
         </component>
     </components>
