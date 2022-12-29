@@ -113,11 +113,14 @@ export class MyInterface extends CGFinterface {
         this.gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
         this.gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
         this.gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
-
-
-        /* this.gameFolder.add(this.scene, 'undo').name('Undo');
-        this.gameFolder.add(this.scene, 'reset').name('Reset');
-        this.gameFolder.add(this.scene, 'replay').name('Replay'); */
+        /* if (this.scene.gameOrchestrator.gameSequence.moves.length == 0)
+            this.gameFolder.add(this.scene.gameOrchestrator, 'initialTurn', this.scene.gameOrchestrator.playersArray).name('First Turn'); */
 
     }
+
+    /* updateInterface(){
+        this.gui.removeFolder(this.gameFolder);
+
+        this.initGameElements();
+    } */
 }

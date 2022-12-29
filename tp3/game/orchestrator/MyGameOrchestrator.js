@@ -27,8 +27,6 @@ export class MyGameOrchestrator {
     // Game state
     this.gameState = new MyGameStateTurn(scene, this, this.board);
 
-    this.turn = "Player 1";
-
     this.players = {
       "Player 1": {
         score: 0,
@@ -40,6 +38,9 @@ export class MyGameOrchestrator {
       },
     };
 
+    // Player that starts the game
+    this.turn = "Player 1"
+
     // Checkers eaten by each player
     this.player1Eat = [];
     this.player2Eat = [];
@@ -48,6 +49,8 @@ export class MyGameOrchestrator {
     this.lastAvailableTiles = [];
 
     this.eatenChecker = null;
+
+    /* this.interfaceUpdated = false; */
   }
 
   /** Initializes the scene graph
@@ -82,8 +85,6 @@ export class MyGameOrchestrator {
 
     this.scene.clearPickRegistration();
 
-    this.scene.clearPickRegistration();
-
     // Display the scene graph
     this.theme.displayScene();
 
@@ -105,11 +106,14 @@ export class MyGameOrchestrator {
   }
 
   changePlayerTurn() {
-    if (this.turn == "Player 1") {
-      this.turn = "Player 2";
-    } else {
-      this.turn = "Player 1";
-    }
+    /* if (!this.interfaceUpdated){
+      this.interfaceUpdated = true;
+      this.scene.interface.updateInterface();
+    } */
+
+    (this.turn == "Player 1")
+      ? this.turn = "Player 2"
+      : this.turn = "Player 1";
 
     // Change the camera
     if (this.autoRotate) {
@@ -331,8 +335,10 @@ export class MyGameOrchestrator {
     );
     if (!confirmation) return;
 
+    this.board.initialized = false;
+
     // Reset the board
-    this.board = new MyBoard(this.scene, this.players, this.gameState);
+    this.board = new MyBoard(this.scene, 8);
 
     // Reset the game sequence
     this.gameSequence = new MyGameSequence();
@@ -341,12 +347,14 @@ export class MyGameOrchestrator {
     this.player1Eat = [];
     this.player2Eat = [];
 
-    // Reset the scoreboard
-    this.board.player1MarkerNumber = 0;
-    this.board.player2MarkerNumber = 0;
-
     // Reset the turn
     this.turn = "Player 1";
+
+    // Reset the game state
+    this.gameState = new MyGameStateTurn(this.scene, this, this.board);
+
+    // Available tiles
+    this.lastAvailableTiles = [];
   }
 
   movie() {

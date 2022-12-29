@@ -68,6 +68,7 @@ export class MyBoard {
     this.player2MarkerNumber = 0;
 
     // Initialize the board
+    this.initialized = false;
     this.initBoard();
   }
 
@@ -96,6 +97,8 @@ export class MyBoard {
     this.initTiles(tiles);
 
     this.initCheckers();
+
+    this.initialized = true;
   }
   /**
    * Given a 1D array of tiles, initializes the board with them, in the correct order
