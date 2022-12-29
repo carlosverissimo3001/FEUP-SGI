@@ -113,6 +113,8 @@ export class XMLscene extends CGFscene {
 
     // set number of rows and columns in font texture
     this.textShader.setUniformsValues({'dims': [16, 16]});
+
+    
   }
 
   changeTheme() {
