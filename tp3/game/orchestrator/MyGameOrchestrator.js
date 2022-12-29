@@ -259,12 +259,24 @@ export class MyGameOrchestrator {
 
     // Check if a checker was eaten in the last move
     if (lastMove.eatenChecker != null) {
+
       // Set its tile to have a checker
-      lastMove.eatenChecker.tile.set(lastMove.checker)
+      lastMove.eatenChecker.tile.set(lastMove.eatenChecker)
+
+      if (lastMove.eatenChecker.color == "blue"){
+        this.board.player1MarkerNumber = lastMove.oldBoard.player1MarkerNumber - 1;
+        this.player1Eat.pop();
+      }
+
+      else if (lastMove.eatenChecker.color == "red"){
+        this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber;
+        this.player2Eat.pop();
+      }
 
       console.log(lastMove.eatenChecker.tile)
-
     }
+
+    // Update score
 
 
     this.changePlayerTurn();
