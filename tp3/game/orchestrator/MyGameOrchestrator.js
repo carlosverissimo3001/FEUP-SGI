@@ -263,6 +263,9 @@ export class MyGameOrchestrator {
       // Set its tile to have a checker
       lastMove.eatenChecker.tile.set(lastMove.eatenChecker)
 
+      // Set it to not have been eaten
+      lastMove.eatenChecker.wasEaten = false;
+
       if (lastMove.eatenChecker.color == "blue"){
         this.board.player1MarkerNumber = lastMove.oldBoard.player1MarkerNumber - 1;
         this.player1Eat.pop();
