@@ -82,6 +82,8 @@ export class MyInterface extends CGFinterface {
                 lightsFolder.add(this.scene.lightsVal, i).onChange(this.scene.setLights.bind(this.scene))
             }
         }
+
+        lightsFolder.closed = false;
     }
 
     addViewsFolder(){
@@ -97,10 +99,18 @@ export class MyInterface extends CGFinterface {
         this.themes = this.gui.addFolder('Themes');
 
         this.themes.add(this.scene, 'theme', this.scene.themes).name('Theme').onChange(this.scene.changeTheme.bind(this.scene));
+
+        this.themes.closed = false;
     }
 
     initGameElements(){
         this.gameFolder = this.gui.addFolder('Game');
+
+        // Keep the folder open
+        this.gameFolder.closed = false;
+
+        this.gameFolder.add(this.scene.gameOrchestrator, 'undo').name('Undo');
+
 
         /* this.gameFolder.add(this.scene, 'undo').name('Undo');
         this.gameFolder.add(this.scene, 'reset').name('Reset');

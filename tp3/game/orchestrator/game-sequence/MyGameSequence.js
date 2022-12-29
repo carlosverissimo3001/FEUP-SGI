@@ -18,12 +18,13 @@ export class MyGameSequence {
     /**
      * Undo the last move
      * @throws {Error} - If there are no moves to undo
+     * @returns {MyGameMove} - The move that was undone
      */
     undo() {
         if (this.moves.length == 0) {
-            console.error("No moves to undo");
+           alert("No moves to undo");
         }
 
-        this.moves.pop();
+        return this.moves.pop();
     }
 }

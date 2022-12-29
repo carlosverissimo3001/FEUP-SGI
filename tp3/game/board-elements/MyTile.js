@@ -28,7 +28,7 @@ export class MyTile {
         this.checker = (this.hasChecker) ? checker : null;
 
 
-        this.avaliable = false;
+        this.available = false;
 
         // Create a bright green material for the border
         this.borderMaterial = new CGFappearance(scene);
@@ -41,12 +41,12 @@ export class MyTile {
         var textureID = (color) ? "light_wood.png" : "dark_wood.png";
         var texture = new CGFtexture(scene, "scenes/images/textures/" + textureID);
 
-        this.avaliableMaterial = new CGFappearance(scene);
-        this.avaliableMaterial.setAmbient(1.0, 1.0, 1.0, 1);
-        this.avaliableMaterial.setDiffuse(1.0, 1.0, 1.0, 1);
-        this.avaliableMaterial.setSpecular(1.0, 1.0, 1.0, 1);
-        this.avaliableMaterial.setShininess(0.0);
-        this.avaliableMaterial.setTexture(texture);
+        this.availableMaterial = new CGFappearance(scene);
+        this.availableMaterial.setAmbient(1.0, 1.0, 1.0, 1);
+        this.availableMaterial.setDiffuse(1.0, 1.0, 1.0, 1);
+        this.availableMaterial.setSpecular(1.0, 1.0, 1.0, 1);
+        this.availableMaterial.setShininess(0.0);
+        this.availableMaterial.setTexture(texture);
 
         this.normalMaterial = new CGFappearance(scene);
         this.normalMaterial.setTexture(texture);
@@ -106,7 +106,7 @@ export class MyTile {
         this.scene.translate(this.x, this.y, this.z);
         this.scene.scale(1, 0.1, 1);
 
-        (this.avaliable) ? this.avaliableMaterial.apply() : this.normalMaterial.apply();
+        (this.available) ? this.availableMaterial.apply() : this.normalMaterial.apply();
 
         this.tile.display();
         /* this.displayBorder(); */
@@ -120,10 +120,10 @@ export class MyTile {
 
     /** If a tile is available,  the material is changed to a brighter color */
     setAvailable() {
-        this.avaliable = true;
+        this.available = true;
     }
 
     unsetAvailable() {
-        this.avaliable = false;
+        this.available = false;
     }
 }

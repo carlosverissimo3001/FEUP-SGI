@@ -38,7 +38,7 @@ export class MyChecker extends CGFobject {
     this.y_eat = 0.27;
 
     this.wasEaten = false;
-    this.avaliable = false;
+    this.available = false;
 
     // Pointer to the tile where the checker is placed
     var tileID = tileID;
@@ -203,7 +203,7 @@ export class MyChecker extends CGFobject {
 
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 10);
-      (this.avaliable ? this.lightRedMaterial : this.redMaterial).apply();
+      (this.available ? this.lightRedMaterial : this.redMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[0].display();
       this.scene.popMatrix();
@@ -214,7 +214,7 @@ export class MyChecker extends CGFobject {
 
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
-      (this.avaliable ? this.lightRedMaterial : this.redMaterial).apply();
+      (this.available ? this.lightRedMaterial : this.redMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[1].display();
       this.scene.popMatrix();
@@ -225,7 +225,7 @@ export class MyChecker extends CGFobject {
 
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.065 * 3, 0.065 * 3, 10);
-      (this.avaliable ? this.lightRedMaterial : this.redMaterial).apply();
+      (this.available ? this.lightRedMaterial : this.redMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[2].display();
       this.scene.popMatrix();
@@ -236,7 +236,7 @@ export class MyChecker extends CGFobject {
 
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.055 * 3, 0.055 * 3, 1);
-      (this.avaliable ? this.lightRedMaterial : this.redMaterial).apply();
+      (this.available ? this.lightRedMaterial : this.redMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[3].display();
       this.scene.popMatrix();
@@ -291,7 +291,7 @@ export class MyChecker extends CGFobject {
       this.scene.translate(this.x, this.y, this.z);
       this.wasEaten ? null : this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.wasEaten ? null : this.scene.scale(0.1 * 3, 0.1 * 3, 10);
-      (this.avaliable ? this.lightBlueMaterial : this.blueMaterial).apply();
+      (this.available ? this.lightBlueMaterial : this.blueMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[0].display();
       this.scene.popMatrix();
@@ -301,7 +301,7 @@ export class MyChecker extends CGFobject {
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.1 * 3, 0.1 * 3, 0.75);
-      (this.avaliable ? this.lightBlueMaterial : this.blueMaterial).apply();
+      (this.available ? this.lightBlueMaterial : this.blueMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[1].display();
       this.scene.popMatrix();
@@ -311,7 +311,7 @@ export class MyChecker extends CGFobject {
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.065 * 3, 0.065 * 3, 10);
-      (this.avaliable ? this.lightBlueMaterial : this.blueMaterial).apply();
+      (this.available ? this.lightBlueMaterial : this.blueMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[2].display();
       this.scene.popMatrix();
@@ -321,7 +321,7 @@ export class MyChecker extends CGFobject {
       this.scene.translate(this.x, this.y, this.z);
       this.scene.rotate(Math.PI / 2, 1, 0, 0);
       this.scene.scale(0.055 * 3, 0.055 * 3, 1);
-      (this.avaliable ? this.lightBlueMaterial : this.blueMaterial).apply();
+      (this.available ? this.lightBlueMaterial : this.blueMaterial).apply();
       (this.selected ? this.selectedMaterial.apply() : null)
       this.parts[3].display();
       this.scene.popMatrix();
@@ -343,11 +343,11 @@ export class MyChecker extends CGFobject {
     this.selected = false;
   }
 
-  setAvaliable() {
-    this.avaliable = true;
+  setAvailable() {
+    this.available = true;
   }
 
-  unsetAvaliable() {
-    this.avaliable = false;
+  unsetAvailable() {
+    this.available = false;
   }
 }

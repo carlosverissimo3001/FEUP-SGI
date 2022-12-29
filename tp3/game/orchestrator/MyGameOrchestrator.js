@@ -12,7 +12,7 @@ export class MyGameOrchestrator {
   constructor(scene) {
     this.scene = scene;
 
-    this.gameSequence = new MyGameSequence();
+    this.gameSequence = new MyGameSequence(this.scene);
     this.animator = new MyAnimator(scene, this, this.gameSequence);
     this.board = new MyBoard(scene, 8);
     /* this.menu = new MyMenu(scene); */
@@ -37,13 +37,14 @@ export class MyGameOrchestrator {
       },
     };
 
+    // Checkers eaten by each player
     this.player1Eat = [];
-
     this.player2Eat = [];
 
-    this.newChecker = false;
+    // Copy of set of tiles that are avaliable to move to
+    this.lastAvailableTiles = [];
 
-    this.lastAvaliableTiles = [];
+    this.eatenChecker = null;
   }
 
   /** Initializes the scene graph
@@ -53,7 +54,7 @@ export class MyGameOrchestrator {
     this.theme = sceneGraph;
     this.hasLoaded = true;
 
-    // Set the camera´s
+    // Set the cameras
     this.player1Camera = "Player 1 View";
     this.player2Camera = "Player 2 View";
   }
@@ -83,7 +84,7 @@ export class MyGameOrchestrator {
     // Display the scene graph
     this.theme.displayScene();
 
-    // // Display the menu
+    // Display the menu
     // this.menu.display();
 
     // Display the board
@@ -116,23 +117,19 @@ export class MyGameOrchestrator {
   }
 
   orchestrate() {
-    // Check if a checker has been picked
     var availableTiles = [];
-    var availableCheckers = this.board.getCheckers(
-      this.players[this.turn].color
-    );
 
-    // Sets the available checkers, with a light green hue
-    for (var i = 0; i < availableCheckers.length; i++) {
-      availableCheckers[i].setAvaliable();
-    }
+    // Get the available checkers
+    var availableCheckers = this.board.getCheckers(this.players[this.turn].color);
+
+    // Sets the available checkers, with a light color
+    this.setAvailable(availableCheckers);
 
     if (this.gameState.checker != null) {
-      availableTiles = this.board.validCheckerPosition(
-        this.gameState.checker,
-        this.players[this.turn].color
-      );
+      // If a checker is selected, get the available tiles for it
+      availableTiles = this.board.validCheckerPosition(this.gameState.checker, this.players[this.turn].color);
 
+      // If no tiles are available, the checker cannot move
       if (availableTiles.length == 0) {
         alert("This checker cannot move");
         this.gameState.checker = null;
@@ -140,33 +137,38 @@ export class MyGameOrchestrator {
       }
 
       if (this.gameState.isNewChecker) {
-        for (var i = 0; i < this.lastAvaliableTiles.length; i++) {
-          this.lastAvaliableTiles[i].unsetAvailable();
-        }
+        // Unsets the last available tiles -> the checker has changed
+        this.unsetAvailable(this.lastAvailableTiles);
 
-        for (var i = 0; i < availableTiles.length; i++) {
-          availableTiles[i].setAvailable();
-        }
+        // Sets the new avaliable tiles, with a light color
+        this.setAvailable(availableTiles);
       }
 
-      this.lastAvaliableTiles = availableTiles;
+      // Creates a copy of the available tiles
+      this.lastAvailableTiles = availableTiles;
 
       // Sets the selected checker, with a green hue
       this.gameState.checker.setSelected();
     }
+
     if (this.gameState.destinationTile != null) {
-      // Check is the destination tile is available
+      // If a tile has been picked, check if it is valid
       if (availableTiles.includes(this.gameState.destinationTile)) {
-        this.gameState.moveChecker();
-        for (var i = 0; i < availableCheckers.length; i++) {
-          availableCheckers[i].unsetAvaliable();
-        }
-        for (var i = 0; i < availableTiles.length; i++) {
-          availableTiles[i].unsetAvailable();
-        }
+        // Check if this move involves eating a checker
         this.eatCheckers();
+
+        // Move the checker to the tile
+        this.gameState.moveChecker(this.eatenChecker);
+
+        // Unset the avaliable tiles and checkers
+        this.unsetAvailable(availableCheckers);
+        this.unsetAvailable(availableTiles);
+
+        // Change the player turn
         this.changePlayerTurn();
-      } else {
+      }
+      // If the tile is not valid, alert the player
+      else {
         alert("This tile is not available");
         this.gameState.destinationTile = null;
         return;
@@ -181,14 +183,15 @@ export class MyGameOrchestrator {
   eatCheckers() {
     console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
     console.log("Player 2 has eaten " + this.player2Eat.length + " checkers");
+
     this.board.player1MarkerNumber = this.player1Eat.length;
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
         if (!this.player1Eat[i].wasEaten) {
           this.player1Eat[i].y_eat += 0.17 * i;
-          this.player1Eat[i].tile.checker = null;
-          this.player1Eat[i].tile.hasChecker = false;
+          this.player1Eat[i].tile.remove();
           this.player1Eat[i].wasEaten = true;
+          this.eatenChecker = this.player1Eat[i];
         }
         this.player1Eat[i].display();
       }
@@ -198,9 +201,9 @@ export class MyGameOrchestrator {
       for (let i = 0; i < this.player2Eat.length; i++) {
         if (!this.player2Eat[i].wasEaten) {
           this.player2Eat[i].y_eat += 0.17 * i;
-          this.player2Eat[i].tile.checker = null;
-          this.player2Eat[i].tile.hasChecker = false;
+          this.player2Eat[i].tile.remove();
           this.player2Eat[i].wasEaten = true;
+          this.eatenChecker = this.player2Eat[i];
         }
         this.player2Eat[i].display();
       }
@@ -237,6 +240,45 @@ export class MyGameOrchestrator {
           this.scene.pickResults.splice(0, this.scene.pickResults.length); // clear the pick results
         }
       }
+    }
+  }
+
+  undo() {
+    // Get the last move's board
+    var lastMove = this.gameSequence.undo();
+
+    // If a checker was selected, unset it
+    if (this.gameState.checker != null)
+      this.gameState.checker.unsetSelected();
+
+    // Unset tiles that were available
+    this.unsetAvailable(this.lastAvailableTiles);
+
+    // Move the checker back to the old tile
+    this.gameState.forceMove(lastMove.checker, lastMove.oldTile, lastMove.newTile);
+
+    // Check if a checker was eaten in the last move
+    if (lastMove.eatenChecker != null) {
+      // Set its tile to have a checker
+      lastMove.eatenChecker.tile.set(lastMove.checker)
+
+      console.log(lastMove.eatenChecker.tile)
+
+    }
+
+
+    this.changePlayerTurn();
+  }
+
+  unsetAvailable(arr){
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].unsetAvailable();
+    }
+  }
+
+  setAvailable(arr){
+    for (var i = 0; i < arr.length; i++) {
+      arr[i].setAvailable();
     }
   }
 }

@@ -38,24 +38,24 @@ export class MyBoard {
     this.borderMaterial.setShininess(120);
 
     this.player1CaptureZoneMaterial = new CGFappearance(scene);
-        
+
     this.player1CaptureZoneMaterial.setAmbient(1.0, 0, 0, 1);
     this.player1CaptureZoneMaterial.setDiffuse(1.0, 0, 0, 1);
     this.player1CaptureZoneMaterial.setSpecular(1.0, 0.0, 0.0, 1);
     this.player1CaptureZoneMaterial.setShininess(120);
 
     this.video_game_text = new CGFtexture(scene, "scenes/images/textures/retro_game.jpg");
-    
+
     this.player1CaptureZoneMaterial.setTexture(this.video_game_text);
     this.player1CaptureZoneMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
     this.player2CaptureZoneMaterial = new CGFappearance(scene);
-        
+
     this.player2CaptureZoneMaterial.setAmbient(0, 0, 1.0, 1);
     this.player2CaptureZoneMaterial.setDiffuse(0, 0, 1.0, 1);
     this.player2CaptureZoneMaterial.setSpecular(0, 0.0, 1.0, 1);
     this.player2CaptureZoneMaterial.setShininess(120);
-    
+
     this.player2CaptureZoneMaterial.setTexture(this.video_game_text);
     this.player2CaptureZoneMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
@@ -125,14 +125,14 @@ export class MyBoard {
             (col % 2 == 0 && row % 2 != 0) ||
             (col % 2 != 0 && row % 2 == 0)
           ) {
-            this.color = "blue";
+            var color = "blue";
             if (row >= 3) {
-              this.color = "red";
+              var color = "red";
             }
 
             let checker = new MyChecker(
               this.scene,
-              this.color,
+              color,
               row,
               col,
               this,
@@ -386,11 +386,11 @@ export class MyBoard {
     // If the checker is white, it can only move up, that is
     if (color == "red") {
         // Diagonal up left
-        if (row > 0 && col > 0) {
+        if (row >= 0 && col >= 0) {
             tiles["left"] = this.board[row - 1][col - 1];
         } else tiles["left"] = null;
         // Diagonal up right
-        if (row > 0 && col < 7) {
+        if (row >= 0 && col <= 7) {
             tiles["right"] = this.board[row - 1][col + 1];
         } else tiles["right"] = null;
     }
@@ -398,11 +398,11 @@ export class MyBoard {
     // If the checker is black, it can only move down, that is
     else {
         // Diagonal down left
-        if (row < 7 && col > 0) {
+        if (row <= 7 && col >= 0) {
             tiles["left"] = this.board[row + 1][col - 1];
         } else tiles["left"] = null;
         // Diagonal down right
-        if (row < 7 && col < 7) {
+        if (row <= 7 && col <= 7) {
             tiles["right"] = this.board[row + 1][col + 1];
         } else tiles["right"] = null;
     }
