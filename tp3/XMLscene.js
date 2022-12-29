@@ -407,7 +407,30 @@ export class XMLscene extends CGFscene {
   }
 
   checkKeys() {
-    //
+    var text = "Keys pressed: ";
+    var keysPressed = false;
+
+    if((this.gui.isKeyPressed("KeyZ") || this.gui.isKeyPressed("Keyz")) && this.gui.isKeyPressed("ControlLeft")) {
+      text += " CTRL + Z ";
+      keysPressed = true;
+      this.gameOrchestrator.undo();
+    }
+
+    if((this.gui.isKeyPressed("KeyR") || this.gui.isKeyPressed("Keyr"))) {
+      text += " R ";
+      keysPressed = true;
+      this.gameOrchestrator.restart();
+    }
+
+    if((this.gui.isKeyPressed("Keym") || this.gui.isKeyPressed("KeyM"))) {
+      text += " M ";
+      keysPressed = true;
+      this.gameOrchestrator.movie();
+    }
+
+    if(keysPressed)
+      console.log(text);
+
   }
 
   setLights() {

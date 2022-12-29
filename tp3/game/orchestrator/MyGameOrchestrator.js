@@ -349,5 +349,8 @@ export class MyGameOrchestrator {
     this.turn = "Player 1";
   }
 
-  movie() {}
+  movie() {
+    var confirmation = confirm ("Are you sure you want to watch the movie of the game? The state of the game will be preserved");
+    if (!confirmation) return;
+  }
 }

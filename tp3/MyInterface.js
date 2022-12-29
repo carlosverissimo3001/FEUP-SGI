@@ -53,7 +53,7 @@ export class MyInterface extends CGFinterface {
     };
 
     isKeyPressed(keyCode) {
-        if(this.activeKeys[keyCode] && (keyCode == "keyM" || keyCode == "keym")){
+        if (this.activeKeys[keyCode]){
             this.activeKeys[keyCode] = false;
             return true;
         }
