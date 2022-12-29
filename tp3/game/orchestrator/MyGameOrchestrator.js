@@ -244,6 +244,16 @@ export class MyGameOrchestrator {
   }
 
   undo() {
+    // Prompt a confirmation message
+    if (this.gameSequence.moves.length <= 0) {
+      alert("There are no moves to undo");
+      return;
+    }
+
+    var confirmation = confirm("Are you sure you want to undo the last move? This action cannot be undone");
+    if (!confirmation)
+      return;
+
     // Get the last move's board
     var lastMove = this.gameSequence.undo();
 
