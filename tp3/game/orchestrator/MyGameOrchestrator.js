@@ -264,6 +264,9 @@ export class MyGameOrchestrator {
     // Unset tiles that were available
     this.unsetAvailable(this.lastAvailableTiles);
 
+    // Unset the avaliable checkers
+    this.unsetAvailable(this.board.getCheckers(this.players[this.turn].color));
+
     // Move the checker back to the old tile
     this.gameState.forceMove(lastMove.checker, lastMove.oldTile, lastMove.newTile);
 
@@ -277,21 +280,24 @@ export class MyGameOrchestrator {
       lastMove.eatenChecker.wasEaten = false;
 
       if (lastMove.eatenChecker.color == "blue"){
+        // Update the scoreboard
         this.board.player1MarkerNumber = lastMove.oldBoard.player1MarkerNumber - 1;
+
+        // Remove the checker from the eaten checkers array
         this.player1Eat.pop();
       }
 
       else if (lastMove.eatenChecker.color == "red"){
+        // Update the scoreboard
         this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber;
+
+        // Remove the checker from the eaten checkers array
         this.player2Eat.pop();
       }
 
-      console.log(lastMove.eatenChecker.tile)
     }
 
-    // Update score
-
-
+    // Change the player turn
     this.changePlayerTurn();
   }
 
