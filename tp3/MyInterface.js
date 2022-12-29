@@ -110,6 +110,9 @@ export class MyInterface extends CGFinterface {
         this.gameFolder.closed = false;
 
         this.gameFolder.add(this.scene.gameOrchestrator, 'undo').name('Undo');
+        this.gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
+        this.gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
+        this.gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
 
 
         /* this.gameFolder.add(this.scene, 'undo').name('Undo');

@@ -21,6 +21,9 @@ export class MyGameOrchestrator {
     this.theme = null;
     this.hasLoaded = false;
 
+    // Automatic camera rotation
+    this.autoRotate = false;
+
     // Game state
     this.gameState = new MyGameStateTurn(scene, this, this.board);
 
@@ -109,10 +112,12 @@ export class MyGameOrchestrator {
     }
 
     // Change the camera
-    if (this.scene.cameraID == this.player1Camera) {
-      this.scene.updateCamera(this.player2Camera);
-    } else if (this.scene.cameraID == this.player2Camera) {
-      this.scene.updateCamera(this.player1Camera);
+    if (this.autoRotate) {
+      if (this.scene.cameraID == this.player1Camera)
+        this.scene.updateCamera(this.player2Camera);
+
+      else if (this.scene.cameraID == this.player2Camera)
+        this.scene.updateCamera(this.player1Camera);
     }
   }
 
@@ -120,14 +125,19 @@ export class MyGameOrchestrator {
     var availableTiles = [];
 
     // Get the available checkers
-    var availableCheckers = this.board.getCheckers(this.players[this.turn].color);
+    var availableCheckers = this.board.getCheckers(
+      this.players[this.turn].color
+    );
 
     // Sets the available checkers, with a light color
     this.setAvailable(availableCheckers);
 
     if (this.gameState.checker != null) {
       // If a checker is selected, get the available tiles for it
-      availableTiles = this.board.validCheckerPosition(this.gameState.checker, this.players[this.turn].color);
+      availableTiles = this.board.validCheckerPosition(
+        this.gameState.checker,
+        this.players[this.turn].color
+      );
 
       // If no tiles are available, the checker cannot move
       if (availableTiles.length == 0) {
@@ -250,16 +260,16 @@ export class MyGameOrchestrator {
       return;
     }
 
-    var confirmation = confirm("Are you sure you want to undo the last move? This action cannot be undone");
-    if (!confirmation)
-      return;
+    var confirmation = confirm(
+      "Are you sure you want to undo the last move? This action cannot be undone"
+    );
+    if (!confirmation) return;
 
     // Get the last move's board
     var lastMove = this.gameSequence.undo();
 
     // If a checker was selected, unset it
-    if (this.gameState.checker != null)
-      this.gameState.checker.unsetSelected();
+    if (this.gameState.checker != null) this.gameState.checker.unsetSelected();
 
     // Unset tiles that were available
     this.unsetAvailable(this.lastAvailableTiles);
@@ -268,48 +278,76 @@ export class MyGameOrchestrator {
     this.unsetAvailable(this.board.getCheckers(this.players[this.turn].color));
 
     // Move the checker back to the old tile
-    this.gameState.forceMove(lastMove.checker, lastMove.oldTile, lastMove.newTile);
+    this.gameState.forceMove(
+      lastMove.checker,
+      lastMove.oldTile,
+      lastMove.newTile
+    );
 
     // Check if a checker was eaten in the last move
     if (lastMove.eatenChecker != null) {
-
       // Set its tile to have a checker
-      lastMove.eatenChecker.tile.set(lastMove.eatenChecker)
+      lastMove.eatenChecker.tile.set(lastMove.eatenChecker);
 
       // Set it to not have been eaten
       lastMove.eatenChecker.wasEaten = false;
 
-      if (lastMove.eatenChecker.color == "blue"){
+      if (lastMove.eatenChecker.color == "blue") {
         // Update the scoreboard
-        this.board.player1MarkerNumber = lastMove.oldBoard.player1MarkerNumber - 1;
+        this.board.player1MarkerNumber =
+          lastMove.oldBoard.player1MarkerNumber - 1;
 
         // Remove the checker from the eaten checkers array
         this.player1Eat.pop();
-      }
-
-      else if (lastMove.eatenChecker.color == "red"){
+      } else if (lastMove.eatenChecker.color == "red") {
         // Update the scoreboard
         this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber;
 
         // Remove the checker from the eaten checkers array
         this.player2Eat.pop();
       }
-
     }
 
     // Change the player turn
     this.changePlayerTurn();
   }
 
-  unsetAvailable(arr){
+  unsetAvailable(arr) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].unsetAvailable();
     }
   }
 
-  setAvailable(arr){
+  setAvailable(arr) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].setAvailable();
     }
   }
+
+  restart() {
+    // Prompt a confirmation message
+    var confirmation = confirm(
+      "Are you sure you want to restart the game? This action cannot be undone"
+    );
+    if (!confirmation) return;
+
+    // Reset the board
+    this.board = new MyBoard(this.scene, this.players, this.gameState);
+
+    // Reset the game sequence
+    this.gameSequence = new MyGameSequence();
+
+    // Reset the eaten checkers
+    this.player1Eat = [];
+    this.player2Eat = [];
+
+    // Reset the scoreboard
+    this.board.player1MarkerNumber = 0;
+    this.board.player2MarkerNumber = 0;
+
+    // Reset the turn
+    this.turn = "Player 1";
+  }
+
+  movie() {}
 }
