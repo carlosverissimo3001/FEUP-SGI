@@ -1,6 +1,7 @@
 import { MyCube } from "../../primitives/MyCube.js";
 import { MyChecker } from "./MyChecker.js";
 import { MyTile } from "./MyTile.js";
+import { MyRectangle } from "../../primitives/MyRectangle.js";
 import { CGFtexture, CGFappearance } from "../../../lib/CGF.js";
 
 export class MyBoard {
@@ -12,6 +13,17 @@ export class MyBoard {
 
     this.captureZone = new MyCube(scene);
 
+    this.player1CaptureZone = new MyCube(scene);
+    this.player2CaptureZone = new MyCube(scene);
+    this.player1MarkerZone = new MyCube(scene);
+    this.player2MarkerZone = new MyCube(scene);
+    this.player1Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
+    this.player2Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
+
+    this.appearance = new CGFappearance(scene);
+
+    this.fontTexture = new CGFtexture(scene, "scenes/images/textures/oolite-font.trans.png");
+    this.appearance.setTexture(this.fontTexture);
 
     this.border = [];
     this.border.push(new MyCube(scene));
@@ -20,16 +32,43 @@ export class MyBoard {
     this.border.push(new MyCube(scene));
 
     this.borderMaterial = new CGFappearance(scene);
-    this.borderMaterial.setTexture(new CGFtexture(scene, "scenes/images/dark_concrete.png"));
+    this.borderMaterial.setAmbient(0, 0, 0, 1);
+    this.borderMaterial.setDiffuse(0, 0, 0, 1);
+    this.borderMaterial.setSpecular(0, 0.0, 0.0, 1);
+    this.borderMaterial.setShininess(120);
 
-    this.captureZoneMaterial = new CGFappearance(scene);
-    this.captureZoneMaterial.setTexture(new CGFtexture(scene, "scenes/images/concrete.jpg"));
+    this.player1CaptureZoneMaterial = new CGFappearance(scene);
+
+    this.player1CaptureZoneMaterial.setAmbient(1.0, 0, 0, 1);
+    this.player1CaptureZoneMaterial.setDiffuse(1.0, 0, 0, 1);
+    this.player1CaptureZoneMaterial.setSpecular(1.0, 0.0, 0.0, 1);
+    this.player1CaptureZoneMaterial.setShininess(120);
+
+    this.video_game_text = new CGFtexture(scene, "scenes/images/textures/retro_game.jpg");
+
+    this.player1CaptureZoneMaterial.setTexture(this.video_game_text);
+    this.player1CaptureZoneMaterial.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.player2CaptureZoneMaterial = new CGFappearance(scene);
+
+    this.player2CaptureZoneMaterial.setAmbient(0, 0, 1.0, 1);
+    this.player2CaptureZoneMaterial.setDiffuse(0, 0, 1.0, 1);
+    this.player2CaptureZoneMaterial.setSpecular(0, 0.0, 1.0, 1);
+    this.player2CaptureZoneMaterial.setShininess(120);
+
+    this.player2CaptureZoneMaterial.setTexture(this.video_game_text);
+    this.player2CaptureZoneMaterial.setTextureWrap('REPEAT', 'REPEAT');
+
 
     this.x = 10.75;
     this.y = 0.1;
     this.z = 42;
 
+    this.player1MarkerNumber = 0;
+    this.player2MarkerNumber = 0;
+
     // Initialize the board
+    this.initialized = false;
     this.initBoard();
   }
 
@@ -58,6 +97,8 @@ export class MyBoard {
     this.initTiles(tiles);
 
     this.initCheckers();
+
+    this.initialized = true;
   }
   /**
    * Given a 1D array of tiles, initializes the board with them, in the correct order
@@ -87,8 +128,10 @@ export class MyBoard {
             (col % 2 == 0 && row % 2 != 0) ||
             (col % 2 != 0 && row % 2 == 0)
           ) {
-            let color = "white";
-            if (row < 3) color = "black";
+            var color = "blue";
+            if (row >= 3) {
+              var color = "red";
+            }
 
             let checker = new MyChecker(
               this.scene,
@@ -225,10 +268,63 @@ export class MyBoard {
 
   displayCaptureZone(){
     this.scene.pushMatrix();
-    this.scene.translate(this.x - 1, this.y-0.1, this.z - 1.575);
-    this.scene.scale(10, 0.15, 11)
-    this.captureZoneMaterial.apply();
-    this.captureZone.display();
+    this.scene.translate(this.x + 9, this.y, this.z + 7);
+    this.scene.scale(1, 0.15, 1)
+    this.player1CaptureZoneMaterial.apply();
+    this.player1CaptureZone.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x - 2, this.y, this.z  );
+    this.scene.scale(1, 0.15, 1)
+    this.player2CaptureZoneMaterial.apply();
+    this.player2CaptureZone.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x + 9, this.y, this.z + 5);
+    this.scene.scale(1, 0.15, 1)
+    this.player1CaptureZoneMaterial.apply();
+    this.player1MarkerZone.display();
+    this.scene.setActiveShader(this.scene.textShader);
+
+    this.scene.pushMatrix();
+
+    this.appearance.apply();
+
+    this.scene.translate(0.4,0,1.5);
+    this.scene.rotate(Math.PI/2,0,1,0);
+    this.scene.scale(3, 8, 3);
+
+    this.scene.textShader.setUniformsValues({'charCoords': [this.player1MarkerNumber,3]});
+    this.player1Marker.display();
+    this.scene.popMatrix();
+
+    // reactivate default shader
+    this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x - 2, this.y, this.z + 2  );
+    this.scene.scale(1, 0.15, 1)
+    this.player2CaptureZoneMaterial.apply();
+    this.player2MarkerZone.display();
+    this.scene.setActiveShader(this.scene.textShader);
+
+    this.scene.pushMatrix();
+
+    this.appearance.apply();
+
+    this.scene.translate(1,0,0);
+    this.scene.rotate(-Math.PI/2,0,1,0);
+    this.scene.scale(3, 8, 3);
+
+    this.scene.textShader.setUniformsValues({'charCoords': [this.player2MarkerNumber,3]});
+    this.player2Marker.display();
+    this.scene.popMatrix();
+
+    // reactivate default shader
+    this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.popMatrix();
   }
 
@@ -269,8 +365,6 @@ export class MyBoard {
   display() {
     this.displayBorder();
 
-    this.displayCaptureZone();
-
     var id = 0;
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
@@ -279,6 +373,8 @@ export class MyBoard {
         id++;
       }
     }
+
+    this.displayCaptureZone();
   }
 
   /**
@@ -291,27 +387,27 @@ export class MyBoard {
     let tiles = [];
 
     // If the checker is white, it can only move up, that is
-    if (color == "white") {
+    if (color == "red") {
         // Diagonal up left
-        if (row > 0 && col > 0) {
-            tiles.push(this.board[row - 1][col - 1]);
-        }
+        if (row >= 0 && col >= 0) {
+            tiles["left"] = this.board[row - 1][col - 1];
+        } else tiles["left"] = null;
         // Diagonal up right
-        if (row > 0 && col < 7) {
-            tiles.push(this.board[row - 1][col + 1]);
-        }
+        if (row >= 0 && col <= 7) {
+            tiles["right"] = this.board[row - 1][col + 1];
+        } else tiles["right"] = null;
     }
 
     // If the checker is black, it can only move down, that is
     else {
         // Diagonal down left
-        if (row < 7 && col > 0) {
-            tiles.push(this.board[row + 1][col - 1]);
-        }
+        if (row <= 7 && col >= 0) {
+            tiles["left"] = this.board[row + 1][col - 1];
+        } else tiles["left"] = null;
         // Diagonal down right
-        if (row < 7 && col < 7) {
-            tiles.push(this.board[row + 1][col + 1]);
-        }
+        if (row <= 7 && col <= 7) {
+            tiles["right"] = this.board[row + 1][col + 1];
+        } else tiles["right"] = null;
     }
 
     return tiles;
@@ -344,8 +440,8 @@ export class MyBoard {
 
     // A tile is deemed avaliable if it is empty, or if it has an enemy checker
     var availableTiles = [];
-    for (var i = 0; i < diagonalTiles.length; i++) {
-      var tile = diagonalTiles[i];
+    var tile = diagonalTiles["left"];
+    if(tile != null) {
       if (tile.checker == null) {
         availableTiles.push(tile);
       }
@@ -353,9 +449,26 @@ export class MyBoard {
       else{
         if (tile.checker.color != color){
           var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-          if (nextTile[0].checker == null){
-            availableTiles.push(nextTile[0]);
+          if (nextTile["left"]!= null && nextTile["left"].checker == null && tile == diagonalTiles["left"]){
+            availableTiles.push(nextTile["left"]);
           }
+
+        }
+      }
+    }
+    var tile = diagonalTiles["right"];
+    if(tile != null) {
+      if (tile.checker == null) {
+        availableTiles.push(tile);
+      }
+      // If there is a checker in the tile, check if there is an empty tile ahead
+      else{
+        if (tile.checker.color != color){
+          var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+          if (nextTile["right"]!= null && nextTile["right"].checker == null && tile == diagonalTiles["right"]){
+            availableTiles.push(nextTile["right"]);
+          }
+
         }
       }
     }

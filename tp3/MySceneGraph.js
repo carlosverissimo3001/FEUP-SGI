@@ -1642,6 +1642,7 @@ export class MySceneGraph {
                 this.scene.setActiveShader(this.scene.pulseShader);
                 this.textures[texID].bind();
             }
+
             /* Display component primitives */
             for (var i = 0; i < currNode.primitives.length; i++){
                 let primitive = this.primitives[currNode.primitives[i]];
@@ -1660,7 +1661,7 @@ export class MySceneGraph {
                     primitive.updateTexCoords(currNode.lenght_s, currNode.lenght_t)
 
                 primitive.display();
-                currAppearence.apply()
+                currAppearence.apply();
             }
             if (poolComponent) this.scene.setActiveShader(this.scene.defaultShader);
 

@@ -1,5 +1,6 @@
 import { MyChecker } from "../../board-elements/MyChecker.js";
 import { MyTile } from "../../board-elements/MyTile.js";
+import { MyGameMove } from "../game-sequence/MyGameMove.js";
 import { MyGameState } from "./MyGameState.js";
 
 /**
@@ -22,8 +23,12 @@ export class MyGameStateTurn extends MyGameState {
     // Destination tile
     this.destinationTile = null;
 
-    // Has the checker been validated?
-    this.isCheckerValidated = false;
+    this.board = board;
+
+    // Was this checker picked after another one
+    this.isNewChecker = false;
+
+    this.orchestrator = orchestrator;
   }
 
   update(time) {}
@@ -36,12 +41,25 @@ export class MyGameStateTurn extends MyGameState {
   checkPick(obj, turn) {
     if (obj instanceof MyTile) {
       this.destinationTile = obj;
+      this.checkEatenCheckers(
+        this.checker,
+        this.destinationTile,
+        [],
+        turn,
+        turn == "Player 1" ? "red" : "blue"
+      );
     } else if (obj instanceof MyChecker) {
       // If a checker has already been picked, unset its material. The second condition is to avoid a glitch where the checker would be unset when the player clicked on the same checker twice
       if (this.checker != null && this.checker != obj) {
         this.checker.unsetSelected();
       }
       if (this.validChecker(obj, turn)) {
+        // If the checker is different from the previous one, set the new checker as the selected one
+        if (this.checker != obj) {
+          this.isNewChecker = true;
+        } else {
+          this.isNewChecker = false;
+        }
         this.checker = obj;
         this.originTile = obj.tile;
         // Change the checker's material to the selected one
@@ -49,10 +67,83 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
+  checkEatenCheckers(checker, destination, eaten, player, color) {
+    var diagonalTiles = this.board.getDiagonalTiles(
+      checker.row,
+      checker.col,
+      color
+    );
+    if (
+      diagonalTiles["left"] == destination ||
+      diagonalTiles["right"] == destination
+    ) {
+      if (player == "Player 1") {
+        for (let i = 0; i < eaten.length; i++) {
+          this.orchestrator.player1Eat.push(eaten[i]);
+        }
+      } else {
+        for (let i = 0; i < eaten.length; i++) {
+          this.orchestrator.player2Eat.push(eaten[i]);
+        }
+      }
+      return true;
+    } else {
+      if (
+        diagonalTiles["left"] &&
+        diagonalTiles["left"].hasChecker &&
+        diagonalTiles["left"].checker.color != color
+      ) {
+        var nextDiagonal = this.board.getDiagonalTiles(
+          diagonalTiles["left"].checker.row,
+          diagonalTiles["left"].checker.col,
+          color
+        );
+        if (
+          (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker) ||
+          (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)
+        ) {
+          let eat = eaten;
+          eat.push(diagonalTiles["left"].checker);
+          return this.checkEatenCheckers(
+            diagonalTiles["left"].checker,
+            destination,
+            eat,
+            player,
+            color
+          );
+        }
+      } else if (
+        diagonalTiles["right"] &&
+        diagonalTiles["right"].hasChecker &&
+        diagonalTiles["right"].checker.color != color
+      ) {
+        var nextDiagonal = this.board.getDiagonalTiles(
+          diagonalTiles["right"].checker.row,
+          diagonalTiles["right"].checker.col,
+          color
+        );
+        if (
+          (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker) ||
+          (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)
+        ) {
+          let eat = eaten;
+          eat.push(diagonalTiles["right"].checker);
+          return this.checkEatenCheckers(
+            diagonalTiles["right"].checker,
+            destination,
+            eat,
+            player,
+            color
+          );
+        }
+      }
+    }
+  }
+
   /** */
   validChecker(checker, turn) {
     // Checker color
-    var checkerColor = turn == "Player 1" ? "white" : "black";
+    var checkerColor = turn == "Player 1" ? "red" : "blue";
 
     // Check if the checker belongs to the player
     if (checker.color == checkerColor) {
@@ -63,9 +154,22 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
-  moveChecker() {
+  moveChecker(eatenChecker) {
     // Remove selected material from the checker
     this.checker.unsetSelected();
+
+    console.log(eatenChecker)
+
+    var move = new MyGameMove(
+      this.scene,
+      this.checker,
+      this.originTile,
+      this.destinationTile,
+      this.orchestrator.board,
+      eatenChecker
+    );
+
+    this.orchestrator.gameSequence.addMove(move);
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
 
@@ -74,8 +178,6 @@ export class MyGameStateTurn extends MyGameState {
     this.checker.row = this.destinationTile.row;
     this.checker.col = this.destinationTile.col;
     this.checker.id = this.destinationTile.id;
-
-    console.log(this.checker);
 
     // Add the checker to the destination tile
     this.destinationTile.set(this.checker);
@@ -86,10 +188,30 @@ export class MyGameStateTurn extends MyGameState {
     this.reset();
   }
 
+  forceMove(checker, originTile, destinationTile) {
+    // Remove selected material from the checker
+    checker.unsetSelected();
+
+    // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
+
+    // Update the checker's tile
+    checker.tile = originTile;
+    checker.row = originTile.row;
+    checker.col = originTile.col;
+    checker.id = originTile.id;
+
+    // Add the checker to the destination tile
+    originTile.set(checker);
+
+    // Remove the checker from the origin tile
+    destinationTile.remove();
+
+    this.reset();
+  }
+
   reset() {
     this.checker = null;
     this.originTile = null;
     this.destinationTile = null;
-    this.isCheckerValidated = false;
   }
 }

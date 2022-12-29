@@ -53,7 +53,7 @@ export class MyInterface extends CGFinterface {
     };
 
     isKeyPressed(keyCode) {
-        if(this.activeKeys[keyCode] && (keyCode == "keyM" || keyCode == "keym")){
+        if (this.activeKeys[keyCode]){
             this.activeKeys[keyCode] = false;
             return true;
         }
@@ -82,6 +82,8 @@ export class MyInterface extends CGFinterface {
                 lightsFolder.add(this.scene.lightsVal, i).onChange(this.scene.setLights.bind(this.scene))
             }
         }
+
+        lightsFolder.closed = false;
     }
 
     addViewsFolder(){
@@ -97,14 +99,28 @@ export class MyInterface extends CGFinterface {
         this.themes = this.gui.addFolder('Themes');
 
         this.themes.add(this.scene, 'theme', this.scene.themes).name('Theme').onChange(this.scene.changeTheme.bind(this.scene));
+
+        this.themes.closed = false;
     }
 
     initGameElements(){
         this.gameFolder = this.gui.addFolder('Game');
 
-        /* this.gameFolder.add(this.scene, 'undo').name('Undo');
-        this.gameFolder.add(this.scene, 'reset').name('Reset');
-        this.gameFolder.add(this.scene, 'replay').name('Replay'); */
+        // Keep the folder open
+        this.gameFolder.closed = false;
+
+        this.gameFolder.add(this.scene.gameOrchestrator, 'undo').name('Undo');
+        this.gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
+        this.gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
+        this.gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
+        /* if (this.scene.gameOrchestrator.gameSequence.moves.length == 0)
+            this.gameFolder.add(this.scene.gameOrchestrator, 'initialTurn', this.scene.gameOrchestrator.playersArray).name('First Turn'); */
 
     }
+
+    /* updateInterface(){
+        this.gui.removeFolder(this.gameFolder);
+
+        this.initGameElements();
+    } */
 }
