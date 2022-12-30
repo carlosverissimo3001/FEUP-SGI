@@ -1,14 +1,14 @@
 <sxs>
     <scene root="pool_night" axis_length="17"/>
 
-   <views default="Player 1 View">
+    <views default="Player 1 View">
         <perspective id="Jacuzi" near="0.1" far="500" angle="23">
             <from x="60" y="50" z="60" />
             <to x="20" y="0" z="20" />
         </perspective>
-        <perspective id="Public" near="0.1" far="500" angle="60">
-            <from x="4" y="10" z="46" />
-            <to x="10" y="5" z="46" />
+        <perspective id="Public" near="0.1" far="500" angle="30">
+            <from x="1" y="8" z="46" />
+            <to x="10" y="3" z="46" />
         </perspective>
         <perspective id="Player 1 View" near="0.1" far="500" angle="60">
             <from x="15" y="6" z="53" />
@@ -21,6 +21,10 @@
         <perspective id="Top View" near="0.1" far="500" angle="70">
             <from x="15" y="7" z="46" />
             <to x="15" y="1" z="46.01" />
+        </perspective>
+        <perspective id="Menu" near="0.1" far="500" angle="60">
+            <from x="7" y="-25" z="-12.5" />
+            <to x="0" y="-25" z="-12.5" />
         </perspective>
     </views>
 
@@ -73,6 +77,7 @@
         <texture id="fabric_texture" file="scenes/images/textures/fabric.jpg"/>
         <texture id="jeans_texture" file="scenes/images/textures/jeans.jpg"/>
         <texture id="tv_texture" file="scenes/images/textures/tv.jpg"/>
+        <texture id="torusTexture2" file="scenes/images/textures/torus2.jpg" />
     </textures>
 
     <materials>
@@ -335,6 +340,10 @@
 
         <primitive id="demoSphere">
             <sphere radius="1.0" slices="15" stacks="15" />
+        </primitive>
+
+        <primitive id="float">
+            <torus inner="0.4" outer="1.2" slices="40" loops="40" />
         </primitive>
 
         <primitive id="demoPatch">
@@ -2463,6 +2472,48 @@
             </children>
         </component>
 
+        <component id="float1">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <translate x="14.8" y="52" z="-0.4" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="torusTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="float" />
+            </children>
+        </component>
+
+        <component id="float2">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <translate x="14.8" y="40" z="-0.4" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="torusTexture2" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="float" />
+            </children>
+        </component>
+
+        <component id="floats">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="float1" />
+                <componentref id="float2" />
+            </children>
+        </component>
+
         <component id="pool_night">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -2490,7 +2541,9 @@
                 <componentref id="shower" />
                 <componentref id="walls" />
                 <componentref id="door" />
-                <!-- <componentref id="people" /> -->
+                <componentref id="menu" />
+                <componentref id="people" />
+                <componentref id="floats" />
             </children>
         </component>
     </components>

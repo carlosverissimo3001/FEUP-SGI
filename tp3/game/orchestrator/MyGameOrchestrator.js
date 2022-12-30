@@ -81,6 +81,18 @@ export class MyGameOrchestrator {
     // Manage picking
     this.managePick();
 
+    /* // If current camera is player1camera, do not display the player
+    if (this.scene.cameraID == this.player1Camera) {
+      this.theme.displayPlayer1 = false;
+      this.theme.displayPlayer2 = true;
+    }
+
+    // If current camera is player2camera, do not display the player
+    else if (this.scene.cameraID == this.player2Camera) {
+      this.theme.displayPlayer1 = true;
+      this.theme.displayPlayer2 = false;
+    } */
+
     this.scene.clearPickRegistration();
 
     // Display the scene graph
