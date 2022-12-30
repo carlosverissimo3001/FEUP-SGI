@@ -22,10 +22,6 @@
             <from x="15" y="7" z="46" />
             <to x="15" y="1" z="46.01" />
         </perspective>
-        <perspective id="Menu" near="0.1" far="500" angle="60">
-            <from x="7" y="-25" z="-12.5" />
-            <to x="0" y="-25" z="-12.5" />
-        </perspective>
     </views>
 
     <ambient>
@@ -2476,19 +2472,6 @@
             </children>
         </component>
 
-        <component id="menu">
-            <transformation>
-                <translate x="5" y="5" z="5" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="text_texture"/>
-            <children>
-                <primitiveref id="rectanglePatch" />
-            </children>
-        </component>
-
         <component id="pool_day">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -2516,7 +2499,6 @@
                 <componentref id="shower" />
                 <componentref id="walls" />
                 <componentref id="door" />
-                <componentref id="menu" />
             </children>
         </component>
     </components>

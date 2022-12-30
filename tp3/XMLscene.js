@@ -55,9 +55,10 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Space", "Day", "Night", "Desert", "UnderSea"];
-    this.theme = "Space";
-    this.loadedThemes = 0;
+    this.themes = ["Day", "Night", "Desert", "UnderSea", "Space"];
+    this.theme = "Day";
+    this.loadedThemes = 1;
+    this.graphs = [];
 
     /* ************************************************** */
 
@@ -183,19 +184,30 @@ export class XMLscene extends CGFscene {
 
   changeTheme(newTheme) {
     this.theme = newTheme;
+    this.start();
+    this.gameOrchestrator.init(this.graphs[0]);
   }
 
   start() {
-    this.graphs = [];
-
     /* Create scene graphs
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
-    var space = new MySceneGraph("themes/space.xml", this);
-    var day = new MySceneGraph("themes/pool_day.xml", this);
-    var night = new MySceneGraph("themes/pool_night.xml", this);
-    var desert = new MySceneGraph("themes/desert.xml", this);
-    var under_sea = new MySceneGraph("themes/under_sea.xml", this);
+    if(this.theme == "Day") {
+      this.graphs = [];
+      var day = new MySceneGraph("themes/pool_day.xml", this);
+    } else if (this.theme == "Night"){
+      this.graphs = [];
+      var night = new MySceneGraph("themes/pool_night.xml", this);
+    } else if(this.theme == "Desert") {
+      this.graphs = [];
+      var desert = new MySceneGraph("themes/desert.xml", this);
+    } else if (this.theme == "UnderSea") {
+      this.graphs = [];
+      var under_sea = new MySceneGraph("themes/under_sea.xml", this);
+    } else {
+      this.graphs = [];
+      var space = new MySceneGraph("themes/space.xml", this);
+    }
   }
 
   /**
@@ -273,7 +285,7 @@ export class XMLscene extends CGFscene {
    * Initializes the scene cameras.
    */
   initCameras() {
-    var themeIndex = this.themes.indexOf(this.theme);
+    var themeIndex = 0;
 
     if (this.graphLoaded) {
       if (this.graphs[themeIndex].defaultCameraID != null) {
@@ -304,7 +316,7 @@ export class XMLscene extends CGFscene {
    */
   initLights() {
     var i = 0;
-    var themeIndex = this.themes.indexOf(this.theme);
+    var themeIndex = 0;
     // Lights index.
 
     // Reads the lights from the scene graph.
@@ -376,23 +388,19 @@ export class XMLscene extends CGFscene {
    * As loading is asynchronous, this may be called already after the application has started the run loop
    */
   onGraphLoaded() {
-    if (this.loadedThemes > 0) {
-      let themeIndex = this.themes.indexOf(this.theme);
+    let themeIndex = 0;
 
-      this.axis = new CGFaxis(this, this.graphs[themeIndex].referenceLength);
-      this.gl.clearColor(...this.graphs[themeIndex].background);
-      this.setGlobalAmbientLight(...this.graphs[themeIndex].ambient);
-      this.createXMLCameras();
-      this.initCameras();
-      this.interface.createInterface();
-      this.initLights();
+    this.axis = new CGFaxis(this, this.graphs[themeIndex].referenceLength);
+    this.gl.clearColor(...this.graphs[themeIndex].background);
+    this.setGlobalAmbientLight(...this.graphs[themeIndex].ambient);
+    this.createXMLCameras();
+    this.initCameras();
+    this.interface.createInterface();
+    this.initLights();
 
-      this.gameOrchestrator.init(this.graphs[themeIndex]);
+    this.gameOrchestrator.init(this.graphs[themeIndex]);
 
-      this.sceneInited = true;
-    } else {
-      this.loadedThemes++;
-    }
+    this.sceneInited = true;
   }
 
   /**
@@ -445,7 +453,7 @@ export class XMLscene extends CGFscene {
 
   update(t) {
     let elapsed;
-    var themeIndex = this.themes.indexOf(this.theme);
+    var themeIndex = 0;
 
     if (this.sceneInited) {
       if (this.startTime == null) elapsed = 0;
