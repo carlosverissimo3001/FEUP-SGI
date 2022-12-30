@@ -1,0 +1,613 @@
+<sxs>
+    <scene root="under_sea" axis_length="17"/>
+
+    <views default="Player 1 View">
+        <perspective id="Jacuzi" near="0.1" far="500" angle="23">
+            <from x="60" y="50" z="60" />
+            <to x="20" y="0" z="20" />
+        </perspective>
+        <perspective id="Public" near="0.1" far="500" angle="60">
+            <from x="4" y="10" z="46" />
+            <to x="10" y="5" z="46" />
+        </perspective>
+        <perspective id="Player 1 View" near="0.1" far="500" angle="60">
+            <from x="15" y="6" z="53" />
+            <to x="15" y="2" z="49" />
+        </perspective>
+        <perspective id="Player 2 View" near="0.1" far="500" angle="60">
+            <from x="15" y="6" z="39" />
+            <to x="15" y="2" z="43" />
+        </perspective>
+        <perspective id="Top View" near="0.1" far="500" angle="70">
+            <from x="15" y="7" z="46" />
+            <to x="15" y="1" z="46.01" />
+        </perspective>
+        <perspective id="Ship" near="0.1" far="500" angle="60">
+            <from x="-10" y="10" z="-12.5" />
+            <to x="0" y="10" z="-12.5" />
+        </perspective>
+    </views>
+
+    <ambient>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.53" g="0.81" b="0.92" a="1.0" />
+    </ambient>
+
+    <lights>
+        <omni id="omniLight" enabled="false">
+            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
+        </omni>
+
+        <omni id="boardLight" enabled="true" angle="-45.0" exponent="2">
+            <location x="15" y="5" z="45" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0"/>
+        </omni>
+
+        <omni id="menuLight" enabled="true" angle="-45.0" exponent="2">
+            <location x="7" y="-25" z="-12.5" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation quadratic="1.0" linear="0.0" constant="0.0"/>
+        </omni>
+
+    </lights>
+<textures>
+        <texture id="trunkTexture" file="scenes/images/textures/trunk-image.jpg" />
+        <texture id="demoTexture" file="scenes/images/textures/vidral.jpg" />
+        <texture id="waterTexture2" file="scenes/images/textures/waterTex2.jpg" />
+        <texture id="waterTexture" file="scenes/images/textures/waterTex.jpg" />
+        <texture id="grassTexture" file="scenes/images/textures/grassTex.jpg" />
+        <texture id="torusTexture" file="scenes/images/textures/torus.jpg" />
+        <texture id="ballTexture" file="scenes/images/textures/ballTex.jpg" />
+        <texture id="testTexture" file="scenes/images/textures/texture.jpg" />
+        <texture id="deckTexture" file="scenes/images/textures/deck.jpg" />
+        <texture id="soilTexture" file="scenes/images/textures/soil.png" />
+        <texture id="concreteTexture" file="scenes/images/textures/concrete.jpg" />
+        <texture id="darkConcreteTexture" file="scenes/images/textures/dark_concrete.png" />
+        <texture id="linenTexture" file="scenes/images/textures/linen.jpg" />
+        <texture id="darkWoodTexture" file="scenes/images/textures/dark_wood.png" />
+        <texture id="lightWoodTexture" file="scenes/images/textures/light_wood.png" />
+        <texture id="poolParty" file="scenes/images/textures/images.jpeg" />
+        <texture id="whiteHouse" file="scenes/images/textures/white-house.jpg" />
+        <texture id="door" file="scenes/images/textures/door.jpg" />
+        <texture id="menuDisplay" file="scenes/images/textures/menu_display.png" />
+        <texture id="patch_texture" file="scenes/images/textures/patch_test.png"/>
+        <texture id="barrel_texture" file="scenes/images/textures/barrel.png"/>
+        <texture id="fabric_texture" file="scenes/images/textures/fabric.jpg"/>
+        <texture id="jeans_texture" file="scenes/images/textures/jeans.jpg"/>
+        <texture id="tv_texture" file="scenes/images/textures/tv.jpg"/>
+        <texture id="text_texture" file="scenes/images/textures/oolite-font.trans.png"/>
+        <texture id="sandTexture" file="scenes/images/textures/sand.png"/>
+        <texture id="ferrugem" file="scenes/images/textures/ferrugem.png"/>
+    </textures>
+
+    <materials>
+        <material id="demoMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="summer" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="winter" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.627" g="0.9" b="1.0" a="1.0" />
+            <diffuse r="0.627" g="0.9" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="fall" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.96" g="0.3" b="0.05" a="1.0" />
+            <diffuse r="0.96" g="0.3" b="0.05" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="spring" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.64" g="0.77" b="0.4" a="1.0" />
+            <diffuse r="0.64" g="0.77" b="0.4" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="metal" shininess = ".6">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.19225" g="0.19225" b="0.19225" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.774597" g="0.774597" b="0.774597" a="1.0" />
+        </material>
+
+        <material id="light_cyan" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.88" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="0.88" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="grass" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.54" g="0.68" b="0.33" a="1.0" />
+            <diffuse r="0.54" g="0.68" b="0.33" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="blue" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0" g="0" b="1.0" a="1.0" />
+            <diffuse r="0" g="0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="red" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="0" b="0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="wood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.92" g="0.83" b="0.65" a="1.0" />
+            <diffuse r="0.92" g="0.83" b="0.65" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="black" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="0" g="0" b="0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="white" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="light_gray" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.83" g="0.83" b="0.83" a="1.0" />
+            <diffuse r="0.83" g="0.83" b="0.83" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="water" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.4" b="0.56" a="1.0" />
+            <diffuse r="0.15" g="0.4" b="0.56" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="red_white" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.4" b="0.56" a="1.0" />
+            <diffuse r="0.15" g="0.4" b="0.56" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="board" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.52" g="0.77" b="0.92" a="1.0" />
+            <diffuse r="0.52" g="0.77" b="0.92" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+        <material id="darkWood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.33" g="0.20" b="0.17" a="1.0" />
+            <diffuse r="0.33" g="0.20" b="0.17" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+
+    </materials>
+
+    <transformations>
+        <transformation id="demoTransform">
+            <scale x="1" y="1" z="1" />
+        </transformation>
+
+        <transformation id="deckTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="30" y="35.3" z="1" />
+            <translate x="0.6" y="-1.085" z="0" />
+        </transformation>
+
+        <transformation id="grassTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="37" y="35.3" z="1" />
+            <translate x="0.965" y="-1.085" z="-0.01" />
+        </transformation>
+
+        <transformation id="wallTransform">
+            <rotate axis="y" angle="90" />
+            <scale x="38.3" y="3.0" z="1" />
+            <translate x="-1" y="1.5" z="-3" />
+        </transformation>
+
+        <transformation id="poolTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="40" y="19" z="1" />
+        </transformation>
+
+        <transformation id="jacuziTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="20" y="7" z="1" />
+            <translate x="0.75" y="-2.9" z="0.1" />
+        </transformation>
+
+        <transformation id="torusTransform">
+            <scale x="0.5" y="0.5" z="0.5" />
+            <translate x="28" y="7.0" z="7.7" />
+        </transformation>
+
+        <transformation id="tableLeg1Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />
+            <translate x="10.0" y="-0.8" z="0" />
+        </transformation>
+
+        <transformation id="tableLeg2Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />
+            <translate x="20.0" y="-0.8" z="0" />
+        </transformation>
+
+        <transformation id="tableLeg3Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />
+            <translate x="10.0" y="-10.8" z="0" />
+        </transformation>
+
+        <transformation id="tableLeg4Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.3" y="0.3" z="0.5" />
+            <translate x="20.0" y="-10.8" z="0" />
+        </transformation>
+
+        <transformation id="tableTopTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="4.0" y="2.0" z="6.0" />
+            <translate x="1.1" y="-0.8" z="0.25" />
+        </transformation>
+
+        <transformation id="chairLeg1Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />
+            <translate x="25.0" y="-70" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairLeg2Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />
+            <translate x="30.0" y="-70" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairLeg3Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />
+            <translate x="25.0" y="-75" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairLeg4Transform">
+            <rotate axis="x" angle="-90" />
+            <scale x="0.2" y="0.2" z="0.4" />
+            <translate x="30.0" y="-75" z="-0.1" />
+        </transformation>
+
+        <transformation id="chairTopTransform">
+            <rotate axis="y" angle="180" />
+            <scale x="2.0" y="1.0" z="2.0" />
+            <translate x="-2.7" y="2.0" z="-7.7" />
+        </transformation>
+
+        <transformation id="chairBaseTransform">
+            <rotate axis="x" angle="-90" />
+            <scale x="2.0" y="1.0" z="3.0" />
+            <translate x="2.7" y="-14.4" z="0.40" />
+        </transformation>
+
+    </transformations>
+
+    <primitives>
+        <primitive id="demoRectangle">
+            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+        </primitive>
+
+        <primitive id="cubeface">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="demoTriangle">
+            <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0" y3="1" z3="0"/>
+        </primitive>
+
+        <primitive id="demoCylinder">
+            <cylinder base="1.0" top="1.0" height="3.0" slices="30" stacks="30" />
+        </primitive>
+
+        <primitive id="demoTorus">
+            <torus inner="0.6" outer="1.4" slices="40" loops="40" />
+        </primitive>
+
+        <primitive id="demoSphere">
+            <sphere radius="1.0" slices="15" stacks="15" />
+        </primitive>
+
+        <primitive id="demoPatch">
+            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <!-- U = 0 // V = 0..3 -->
+                <controlpoint x="-1.5" y="-1.5" z="0.0" />
+                <controlpoint x="-2.0" y="-2.0" z="2.0" />
+                <controlpoint x="-2.0" y="2.0" z="2.0" />
+                <controlpoint x="-1.5" y="1.5" z="0.0" />
+
+                <!-- U = 1 // V = 0..3 -->
+                <controlpoint x="0" y="0" z="3.0" />
+                <controlpoint x="0" y="-2.0" z="3.0" />
+                <controlpoint x="0" y="2.0" z="3.0" />
+                <controlpoint x="0" y="0" z="3.0" />
+
+                <!-- U = 2 // V = 0..3 -->
+                <controlpoint x="1.5" y="-1.5" z="0.0" />
+                <controlpoint x="2.0" y="-2.0" z="2.0" />
+                <controlpoint x="2.0" y="2.0" z="2.0" />
+                <controlpoint x="1.5" y="1.5" z="0.0" />
+            </patch>
+        </primitive>
+
+        <primitive id="rectanglePatch">
+            <patch degree_u="1" parts_u="100" degree_v="1" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <!-- U = 0 // V = 0..1 -->
+                <controlpoint x="1.0" y="-1.5" z="3.0" />
+                <controlpoint x="-1.0" y="-1.5" z="3.0" />
+
+                <!-- U = 1 // V = 0..1 -->
+                <controlpoint x="1.0" y="1.5" z="3.0" />
+                <controlpoint x="-1.0" y="1.5" z="3.0" />
+
+            </patch>
+        </primitive>
+
+        <primitive id="tentPatch">
+            <patch degree_u="1" parts_u="100" degree_v="2" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <!-- U = 0 // V = 0..2 -->
+                <controlpoint x="1.0" y="1.5" z="3.0" />
+                <controlpoint x="2.0" y="1.5" z="-3.0" />
+                <controlpoint x="3.0" y="1.5" z="3.0" />
+
+                <!-- U = 1 // V = 0..2 -->
+                <controlpoint x="1.0" y="-1.5" z="3.0" />
+                <controlpoint x="2.0" y="-1.5" z="-3.0" />
+                <controlpoint x="3.0" y="-1.5" z="3.0" />
+
+            </patch>
+        </primitive>
+
+        <primitive id="pillow">
+            <patch degree_u="2" parts_u="100" degree_v="4" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <!-- U = 0 // V = 0..2 -->
+                <controlpoint x="1.0" y="2.0" z="0.0"/>
+                <controlpoint x="2.0" y="2.0" z="0.0"/>
+                <controlpoint x="3.0" y="2.0" z="0.0"/>
+                <controlpoint x="4.0" y="2.0" z="0.0"/>
+                <controlpoint x="5.0" y="2.0" z="0.0"/>
+
+                <!-- U = 0 // V = 0..2 -->
+                <controlpoint x="1.0" y="0.0" z="0.0"/>
+                <controlpoint x="2.0" y="0.0" z="0.0"/>
+                <controlpoint x="3.0" y="0.0" z="4.5"/>
+                <controlpoint x="4.0" y="0.0" z="0.0"/>
+                <controlpoint x="5.0" y="0.0" z="0.0"/>
+
+                <!-- U = 1 // V = 0..2 -->
+                <controlpoint x="1.0" y="-2.0" z="0.0"/>
+                <controlpoint x="2.0" y="-2.0" z="0.0"/>
+                <controlpoint x="3.0" y="-2.0" z="0.0"/>
+                <controlpoint x="4.0" y="-2.0" z="0.0"/>
+                <controlpoint x="5.0" y="-2.0" z="0.0"/>
+
+            </patch>
+
+        </primitive>
+
+        <primitive id="1/4barrel">
+            <patch degree_u="3" parts_u="100" degree_v="3" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <!-- U = 0 // V = 0..2 -->
+                <controlpoint x="2.0" y="0.0" z="0.0" w="1.0"/>
+                <controlpoint x="2.4" y="0.0" z="2.0" w="1.0"/>
+                <controlpoint x="2.4" y="0.0" z="4.0" w="1.0"/>
+                <controlpoint x="2.0" y="0.0" z="1.0" w="1.0"/>
+
+                <!-- U = 1 // V = 0..2 -->
+                <controlpoint x="2.0" y="2,666666667" z="0.0" w="1.0"/>
+                <controlpoint x="2.4" y="3.2" z="2.0" w="1.0"/>
+                <controlpoint x="2.4" y="3.2" z="4.0" w="1.0"/>
+                <controlpoint x="2.0" y="2,666666667" z="1.0" w="1.0"/>
+
+                <!-- U = 1 // V = 0..2 -->
+                <controlpoint x="-2.0" y="2,666666667" z="0.0" w="1.0"/>
+                <controlpoint x="-2.4" y="3.2" z="2.0" w="1.0"/>
+                <controlpoint x="-2.4" y="3.2" z="4.0" w="1.0"/>
+                <controlpoint x="-2.0" y="2,666666667" z="1.0" w="1.0"/>
+
+                <!-- U = 0 // V = 0..2 -->
+                <controlpoint x="-2.0" y="0.0" z="0.0" w="1.0"/>
+                <controlpoint x="-2.4" y="0.0" z="2.0" w="1.0"/>
+                <controlpoint x="-2.4" y="0.0" z="4.0" w="1.0"/>
+                <controlpoint x="-2.0" y="0.0" z="1.0" w="1.0"/>
+
+            </patch>
+
+        </primitive>
+
+        <primitive id="circlePatch">
+            <patch degree_u="3" parts_u="100" degree_v="3" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <controlpoint x="-1" y="0.0" z="0.0"/>
+			    <controlpoint x="-1" y="0.0" z="-1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="-1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="0.0" />
+
+				<controlpoint x="-1" y="0.0" z="0.0" />
+				<controlpoint x="-1" y="0.0" z="-0.6666666666666667" />
+				<controlpoint x="1" y="0.0" z="-0.6666666666666667" />
+				<controlpoint x="1" y="0.0" z="0.0" />
+
+				<controlpoint x="-1" y="0.0" z="-0.0" />
+				<controlpoint x="-1" y="0.0" z="0.6666666666666663" />
+				<controlpoint x="1" y="0.0" z="0.6666666666666663" />
+				<controlpoint x="1" y="0.0" z="-0.0" />
+
+				<controlpoint x="-1" y="0.0" z="-0.0" />
+				<controlpoint x="-1" y="0.0" z="1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="0.0" />
+
+            </patch>
+        </primitive>
+
+        <primitive id="barrelTop">
+            <patch degree_u="3" parts_u="100" degree_v="3" parts_v="20" >
+                <!-- Seguem-se (degree_u + 1) * (degree_v + 1) controlpoints -->
+
+                <controlpoint x="-1" y="0.0" z="0.0"/>
+				<controlpoint x="-1" y="0.0" z="-1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="-1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="0.0" />
+
+				<controlpoint x="-1" y="0.0" z="0.0" />
+				<controlpoint x="-1" y="1.1547005383792515" z="-0.6666666666666667" />
+				<controlpoint x="1" y="1.1547005383792515" z="-0.6666666666666667" />
+				<controlpoint x="1" y="0.0" z="0.0" />
+
+				<controlpoint x="-1" y="0.0" z="-0.0" />
+				<controlpoint x="-1" y="1.1547005383792515" z="0.6666666666666663" />
+				<controlpoint x="1" y="1.1547005383792515" z="0.6666666666666663" />
+				<controlpoint x="1" y="0.0" z="-0.0" />
+
+				<controlpoint x="-1" y="0.0" z="-0.0" />
+				<controlpoint x="-1" y="1.6328623988631375e-16" z="1.3333333333333333" />
+				<controlpoint x="1" y="1.6328623988631375e-16" z="1.3333333333333333" />
+				<controlpoint x="1" y="0.0" z="0.0" />
+
+            </patch>
+        </primitive>
+
+        <primitive id="seaFloor">
+            <seaFloor />
+        </primitive>
+
+        <primitive id="surface">
+            <surface />
+        </primitive>
+
+        <primitive id="deepOceanMap">
+            <oceanMap />
+        </primitive>
+
+        <primitive id="obj">
+            <obj form="pirateShip"/>
+        </primitive>
+
+    </primitives>
+
+    <animations>
+
+    </animations>
+
+    <components>
+
+        <component id="seaFloor">
+            <transformation>
+            </transformation>
+            <texture id="none" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="seaFloor"/>
+            </children>
+        </component>
+
+        <component id="oceanMap">
+            <transformation>
+            </transformation>
+            <texture id="none" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="deepOceanMap"/>
+            </children>
+        </component>
+
+        <component id="surface">
+            <transformation>
+            </transformation>
+            <texture id="none" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="surface"/>
+            </children>
+        </component>
+
+        <component id="pirateShip">
+            <transformation>
+            </transformation>
+            <texture id="ferrugem" length_s="1" length_t="1"/>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <children>
+                <primitiveref id="obj"/>
+            </children>
+        </component>
+
+        <component id="under_sea">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="seaFloor" />
+                <componentref id="surface" />
+                <componentref id="oceanMap" />
+                <componentref id="pirateShip" />
+            </children>
+        </component>
+    </components>
+</sxs>

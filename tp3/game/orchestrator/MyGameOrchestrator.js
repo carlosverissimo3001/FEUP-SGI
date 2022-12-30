@@ -6,7 +6,6 @@ import { MyGameState } from "./game-state/MyGameState.js";
 import { MyChecker } from "../board-elements/MyChecker.js";
 import { MyTile } from "../board-elements/MyTile.js";
 import { MyGameStateTurn } from "./game-state/MyGameStateTurn.js";
-/* import { MyMenu } from "./MyMenu.js"; */
 
 export class MyGameOrchestrator {
   constructor(scene) {
@@ -15,7 +14,6 @@ export class MyGameOrchestrator {
     this.gameSequence = new MyGameSequence(this.scene);
     this.animator = new MyAnimator(scene, this, this.gameSequence);
     this.board = new MyBoard(scene, 8);
-    /* this.menu = new MyMenu(scene); */
 
     // Scene graph
     this.theme = null;
@@ -87,9 +85,6 @@ export class MyGameOrchestrator {
 
     // Display the scene graph
     this.theme.displayScene();
-
-    // Display the menu
-    // this.menu.display();
 
     // Display the board
     this.board.display();
@@ -191,7 +186,6 @@ export class MyGameOrchestrator {
   }
 
   chooseScene() {
-    this.menu.checkScene();
   }
 
   eatCheckers() {
