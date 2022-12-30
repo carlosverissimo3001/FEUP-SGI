@@ -55,8 +55,8 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Day", "Night", "Desert", "UnderSea"];
-    this.theme = "Day";
+    this.themes = ["Space", "Day", "Night", "Desert", "UnderSea"];
+    this.theme = "Space";
     this.loadedThemes = 0;
 
     /* ************************************************** */
@@ -171,6 +171,14 @@ export class XMLscene extends CGFscene {
 
 		this.heatdistortionmap = new CGFtexture(this, "scenes/images/textures/heatDistortion.png");
 
+    this.spaceShader = new CGFshader(this.gl, "shaders/space.vert", "shaders/space.frag");
+
+    this.gray = new CGFappearance(this);
+    this.gray.setAmbient(62/255,58/255,68/255,1.00);
+    this.gray.setDiffuse(62/255,58/255,68/255,1);
+    this.gray.setShininess(100);
+
+
   }
 
   changeTheme(newTheme) {
@@ -183,6 +191,7 @@ export class XMLscene extends CGFscene {
     /* Create scene graphs
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
+    var space = new MySceneGraph("themes/space.xml", this);
     var day = new MySceneGraph("themes/pool_day.xml", this);
     var night = new MySceneGraph("themes/pool_night.xml", this);
     var desert = new MySceneGraph("themes/desert.xml", this);
@@ -463,6 +472,8 @@ export class XMLscene extends CGFscene {
       this.surfaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       this.heatShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      this.spaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       /* Update game orchestrator */
       this.gameOrchestrator.update(elapsed / 1000);

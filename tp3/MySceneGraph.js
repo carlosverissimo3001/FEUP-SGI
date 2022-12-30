@@ -19,6 +19,8 @@ import { CGFOBJModel } from './extra/CGFOBJModel.js';
 import { MyPirateShip } from './extra/MyPirateShip.js';
 import { MyPyramid } from './extra/MyPyramid.js';
 import { MyDesertCubeMap } from './extra/MyDesertCubeMap.js';
+import { MySpaceCubeMap } from './extra/MySpaceCubeMap.js';
+import { MySpaceShip } from './extra/MySpaceShip.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -813,7 +815,7 @@ export class MySceneGraph {
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
                     grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'seaFloor' &&
                     grandChildren[0].nodeName != 'surface' && grandChildren[0].nodeName != 'oceanMap' && grandChildren[0].nodeName != 'obj' &&
-                    grandChildren[0].nodeName != 'desertMap')) {
+                    grandChildren[0].nodeName != 'desertMap' && grandChildren[0].nodeName != 'spaceMap')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)"
             }
 
@@ -1052,6 +1054,13 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = oceanMap;
             }
 
+            else if (primitiveType == 'spaceMap'){
+
+                var spaceMap = new MySpaceCubeMap(this.scene);
+
+                this.primitives[primitiveId] = spaceMap;
+            }
+
             else if (primitiveType == 'obj'){
 
                 var form = this.reader.getString(grandChildren[0], 'form');
@@ -1064,6 +1073,10 @@ export class MySceneGraph {
                     this.primitives[primitiveId] = obj;
                 } else if(form == "pyramid"){
                     var obj = new MyPyramid(this.scene);
+
+                    this.primitives[primitiveId] = obj;
+                } else if(form == "spaceShip"){
+                    var obj = new MySpaceShip(this.scene);
 
                     this.primitives[primitiveId] = obj;
                 }
