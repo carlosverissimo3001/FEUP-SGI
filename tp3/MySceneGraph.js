@@ -17,6 +17,8 @@ import { MySurface } from './extra/MySurface.js';
 import { MyCubeMap } from './extra/MyCubeMap.js';
 import { CGFOBJModel } from './extra/CGFOBJModel.js';
 import { MyPirateShip } from './extra/MyPirateShip.js';
+import { MyPyramid } from './extra/MyPyramid.js';
+import { MyDesertCubeMap } from './extra/MyDesertCubeMap.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -809,7 +811,9 @@ export class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'seaFloor' && grandChildren[0].nodeName != 'surface' && grandChildren[0].nodeName != 'oceanMap' && grandChildren[0].nodeName != 'obj')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'seaFloor' &&
+                    grandChildren[0].nodeName != 'surface' && grandChildren[0].nodeName != 'oceanMap' && grandChildren[0].nodeName != 'obj' &&
+                    grandChildren[0].nodeName != 'desertMap')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)"
             }
 
@@ -1041,6 +1045,13 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = oceanMap;
             }
 
+            else if (primitiveType == 'desertMap'){
+
+                var oceanMap = new MyDesertCubeMap(this.scene);
+
+                this.primitives[primitiveId] = oceanMap;
+            }
+
             else if (primitiveType == 'obj'){
 
                 var form = this.reader.getString(grandChildren[0], 'form');
@@ -1049,6 +1060,10 @@ export class MySceneGraph {
 
                 if(form == "pirateShip"){
                     var obj = new MyPirateShip(this.scene);
+
+                    this.primitives[primitiveId] = obj;
+                } else if(form == "pyramid"){
+                    var obj = new MyPyramid(this.scene);
 
                     this.primitives[primitiveId] = obj;
                 }

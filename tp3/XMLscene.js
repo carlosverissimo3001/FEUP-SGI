@@ -55,8 +55,8 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["UnderSea", "Day", "Night"];
-    this.theme = "UnderSea";
+    this.themes = ["Day", "Night", "Desert", "UnderSea"];
+    this.theme = "Day";
     this.loadedThemes = 0;
 
     /* ************************************************** */
@@ -157,6 +157,20 @@ export class XMLscene extends CGFscene {
     this.ferrugem.setTexture(this.ferr);
     this.ferrugem.setTextureWrap('REPEAT', 'REPEAT');
 
+    this.heatShader = new CGFshader(this.gl, "shaders/heat.vert", "shaders/heat.frag");
+
+    this.heatShader.setUniformsValues({ uSampler2: 1 });
+		this.heatShader.setUniformsValues({ uSampler: 0 });
+
+    this.heattexture = new CGFappearance(this);
+    this.heattexture.setAmbient(248/255,229/255,175/255,1.00);
+    this.heattexture.setDiffuse(248/255,229/255,175/255,1);
+    this.heattexture.setShininess(100);
+
+    this.desert = new CGFtexture(this, "scenes/images/textures/desert.png");
+
+		this.heatdistortionmap = new CGFtexture(this, "scenes/images/textures/heatDistortion.png");
+
   }
 
   changeTheme(newTheme) {
@@ -169,9 +183,10 @@ export class XMLscene extends CGFscene {
     /* Create scene graphs
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
-    var under_sea = new MySceneGraph("themes/under_sea.xml", this);
     var day = new MySceneGraph("themes/pool_day.xml", this);
     var night = new MySceneGraph("themes/pool_night.xml", this);
+    var desert = new MySceneGraph("themes/desert.xml", this);
+    var under_sea = new MySceneGraph("themes/under_sea.xml", this);
   }
 
   /**
@@ -446,6 +461,8 @@ export class XMLscene extends CGFscene {
       this.pulseShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       this.surfaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      this.heatShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       /* Update game orchestrator */
       this.gameOrchestrator.update(elapsed / 1000);
