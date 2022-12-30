@@ -37,7 +37,7 @@ export class MyGameOrchestrator {
     };
 
     // Player that starts the game
-    this.turn = "Player 1"
+    this.turn = "Player 1";
 
     // Checkers eaten by each player
     this.player1Eat = [];
@@ -45,6 +45,8 @@ export class MyGameOrchestrator {
 
     // Copy of set of tiles that are avaliable to move to
     this.lastAvailableTiles = [];
+
+    this.availableTiles = [];
 
     this.eatenChecker = null;
 
@@ -118,22 +120,32 @@ export class MyGameOrchestrator {
       this.scene.interface.updateInterface();
     } */
 
-    (this.turn == "Player 1")
-      ? this.turn = "Player 2"
-      : this.turn = "Player 1";
+    this.turn == "Player 1"
+      ? (this.turn = "Player 2")
+      : (this.turn = "Player 1");
 
     // Change the camera
     if (this.autoRotate) {
       if (this.scene.cameraID == this.player1Camera)
         this.scene.updateCamera(this.player2Camera);
-
       else if (this.scene.cameraID == this.player2Camera)
         this.scene.updateCamera(this.player1Camera);
     }
   }
 
+  clearPicked() {
+    // If a checker had been picked, unset it
+    if (this.gameState.checker != null) this.gameState.checker.unsetSelected();
+
+    this.gameState.checker = null;
+    this.gameState.destinationTile = null;
+
+    // Unsets the available tiles
+    this.unsetAvailable(this.lastAvailableTiles);
+  }
+
   orchestrate() {
-    var availableTiles = [];
+    this.availableTiles = [];
 
     // Get the available checkers
     var availableCheckers = this.board.getCheckers(
@@ -145,13 +157,13 @@ export class MyGameOrchestrator {
 
     if (this.gameState.checker != null) {
       // If a checker is selected, get the available tiles for it
-      availableTiles = this.board.validCheckerPosition(
+      this.availableTiles = this.board.validCheckerPosition(
         this.gameState.checker,
         this.players[this.turn].color
       );
 
       // If no tiles are available, the checker cannot move
-      if (availableTiles.length == 0) {
+      if (this.availableTiles.length == 0) {
         alert("This checker cannot move");
         this.gameState.checker = null;
         return;
@@ -162,11 +174,11 @@ export class MyGameOrchestrator {
         this.unsetAvailable(this.lastAvailableTiles);
 
         // Sets the new avaliable tiles, with a light color
-        this.setAvailable(availableTiles);
+        this.setAvailable(this.availableTiles);
       }
 
       // Creates a copy of the available tiles
-      this.lastAvailableTiles = availableTiles;
+      this.lastAvailableTiles = this.availableTiles;
 
       // Sets the selected checker, with a green hue
       this.gameState.checker.setSelected();
@@ -174,7 +186,7 @@ export class MyGameOrchestrator {
 
     if (this.gameState.destinationTile != null) {
       // If a tile has been picked, check if it is valid
-      if (availableTiles.includes(this.gameState.destinationTile)) {
+      if (this.availableTiles.includes(this.gameState.destinationTile)) {
         // Check if this move involves eating a checker
         this.eatCheckers();
 
@@ -183,7 +195,7 @@ export class MyGameOrchestrator {
 
         // Unset the avaliable tiles and checkers
         this.unsetAvailable(availableCheckers);
-        this.unsetAvailable(availableTiles);
+        this.unsetAvailable(this.availableTiles);
 
         // Change the player turn
         this.changePlayerTurn();
@@ -195,9 +207,6 @@ export class MyGameOrchestrator {
         return;
       }
     }
-  }
-
-  chooseScene() {
   }
 
   eatCheckers() {
@@ -243,10 +252,12 @@ export class MyGameOrchestrator {
           for (var i = 0; i < this.scene.pickResults.length; i++) {
             // for each pick result
             var obj = this.scene.pickResults[i][0]; // get the nth pick result
+            var objid = this.scene.pickResults[i][1]; // get the id of the nth pick result
 
             if (obj) {
+              console.log(objid);
               // is this a valid pick?
-              if (obj instanceof MyTile && obj.row != 0 && obj.col != 0) {
+              if (obj instanceof MyTile) {
                 if (this.gameState.checker != null) {
                   this.gameState.checkPick(obj, this.turn);
                 } else {
@@ -255,6 +266,9 @@ export class MyGameOrchestrator {
               } else if (obj instanceof MyChecker) {
                 this.gameState.checkPick(obj, this.turn);
               }
+            } else {
+              console.log("Clicked on nothing");
+              this.clearPicked();
             }
           }
           this.scene.pickResults.splice(0, this.scene.pickResults.length); // clear the pick results
@@ -364,7 +378,9 @@ export class MyGameOrchestrator {
   }
 
   movie() {
-    var confirmation = confirm ("Are you sure you want to watch the movie of the game? The state of the game will be preserved");
+    var confirmation = confirm(
+      "Are you sure you want to watch the movie of the game? The state of the game will be preserved"
+    );
     if (!confirmation) return;
   }
 }

@@ -111,7 +111,9 @@ export class MyTile {
         this.tile.display();
         /* this.displayBorder(); */
         if (this.hasChecker) {
-            var checkerId = this.row * this.board.size + this.col;
+            // ! Pick ID start with 1, ex: tile at 0,0 has pick ID 1
+            // ! So the pick ID is the row * board size + col + 1
+            var checkerId = this.row * this.board.size + this.col + 1;
             this.scene.registerForPick(checkerId, this.checker);
             this.checker.display();
         }

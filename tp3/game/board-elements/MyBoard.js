@@ -365,7 +365,7 @@ export class MyBoard {
   display() {
     this.displayBorder();
 
-    var id = 0;
+    var id = 1;
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
         this.scene.registerForPick(id, this.board[i][j]);
