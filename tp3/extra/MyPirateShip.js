@@ -1,9 +1,8 @@
 import {CGFobject} from '../../lib/CGF.js';
-import { MyRectangle } from '../primitives/MyRectangle.js';
+import { CGFOBJModel } from './CGFOBJModel.js';
 
 
-
-export class MySeaFloor extends CGFobject {
+export class MyPirateShip extends CGFobject {
   /**
    * @method constructor
    * @param  {CGFscene} scene - MyScene object
@@ -23,7 +22,7 @@ export class MySeaFloor extends CGFobject {
    */
   initBuffers() {
 
-    this.plane = new MyRectangle(this.scene, 20, 0, 1, 0 ,1);
+    this.ship = new CGFOBJModel(this.scene, "scenes/obj/Project Name.obj");
 
   }
 
@@ -31,14 +30,9 @@ export class MySeaFloor extends CGFobject {
   display(){
     
     this.scene.pushMatrix();
-    this.scene.translate(0,2.9,60);
-    this.scene.rotate(-Math.PI/2,1,0,0);
-    this.scene.scale(50,50,1);
-    this.scene.setActiveShader(this.scene.sandShader);
-    this.scene.texture2.bind(1);
-    this.scene.texture.bind(0);
-    this.plane.display();
-    this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.ferrugem.apply();
+    this.scene.translate(40, 0.5, 40);
+    this.ship.display();
     this.scene.popMatrix();
 
   }

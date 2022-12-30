@@ -129,6 +129,34 @@ export class XMLscene extends CGFscene {
     this.sandtexture.setTextureWrap('REPEAT', 'REPEAT');
 
     this.texture2 = new CGFtexture(this, "scenes/images/textures/sandMap.png");
+
+    this.surfaceShader = new CGFshader(this.gl, "shaders/surface.vert", "shaders/surface.frag");
+
+    this.surfaceShader.setUniformsValues({ uSampler2: 1 });
+		this.surfaceShader.setUniformsValues({ uSampler: 0 });
+
+    this.surfacetexture = new CGFappearance(this);
+    this.surfacetexture.setAmbient(0.7,0.7,0.7,1);
+    this.surfacetexture.setDiffuse(0.9,0.9,0.9,1);
+    this.surfacetexture.setDiffuse(0.2,0.2,0.2,1);
+    this.surfacetexture.setShininess(10);
+
+    this.waterpier = new CGFtexture(this, "scenes/images/textures/pier.png");
+		this.surfacetexture.setTexture(this.texture);
+		this.surfacetexture.setTextureWrap('REPEAT', 'REPEAT');
+
+		this.distortionmap = new CGFtexture(this, "scenes/images/textures/distortionmap.png");
+
+    this.ferrugem = new CGFappearance(this);
+    this.ferrugem.setAmbient(0/255,139/255,139/255,1);
+    this.ferrugem.setDiffuse(0/255,139/255,139/255,1);
+    this.ferrugem.setDiffuse(0/255,139/255,139/255,1);
+    this.ferrugem.setShininess(10);
+
+    this.ferr = new CGFtexture(this, "scenes/images/textures/ferrugem.png");
+    this.ferrugem.setTexture(this.ferr);
+    this.ferrugem.setTextureWrap('REPEAT', 'REPEAT');
+
   }
 
   changeTheme(newTheme) {
@@ -416,6 +444,8 @@ export class XMLscene extends CGFscene {
 
       /* Update pulse shader */
       this.pulseShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      this.surfaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       /* Update game orchestrator */
       this.gameOrchestrator.update(elapsed / 1000);

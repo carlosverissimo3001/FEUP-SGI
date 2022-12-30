@@ -13,6 +13,10 @@ import { MyBoard } from './game/board-elements/MyBoard.js'
 import { MyTile } from './game/board-elements/MyTile.js';
 import { MyChecker } from './game/board-elements/MyChecker.js';
 import { MySeaFloor } from './extra/MySeaFloor.js';
+import { MySurface } from './extra/MySurface.js';
+import { MyCubeMap } from './extra/MyCubeMap.js';
+import { CGFOBJModel } from './extra/CGFOBJModel.js';
+import { MyPirateShip } from './extra/MyPirateShip.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -243,6 +247,7 @@ export class MySceneGraph {
 
         // Get root of the scene.
         var root = this.reader.getString(sceneNode, 'root')
+        console.log(root);
         if (root == null)
             return "no root defined for scene";
 
@@ -804,7 +809,7 @@ export class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'seaFloor')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'seaFloor' && grandChildren[0].nodeName != 'surface' && grandChildren[0].nodeName != 'oceanMap' && grandChildren[0].nodeName != 'obj')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus or patch)"
             }
 
@@ -1020,6 +1025,34 @@ export class MySceneGraph {
                 var seaFloor = new MySeaFloor(this.scene);
 
                 this.primitives[primitiveId] = seaFloor;
+            }
+
+            else if (primitiveType == 'surface'){
+
+                var surface = new MySurface(this.scene);
+
+                this.primitives[primitiveId] = surface;
+            }
+
+            else if (primitiveType == 'oceanMap'){
+
+                var oceanMap = new MyCubeMap(this.scene);
+
+                this.primitives[primitiveId] = oceanMap;
+            }
+
+            else if (primitiveType == 'obj'){
+
+                var form = this.reader.getString(grandChildren[0], 'form');
+                if (form == null)
+                    return "no form defined for obj";
+
+                if(form == "pirateShip"){
+                    var obj = new MyPirateShip(this.scene);
+
+                    this.primitives[primitiveId] = obj;
+                }
+
             }
 
             else {
