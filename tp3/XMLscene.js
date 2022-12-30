@@ -55,9 +55,10 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Day", "Night", "Menu"];
+    this.themes = ["Day", "Night", "Desert", "UnderSea", "Space"];
     this.theme = "Day";
-    this.loadedThemes = 0;
+    this.loadedThemes = 1;
+    this.graphs = [];
 
     /* ************************************************** */
 
@@ -114,22 +115,99 @@ export class XMLscene extends CGFscene {
     // set number of rows and columns in font texture
     this.textShader.setUniformsValues({'dims': [16, 16]});
 
-    
+    this.sandShader = new CGFshader(this.gl, "shaders/sand.vert", "shaders/sand.frag");
+    this.sandShader.setUniformsValues({ uSampler2: 1 });
+		this.sandShader.setUniformsValues({ USampler: 0 });
+
+    this.sandtexture = new CGFappearance(this);
+    this.sandtexture.setAmbient(1.0,1.0,1.0,1);
+    this.sandtexture.setDiffuse(1.0,1.0,1.0,1);
+    this.sandtexture.setDiffuse(1.0,1.0,1.0,1);
+    this.sandtexture.setShininess(10);
+
+    this.texture = new CGFtexture(this, "scenes/images/textures/sand.png");
+    this.sandtexture.setTexture(this.texture);
+    this.sandtexture.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.texture2 = new CGFtexture(this, "scenes/images/textures/sandMap.png");
+
+    this.surfaceShader = new CGFshader(this.gl, "shaders/surface.vert", "shaders/surface.frag");
+
+    this.surfaceShader.setUniformsValues({ uSampler2: 1 });
+		this.surfaceShader.setUniformsValues({ uSampler: 0 });
+
+    this.surfacetexture = new CGFappearance(this);
+    this.surfacetexture.setAmbient(0.7,0.7,0.7,1);
+    this.surfacetexture.setDiffuse(0.9,0.9,0.9,1);
+    this.surfacetexture.setDiffuse(0.2,0.2,0.2,1);
+    this.surfacetexture.setShininess(10);
+
+    this.waterpier = new CGFtexture(this, "scenes/images/textures/pier.png");
+		this.surfacetexture.setTexture(this.texture);
+		this.surfacetexture.setTextureWrap('REPEAT', 'REPEAT');
+
+		this.distortionmap = new CGFtexture(this, "scenes/images/textures/distortionmap.png");
+
+    this.ferrugem = new CGFappearance(this);
+    this.ferrugem.setAmbient(0/255,139/255,139/255,1);
+    this.ferrugem.setDiffuse(0/255,139/255,139/255,1);
+    this.ferrugem.setDiffuse(0/255,139/255,139/255,1);
+    this.ferrugem.setShininess(10);
+
+    this.ferr = new CGFtexture(this, "scenes/images/textures/ferrugem.png");
+    this.ferrugem.setTexture(this.ferr);
+    this.ferrugem.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.heatShader = new CGFshader(this.gl, "shaders/heat.vert", "shaders/heat.frag");
+
+    this.heatShader.setUniformsValues({ uSampler2: 1 });
+		this.heatShader.setUniformsValues({ uSampler: 0 });
+
+    this.heattexture = new CGFappearance(this);
+    this.heattexture.setAmbient(248/255,229/255,175/255,1.00);
+    this.heattexture.setDiffuse(248/255,229/255,175/255,1);
+    this.heattexture.setShininess(100);
+
+    this.desert = new CGFtexture(this, "scenes/images/textures/desert.png");
+
+		this.heatdistortionmap = new CGFtexture(this, "scenes/images/textures/heatDistortion.png");
+
+    this.spaceShader = new CGFshader(this.gl, "shaders/space.vert", "shaders/space.frag");
+
+    this.gray = new CGFappearance(this);
+    this.gray.setAmbient(62/255,58/255,68/255,1.00);
+    this.gray.setDiffuse(62/255,58/255,68/255,1);
+    this.gray.setShininess(100);
+
+
   }
 
-  changeTheme() {
-    //
+  changeTheme(newTheme) {
+    this.theme = newTheme;
+    this.start();
+    this.gameOrchestrator.init(this.graphs[0]);
   }
 
   start() {
-    this.graphs = [];
-
     /* Create scene graphs
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
-    var day = new MySceneGraph("themes/pool_day.xml", this);
-    var night = new MySceneGraph("themes/pool_night.xml", this);
-    var menu = new MySceneGraph("themes/menu.xml", this);
+    if(this.theme == "Day") {
+      this.graphs = [];
+      var day = new MySceneGraph("themes/pool_day.xml", this);
+    } else if (this.theme == "Night"){
+      this.graphs = [];
+      var night = new MySceneGraph("themes/pool_night.xml", this);
+    } else if(this.theme == "Desert") {
+      this.graphs = [];
+      var desert = new MySceneGraph("themes/desert.xml", this);
+    } else if (this.theme == "UnderSea") {
+      this.graphs = [];
+      var under_sea = new MySceneGraph("themes/under_sea.xml", this);
+    } else {
+      this.graphs = [];
+      var space = new MySceneGraph("themes/space.xml", this);
+    }
   }
 
   /**
@@ -207,7 +285,7 @@ export class XMLscene extends CGFscene {
    * Initializes the scene cameras.
    */
   initCameras() {
-    var themeIndex = this.themes.indexOf(this.theme);
+    var themeIndex = 0;
 
     if (this.graphLoaded) {
       if (this.graphs[themeIndex].defaultCameraID != null) {
@@ -238,7 +316,7 @@ export class XMLscene extends CGFscene {
    */
   initLights() {
     var i = 0;
-    var themeIndex = this.themes.indexOf(this.theme);
+    var themeIndex = 0;
     // Lights index.
 
     // Reads the lights from the scene graph.
@@ -310,23 +388,19 @@ export class XMLscene extends CGFscene {
    * As loading is asynchronous, this may be called already after the application has started the run loop
    */
   onGraphLoaded() {
-    if (this.loadedThemes > 0) {
-      let themeIndex = this.themes.indexOf(this.theme);
+    let themeIndex = 0;
 
-      this.axis = new CGFaxis(this, this.graphs[themeIndex].referenceLength);
-      this.gl.clearColor(...this.graphs[themeIndex].background);
-      this.setGlobalAmbientLight(...this.graphs[themeIndex].ambient);
-      this.createXMLCameras();
-      this.initCameras();
-      this.interface.createInterface();
-      this.initLights();
+    this.axis = new CGFaxis(this, this.graphs[themeIndex].referenceLength);
+    this.gl.clearColor(...this.graphs[themeIndex].background);
+    this.setGlobalAmbientLight(...this.graphs[themeIndex].ambient);
+    this.createXMLCameras();
+    this.initCameras();
+    this.interface.createInterface();
+    this.initLights();
 
-      this.gameOrchestrator.init(this.graphs[themeIndex]);
+    this.gameOrchestrator.init(this.graphs[themeIndex]);
 
-      this.sceneInited = true;
-    } else {
-      this.loadedThemes++;
-    }
+    this.sceneInited = true;
   }
 
   /**
@@ -379,7 +453,7 @@ export class XMLscene extends CGFscene {
 
   update(t) {
     let elapsed;
-    var themeIndex = this.themes.indexOf(this.theme);
+    var themeIndex = 0;
 
     if (this.sceneInited) {
       if (this.startTime == null) elapsed = 0;
@@ -402,6 +476,12 @@ export class XMLscene extends CGFscene {
 
       /* Update pulse shader */
       this.pulseShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      this.surfaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      this.heatShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+
+      this.spaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
       /* Update game orchestrator */
       this.gameOrchestrator.update(elapsed / 1000);
