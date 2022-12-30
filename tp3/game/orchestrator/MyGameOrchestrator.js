@@ -120,9 +120,14 @@ export class MyGameOrchestrator {
       this.scene.interface.updateInterface();
     } */
 
-    this.turn == "Player 1"
-      ? (this.turn = "Player 2")
-      : (this.turn = "Player 1");
+  console.log(this.eatenChecker)
+
+    // Only change the turn if a checker was not eaten
+    if (!this.eatenChecker) {
+      this.turn == "Player 1"
+        ? (this.turn = "Player 2")
+        : (this.turn = "Player 1");
+    }
 
     // Change the camera
     if (this.autoRotate) {
@@ -131,6 +136,8 @@ export class MyGameOrchestrator {
       else if (this.scene.cameraID == this.player2Camera)
         this.scene.updateCamera(this.player1Camera);
     }
+
+    this.eatenChecker = null;
   }
 
   clearPicked() {

@@ -158,8 +158,6 @@ export class MyGameStateTurn extends MyGameState {
     // Remove selected material from the checker
     this.checker.unsetSelected();
 
-    console.log(eatenChecker)
-
     var move = new MyGameMove(
       this.scene,
       this.checker,
