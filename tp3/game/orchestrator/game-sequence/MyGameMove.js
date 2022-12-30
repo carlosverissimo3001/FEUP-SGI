@@ -6,9 +6,10 @@
  * @param {MyTile} oldTile - Tile where the checker is being moved from
  * @param {MyTile} newTile - Tile where the checker is being moved to
  * @param {MyBoard} oldBoard - Board before the move
+ * @param {MyChecker} eatenChecker - Checker that was eaten, can be null
  */
 export class MyGameMove {
-    constructor(scene, checker, oldTile, newTile, oldBoard) {
+    constructor(scene, checker, oldTile, newTile, oldBoard, eatenChecker) {
         this.scene = scene;
 
         // Pointer to the checker that is being moved
@@ -24,6 +25,9 @@ export class MyGameMove {
         this.oldBoard = oldBoard;
 
         this.animation = null;
+
+        // Checker that was eaten, can be null
+        this.eatenChecker = eatenChecker;
     }
 
     animate() {
