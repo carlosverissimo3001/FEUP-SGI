@@ -42,7 +42,7 @@ export class MyGameOrchestrator {
     };
 
     // Player that starts the game
-    this.turn = "Player 2";
+    this.turn = "Player 1";
 
     // Checkers eaten by each player
     this.player1Eat = [];
@@ -79,13 +79,12 @@ export class MyGameOrchestrator {
   update(time) {
     /* Update all checkers animations*/
     for (let i = 0; i < this.board.checkers.length; i++) {
-      if (this.board.checkers[i].animation != null){
-        if (!this.movingChecker)
-          this.movingChecker = this.board.checkers[i];
+      if (this.board.checkers[i].animation != null) {
+        if (!this.movingChecker) this.movingChecker = this.board.checkers[i];
         this.board.checkers[i].animation.update(time);
       }
+    }
   }
-}
 
   displayEatenCheckers() {
     for (let i = 0; i < this.player1Eat.length; i++) {
@@ -99,7 +98,6 @@ export class MyGameOrchestrator {
   displayMovingChecker() {
     this.movingChecker.display();
   }
-
 
   display() {
     // Manage picking
@@ -117,15 +115,16 @@ export class MyGameOrchestrator {
     this.displayEatenCheckers();
 
     // Display the moving checkers
-    if(this.movingChecker)
-      if(this.movingChecker.moving)
-        this.displayMovingChecker();
-      else{
-        this.movingChecker.tile.set(this.movingChecker)
+    if (this.movingChecker)
+      if (this.movingChecker.moving) this.displayMovingChecker();
+      else {
+        // If the checker has finished moving, set the tile's checker
+        // Now its display will be called by the tile, and not here
+        this.movingChecker.tile.set(this.movingChecker);
+
+        // No checker is moving anymore
         this.movingChecker = null;
-
       }
-
   }
 
   /** Changes the game state
@@ -199,10 +198,10 @@ export class MyGameOrchestrator {
       }
 
       // Assume a double click in the same checker as an unselect
-      else{
+      else {
         this.gameState.checker.unsetSelected();
         this.gameState.checker = null;
-        this.unsetAvailable(this.availableTiles)
+        this.unsetAvailable(this.availableTiles);
         return;
       }
 

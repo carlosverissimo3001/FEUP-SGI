@@ -104,23 +104,7 @@ export class MyChecker extends CGFobject {
     this.initialPos.push(this.y);
     this.initialPos.push(this.tile.getZ() + this.z);
 
-    // Normal animation -> Piece moves from one tile to another, without eating another piece
-    this.normalAnimation = new MyKeyframeAnimation(
-      this.scene,
-      "checkerNormalAnimation"
-    );
-
-    // Eating animation -> Piece moves from one tile to another, eating another piece
-    this.eatingAnimation = new MyKeyframeAnimation(
-      this.scene,
-      "checkerEatingAnimation"
-    );
-
-    // Being eaten animation -> Piece is being eaten by another piece
-    this.eatenAnimation = new MyKeyframeAnimation(
-      this.scene,
-      "checkerEatenAnimation"
-    );
+    this.animation = null;
 
     // Audio
     this.audio = new Audio("sounds/slide.mp3");
@@ -129,8 +113,6 @@ export class MyChecker extends CGFobject {
 
     // Animation duration
     this.animDuration = 0.44;
-
-    this.animation = null;
 
     this.movementDir = "";
   }
@@ -271,8 +253,9 @@ export class MyChecker extends CGFobject {
   /**
    * Starts the animation for the checker piece
    * @param {MyTile} tile - Destination tile
+   * @param {boolean} jump - If the checker piece is jumping
    */
-  startAnimation(tile) {
+  startAnimation(tile, jump) {
     /* Since the checker is being displayed within the tile scene, the first frame of
       the animation will be the checker's initial position, which is the center of the old tile.
 
@@ -283,7 +266,15 @@ export class MyChecker extends CGFobject {
     // Get the movement direction
     this.getMovementDirection(tile);
 
+    // Get transformations relative to the origin
     this.initRelativeTransformations();
+
+    // Create the animation
+    this.animation = new MyKeyframeAnimation(
+      this.scene,
+      "checkerAnimation"
+    );
+
 
 
     // Get the destination tile coordinates
@@ -304,12 +295,13 @@ export class MyChecker extends CGFobject {
       [1, 1, 1]
     );
 
-    if (this.animation.animationId == "checkerEatingAnimation") {
+    if (jump) {
+      console.log("JUMPING")
       this.animDuration*=2;
 
       var halfKf = new MyKeyframe(
         this.animDuration / 2,
-        [deltaX / 2, 8, deltaZ / 2],  // Checker jumps up
+        [deltaX / 2, 1, deltaZ / 2],  // Checker jumps up
         [0, 0, 0],
         [1, 1, 1]
       )
@@ -335,16 +327,12 @@ export class MyChecker extends CGFobject {
   }
 
   displayMoving() {
-    console.log("Moving animation")
-
     this.scene.pushMatrix();
 
     // Has the animation finished?
     if (this.animation.finished) {
       // If so, checker piece is no longer moving
       this.moving = false;
-
-      this.updatePos();
 
       // No animation is being played
       this.animation = null;
