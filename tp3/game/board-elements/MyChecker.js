@@ -37,10 +37,10 @@ export class MyChecker extends CGFobject {
 
     this.y_eat = 0.27;
 
+    this.color = color;
+
     this.transformations = [];
     this.initTransformations();
-
-
 
     this.row = row;
     this.col = col;
@@ -97,9 +97,7 @@ export class MyChecker extends CGFobject {
     this.tile = this.board.getTile(tileID.split(",")[0], tileID.split(",")[1]);
 
     this.relativeTransformations = [];
-    this.initRelativeTransformations();
 
-    this.color = color;
 
     this.initialPos = [];
     this.initialPos.push(this.tile.getX() + this.x);
@@ -133,6 +131,8 @@ export class MyChecker extends CGFobject {
     this.animDuration = 0.44;
 
     this.animation = null;
+
+    this.movementDir = "";
   }
 
   /**
@@ -182,8 +182,16 @@ export class MyChecker extends CGFobject {
     mat4.scale(transf, transf, [0.055 * 3, 0.055 * 3, 1]);
 
     this.transformations.push(transf);
+  }
 
+  /**
+   * Computes the checker piece movement direction
+   * @param {MyTile} tile - destination tile
+   */
+  getMovementDirection(tile){
+    var x = tile.getX() - this.tile.getX();
 
+   (x < 0) ? this.movementDir = "left" : this.movementDir = "right";
   }
 
   /**
@@ -194,40 +202,70 @@ export class MyChecker extends CGFobject {
     var transf = mat4.create();
 
     // The x and z coordinates are relative to the tile' absolute position + offset
-    var x = this.tile.getX() + 1.25;
+
+    var x, y = 0.3, z;
+
+    /* var x = (this.color == "red")
+      ? this.tile.getX() + 1.5
+      : this.tile.getX() - 0.5;
     var y = 0.3;
-    var z = this.tile.getZ() - 0.5;
+    var z = (this.color == "red")
+      ? this.tile.getZ() - 0.5
+      : this.tile.getZ() + 1.5; */
+
+    if (this.color == "red"){
+      if (this.movementDir == "right"){
+        x = this.tile.getX() + 1.5;
+        z = this.tile.getZ() - 0.5;
+      }
+      else{
+        x = this.tile.getX() - 0.5;
+        z = this.tile.getZ() - 0.5;
+      }
+    }
+
+    else{
+      if (this.movementDir == "right"){
+        x = this.tile.getX() + 1.5;
+        z = this.tile.getZ() + 1.5;
+      }
+      else{
+        x = this.tile.getX() - 0.5;
+        z = this.tile.getZ() + 1.5;
+      }
+    }
 
     transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
-    transf = mat4.scale(transf, transf, [0.3, 0.3, 0.3]);
+    transf = mat4.scale(transf, transf, [0.3, 0.3, 1]);
 
     this.relativeTransformations.push(transf);
 
-    /* // Whole sphere
+    // Whole sphere
     transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [x, this.y, z]);
-    transf = mat4.scale(transf, transf, [0.32, 0.16 * scaleFactor, 0.32]);
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.scale(transf, transf, [0.32, 0.064, 0.416]);
 
     this.relativeTransformations.push(transf);
+
 
     // Inner torus
     transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [x, this.y, z]);
+    transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
-    transf = mat4.scale(transf, transf, [0.2, 0.2, 2 * scaleFactor]);
+    transf = mat4.scale(transf, transf, [0.2, 0.2, 1.04]);
 
     this.relativeTransformations.push(transf);
 
     // Inner sphere
     transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [x, this.y, z]);
-    transf = mat4.scale(transf, transf, [0.18, 0.21 * scaleFactor, 0.18]);
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.scale(transf, transf, [0.18, 0.084, 0.234]);
 
-    this.relativeTransformations.push(transf); */
+    this.relativeTransformations.push(transf);
   }
 
   /**
@@ -241,6 +279,12 @@ export class MyChecker extends CGFobject {
       The final frame of the animation will be the checker's final position, which is the center of the new tile.
       So no tranlation is needed for the last kf.
     */
+
+    // Get the movement direction
+    this.getMovementDirection(tile);
+
+    this.initRelativeTransformations();
+
 
     // Get the destination tile coordinates
     var x = tile.getX() + 0.5;
@@ -324,7 +368,7 @@ export class MyChecker extends CGFobject {
       this.audio.play();
 
 
-      for (var i = 0; i < /* this.components.length */ 1; i++) {
+      for (var i = 0; i < /* this.components.length */ 3; i++) {
         this.scene.pushMatrix();
 
         // Applies the animation

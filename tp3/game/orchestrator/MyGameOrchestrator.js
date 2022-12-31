@@ -42,7 +42,7 @@ export class MyGameOrchestrator {
     };
 
     // Player that starts the game
-    this.turn = "Player 1";
+    this.turn = "Player 2";
 
     // Checkers eaten by each player
     this.player1Eat = [];
