@@ -154,6 +154,21 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
+  /**
+   * Manages the animations
+   * @param {MyChecker} checker - Checker to be animated
+   * @param {Boolean} jump - Did the checker eat another?
+  */
+  animateChecker(jump){
+    // Select the animation to be played
+    (jump)
+      ? this.checker.animation = this.checker.eatingAnimation
+      : this.checker.animation = this.checker.normalAnimation;
+
+    // Start the animation by passing the destination tile
+    this.checker.startAnimation(this.destinationTile);
+  }
+
   moveChecker(eatenChecker) {
     // Remove selected material from the checker
     this.checker.unsetSelected();
@@ -167,7 +182,14 @@ export class MyGameStateTurn extends MyGameState {
       eatenChecker
     );
 
+    /* if (eatenChecker){
+      eatenChecker.animation = eatenChecker.eatenAnimation;
+    } */
+
     this.orchestrator.gameSequence.addMove(move);
+
+    // Animate the checker. If eaten checker is not null, then the checker ate another one
+    this.animateChecker(eatenChecker != null);
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
 

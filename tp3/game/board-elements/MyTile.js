@@ -99,9 +99,28 @@ export class MyTile {
     }
 
     /**
+     * Get the tile's x coordinate
+     * @returns {number} x coordinate
+    */
+    getX(){
+        return this.board.x + this.col;
+    }
+
+    /**
+     * Get the tile's z coordinate
+     * @returns {number} z coordinate
+     */
+    getZ(){
+        return this.board.z + this.row;
+    }
+
+    /**
      * Display the tile
      */
     display(){
+        if (this.id == "4,5" && this.hasChecker){
+            console.log(this.hasChecker)
+        }
         this.scene.pushMatrix();
         this.scene.translate(this.x, this.y, this.z);
         this.scene.scale(1, 0.1, 1);
