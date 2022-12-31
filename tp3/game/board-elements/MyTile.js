@@ -118,6 +118,9 @@ export class MyTile {
      * Display the tile
      */
     display(){
+        if (this.id == "4,5" && this.hasChecker){
+            console.log(this.hasChecker)
+        }
         this.scene.pushMatrix();
         this.scene.translate(this.x, this.y, this.z);
         this.scene.scale(1, 0.1, 1);

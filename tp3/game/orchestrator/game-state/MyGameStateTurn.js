@@ -182,6 +182,10 @@ export class MyGameStateTurn extends MyGameState {
       eatenChecker
     );
 
+    /* if (eatenChecker){
+      eatenChecker.animation = eatenChecker.eatenAnimation;
+    } */
+
     this.orchestrator.gameSequence.addMove(move);
 
     // Animate the checker. If eaten checker is not null, then the checker ate another one

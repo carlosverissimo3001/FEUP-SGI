@@ -74,6 +74,7 @@ export class MyGameOrchestrator {
     for (let i = 0; i < this.board.checkers.length; i++) {
       if (this.board.checkers[i].animation != null)
         this.board.checkers[i].animation.update(time);
+        this.board.checkers[i].display();
     }
   }
 
@@ -85,6 +86,7 @@ export class MyGameOrchestrator {
       this.player2Eat[i].display();
     }
   }
+
 
   display() {
     // Manage picking

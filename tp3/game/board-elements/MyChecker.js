@@ -32,7 +32,7 @@ export class MyChecker extends CGFobject {
     this.components.push(new MySphere(scene, "none", 1, 40, 40));
 
     this.x = 0.5;
-    this.y = 1.1;
+    this.y = 2.1;
     this.z = 0.5;
 
     this.y_eat = 0.27;
@@ -40,12 +40,10 @@ export class MyChecker extends CGFobject {
     this.transformations = [];
     this.initTransformations();
 
-
     this.row = row;
     this.col = col;
     this.board = board;
     this.id = row + "," + col;
-
 
     // Was the checker piece eaten?
     this.wasEaten = false;
@@ -58,8 +56,6 @@ export class MyChecker extends CGFobject {
 
     // Is this piece moving? If so, straight or jumping?
     this.moving = false;
-    this.straight = true; /* This is the most common case, when a piece moves from one tile to another, without eating another piece */
-    this.jumping = false;
 
     // Pointer to the tile where the checker is placed
     var tileID = tileID;
@@ -100,12 +96,10 @@ export class MyChecker extends CGFobject {
 
     this.color = color;
 
-
     this.initialPos = [];
     this.initialPos.push(this.tile.getX() + this.x);
     this.initialPos.push(1.1);
     this.initialPos.push(this.tile.getZ() + this.z);
-
 
     // Normal animation -> Piece moves from one tile to another, without eating another piece
     this.normalAnimation = new MyKeyframeAnimation(
@@ -126,14 +120,16 @@ export class MyChecker extends CGFobject {
     );
 
     // Animation duration
-    this.animDuration = 2.5;
+    this.animDuration = 0.75;
 
     this.animation = null;
   }
 
-  updatePos(){
+  /**
+   * Updates the checker piece position
+   */
+  updatePos() {
     this.initialPos[0] = this.tile.getX() + this.x;
-    this.initialPos[1] = 1.1;
     this.initialPos[2] = this.tile.getZ() + this.z;
   }
 
@@ -180,7 +176,6 @@ export class MyChecker extends CGFobject {
    * @param {MyTile} tile - Destination tile
    */
   startAnimation(tile) {
-
     /* Since the checker is being displayed within the tile scene, the first frame of
       the animation will be the checker's initial position, which is the center of the old tile.
 
@@ -204,8 +199,19 @@ export class MyChecker extends CGFobject {
       [deltaX, deltaY, deltaZ],
       [0, 0, 0],
       [1, 1, 1]
-    )
+    );
 
+    if (this.animation.animationId == "checkerEatingAnimation") {
+      this.animDuration*=2;
+
+      var halfKf = new MyKeyframe(
+        this.animDuration / 2,
+        [deltaX / 2, 8, deltaZ / 2],  // Checker jumps up
+        [0, 0, 0],
+        [1, 1, 1]
+      )
+      this.animation.addKeyframe(halfKf);
+    }
 
     // Final frame -> Current position, therefore no deltas
     var finalkf = new MyKeyframe(
@@ -216,10 +222,10 @@ export class MyChecker extends CGFobject {
     );
 
     // Add the keyframes to the animation
-    this.normalAnimation.addKeyframe(initialkf);
-    this.normalAnimation.addKeyframe(finalkf);
+    this.animation.addKeyframe(initialkf);
+    this.animation.addKeyframe(finalkf);
 
-    this.normalAnimation.update_order();
+    this.animation.update_order();
 
     // Start the animation
     this.moving = true;
@@ -229,22 +235,24 @@ export class MyChecker extends CGFobject {
     this.scene.pushMatrix();
 
     // Has the animation finished?
-    if (this.animation.finished){
+    if (this.animation.finished) {
       // If so, checker piece is no longer moving
       this.moving = false;
+
+      this.updatePos();
 
       // No animation is being played
       this.animation = null;
       this.scene.popMatrix();
-      return
+      return;
     }
 
     // Otherwise, display the checker piece, with the animation
-    else{
-      for (var i = 0; i < this.components.length; i++){
+    else {
+      for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
-        this.scene.multMatrix(this.transformations[i]);
         this.scene.multMatrix(this.animation.getMatrix());
+        this.scene.multMatrix(this.transformations[i]);
         this.components[i].display();
         this.scene.popMatrix();
       }
@@ -320,33 +328,27 @@ export class MyChecker extends CGFobject {
    * Displays the checker piece
    */
   display() {
-    if (this.id == "4,1" && this.moving)
-      console.log("displaying")
-
     this.scene.pushMatrix();
-    var display;
 
     if (this.wasEaten) {
       this.displayEaten();
       return;
     }
 
-    if (this.moving) {
-      this.displayMoving();
-      return;
-    }
-
-
     if (this.color == "red") {
       (this.available ? this.lightRedMaterial : this.redMaterial).apply();
-      (this.selected ? this.selectedMaterial.apply() : null)
+      this.selected ? this.selectedMaterial.apply() : null;
     }
 
     if (this.color == "blue") {
       (this.available ? this.lightBlueMaterial : this.blueMaterial).apply();
-      (this.selected ? this.selectedMaterial.apply() : null)
+      this.selected ? this.selectedMaterial.apply() : null;
     }
 
+    if (this.moving) {
+      this.displayMoving();
+      return;
+    }
 
     // Display components
     for (var i = 0; i < this.components.length; i++) {
@@ -357,7 +359,6 @@ export class MyChecker extends CGFobject {
     }
 
     this.scene.popMatrix();
-
   }
 
   /**
