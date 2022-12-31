@@ -184,12 +184,6 @@ export class MyGameStateTurn extends MyGameState {
     this.checker.col = this.destinationTile.col;
     this.checker.id = this.destinationTile.id;
 
-    // Update the checker's position
-    this.checker.updatePos();
-
-   /*  // Add the checker to the destination tile
-    this.destinationTile.set(this.checker); */
-
     // Remove the checker from the origin tile
     this.originTile.remove();
 

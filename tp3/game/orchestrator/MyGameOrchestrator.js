@@ -116,11 +116,14 @@ export class MyGameOrchestrator {
 
     // Display the moving checkers
     if (this.movingChecker)
-      if (this.movingChecker.moving) this.displayMovingChecker();
+      if (this.movingChecker.moving)
+        this.displayMovingChecker();
       else {
         // If the checker has finished moving, set the tile's checker
         // Now its display will be called by the tile, and not here
         this.movingChecker.tile.set(this.movingChecker);
+
+        this.movingChecker.updatePos();
 
         // No checker is moving anymore
         this.movingChecker = null;

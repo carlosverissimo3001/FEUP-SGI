@@ -56,6 +56,9 @@ export class MyChecker extends CGFobject {
     // Is this piece selected?
     this.selected = false;
 
+    // Is this the first move of this piece?
+    this.firstMove = true;
+
     // Is this piece moving? If so, straight or jumping?
     this.moving = false;
 
@@ -123,6 +126,8 @@ export class MyChecker extends CGFobject {
   updatePos() {
     this.initialPos[0] = this.tile.getX() + this.x;
     this.initialPos[2] = this.tile.getZ() + this.z;
+
+    this.relativeTransformations = [];
   }
 
   /**
@@ -185,15 +190,9 @@ export class MyChecker extends CGFobject {
 
     // The x and z coordinates are relative to the tile' absolute position + offset
 
-    var x, y = 0.3, z;
+    console.log(this.tile.id)
 
-    /* var x = (this.color == "red")
-      ? this.tile.getX() + 1.5
-      : this.tile.getX() - 0.5;
-    var y = 0.3;
-    var z = (this.color == "red")
-      ? this.tile.getZ() - 0.5
-      : this.tile.getZ() + 1.5; */
+    var x, y = 0.3, z;
 
     if (this.color == "red"){
       if (this.movementDir == "right"){
@@ -263,6 +262,8 @@ export class MyChecker extends CGFobject {
       So no tranlation is needed for the last kf.
     */
 
+    console.log("Checker with color " + this.color + " has initial position: " + this.initialPos);
+
     // Get the movement direction
     this.getMovementDirection(tile);
 
@@ -274,8 +275,6 @@ export class MyChecker extends CGFobject {
       this.scene,
       "checkerAnimation"
     );
-
-
 
     // Get the destination tile coordinates
     var x = tile.getX() + 0.5;
@@ -426,7 +425,6 @@ export class MyChecker extends CGFobject {
    */
   display() {
     this.scene.pushMatrix();
-
 
     if (this.color == "red") {
       (this.available ? this.lightRedMaterial : this.redMaterial).apply();
