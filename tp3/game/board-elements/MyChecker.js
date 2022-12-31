@@ -115,7 +115,7 @@ export class MyChecker extends CGFobject {
     this.audioActive = false;
 
     // Animation duration
-    this.animDuration = 0.44;
+    this.animDuration = 3.44;
 
     this.movementDir = "";
   }
@@ -226,10 +226,9 @@ export class MyChecker extends CGFobject {
     transf = mat4.create();
 
     transf = mat4.translate(transf, transf, [x, y, z]);
-    transf = mat4.scale(transf, transf, [0.32, 0.064, 0.416]);
+    transf = mat4.scale(transf, transf, [0.32, 0.064, 0.32]);
 
     this.relativeTransformations.push(transf);
-
 
     // Inner torus
     transf = mat4.create();
@@ -252,9 +251,8 @@ export class MyChecker extends CGFobject {
   /**
    * Starts the animation for the checker piece
    * @param {MyTile} tile - Destination tile
-   * @param {boolean} jump - If the checker piece is jumping
    */
-  startAnimation(tile, jump) {
+  startAnimation(tile) {
     /* Since the checker is being displayed within the tile scene, the first frame of
       the animation will be the checker's initial position, which is the center of the old tile.
 
@@ -293,19 +291,6 @@ export class MyChecker extends CGFobject {
       [0, 0, 0],
       [1, 1, 1]
     );
-
-    if (jump) {
-      console.log("JUMPING")
-      this.animDuration*=2;
-
-      var halfKf = new MyKeyframe(
-        this.animDuration / 2,
-        [deltaX / 2, 1, deltaZ / 2],  // Checker jumps up
-        [0, 0, 0],
-        [1, 1, 1]
-      )
-      this.animation.addKeyframe(halfKf);
-    }
 
     // Final frame -> Current position, therefore no deltas
     var finalkf = new MyKeyframe(
@@ -355,7 +340,7 @@ export class MyChecker extends CGFobject {
       this.audio.play();
 
 
-      for (var i = 0; i < /* this.components.length */ 3; i++) {
+      for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
 
         // Applies the animation
@@ -363,7 +348,6 @@ export class MyChecker extends CGFobject {
 
         // Puts the piece in the correct position
         this.scene.multMatrix(this.relativeTransformations[i]);
-
 
         this.components[i].display();
         this.scene.popMatrix();

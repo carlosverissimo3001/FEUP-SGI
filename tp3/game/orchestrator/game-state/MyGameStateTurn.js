@@ -167,14 +167,16 @@ export class MyGameStateTurn extends MyGameState {
       eatenChecker
     );
 
+
+    this.orchestrator.gameSequence.addMove(move);
+
+    // If a checker was eaten, animate it, in an arc-like movement, to the eaten checkers' stack
     /* if (eatenChecker){
       eatenChecker.animation = eatenChecker.eatenAnimation;
     } */
 
-    this.orchestrator.gameSequence.addMove(move);
-
     // Animate the checker. If eaten checker is not null, then the checker ate another one
-    this.checker.startAnimation(this.destinationTile, eatenChecker);
+    this.checker.startAnimation(this.destinationTile);
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
 
