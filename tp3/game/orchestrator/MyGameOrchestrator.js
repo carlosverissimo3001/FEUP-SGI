@@ -55,6 +55,8 @@ export class MyGameOrchestrator {
 
     this.eatenChecker = null;
 
+    this.movingChecker = null;
+
     /* this.interfaceUpdated = false; */
   }
 
@@ -77,11 +79,13 @@ export class MyGameOrchestrator {
   update(time) {
     /* Update all checkers animations*/
     for (let i = 0; i < this.board.checkers.length; i++) {
-      if (this.board.checkers[i].animation != null)
+      if (this.board.checkers[i].animation != null){
+        if (!this.movingChecker)
+          this.movingChecker = this.board.checkers[i];
         this.board.checkers[i].animation.update(time);
-        this.board.checkers[i].display();
-    }
+      }
   }
+}
 
   displayEatenCheckers() {
     for (let i = 0; i < this.player1Eat.length; i++) {
@@ -92,6 +96,10 @@ export class MyGameOrchestrator {
     }
   }
 
+  displayMovingChecker() {
+    this.movingChecker.display();
+  }
+
 
   display() {
     // Manage picking
@@ -100,13 +108,24 @@ export class MyGameOrchestrator {
     this.scene.clearPickRegistration();
 
     // Display the scene graph
-    this.theme.displayScene();
+    /* this.theme.displayScene(); */
 
     // Display the board
     this.board.display();
 
     // Display the eaten checkers
     this.displayEatenCheckers();
+
+    // Display the moving checkers
+    if(this.movingChecker)
+      if(this.movingChecker.moving)
+        this.displayMovingChecker();
+      else{
+        this.movingChecker.tile.set(this.movingChecker)
+        this.movingChecker = null;
+
+      }
+
   }
 
   /** Changes the game state
@@ -220,9 +239,9 @@ export class MyGameOrchestrator {
   }
 
   eatCheckers() {
-    console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
+    /* console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
     console.log("Player 2 has eaten " + this.player2Eat.length + " checkers");
-
+ */
     this.board.player1MarkerNumber = this.player1Eat.length;
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
@@ -265,7 +284,6 @@ export class MyGameOrchestrator {
             var objid = this.scene.pickResults[i][1]; // get the id of the nth pick result
 
             if (obj) {
-              console.log(objid);
               // is this a valid pick?
               if (obj instanceof MyTile) {
                 if (this.gameState.checker != null) {

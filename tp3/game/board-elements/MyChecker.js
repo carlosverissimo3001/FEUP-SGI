@@ -40,6 +40,8 @@ export class MyChecker extends CGFobject {
     this.transformations = [];
     this.initTransformations();
 
+
+
     this.row = row;
     this.col = col;
     this.board = board;
@@ -94,11 +96,14 @@ export class MyChecker extends CGFobject {
 
     this.tile = this.board.getTile(tileID.split(",")[0], tileID.split(",")[1]);
 
+    this.relativeTransformations = [];
+    this.initRelativeTransformations();
+
     this.color = color;
 
     this.initialPos = [];
     this.initialPos.push(this.tile.getX() + this.x);
-    this.initialPos.push(1.1);
+    this.initialPos.push(this.y);
     this.initialPos.push(this.tile.getZ() + this.z);
 
     // Normal animation -> Piece moves from one tile to another, without eating another piece
@@ -138,6 +143,9 @@ export class MyChecker extends CGFobject {
     this.initialPos[2] = this.tile.getZ() + this.z;
   }
 
+  /**
+   * These are the transformations relative to the tile
+   */
   initTransformations() {
     // Outer torus
     var transf = mat4.create();
@@ -174,6 +182,52 @@ export class MyChecker extends CGFobject {
     mat4.scale(transf, transf, [0.055 * 3, 0.055 * 3, 1]);
 
     this.transformations.push(transf);
+
+
+  }
+
+  /**
+   * These are the transformations relative to the origin
+   */
+  initRelativeTransformations() {
+    // Outer torus
+    var transf = mat4.create();
+
+    // The x and z coordinates are relative to the tile' absolute position + offset
+    var x = this.tile.getX() + 1.25;
+    var y = 0.3;
+    var z = this.tile.getZ() - 0.5;
+
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
+    transf = mat4.scale(transf, transf, [0.3, 0.3, 0.3]);
+
+    this.relativeTransformations.push(transf);
+
+    /* // Whole sphere
+    transf = mat4.create();
+
+    transf = mat4.translate(transf, transf, [x, this.y, z]);
+    transf = mat4.scale(transf, transf, [0.32, 0.16 * scaleFactor, 0.32]);
+
+    this.relativeTransformations.push(transf);
+
+    // Inner torus
+    transf = mat4.create();
+
+    transf = mat4.translate(transf, transf, [x, this.y, z]);
+    transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
+    transf = mat4.scale(transf, transf, [0.2, 0.2, 2 * scaleFactor]);
+
+    this.relativeTransformations.push(transf);
+
+    // Inner sphere
+    transf = mat4.create();
+
+    transf = mat4.translate(transf, transf, [x, this.y, z]);
+    transf = mat4.scale(transf, transf, [0.18, 0.21 * scaleFactor, 0.18]);
+
+    this.relativeTransformations.push(transf); */
   }
 
   /**
@@ -198,7 +252,7 @@ export class MyChecker extends CGFobject {
     var deltaY = 0;
     var deltaZ = this.initialPos[2] - z;
 
-    /* Initial frame -> Deltas to old position */
+    // Initial frame -> Deltas to old position
     var initialkf = new MyKeyframe(
       0,
       [deltaX, deltaY, deltaZ],
@@ -237,6 +291,8 @@ export class MyChecker extends CGFobject {
   }
 
   displayMoving() {
+    console.log("Moving animation")
+
     this.scene.pushMatrix();
 
     // Has the animation finished?
@@ -268,10 +324,16 @@ export class MyChecker extends CGFobject {
       this.audio.play();
 
 
-      for (var i = 0; i < this.components.length; i++) {
+      for (var i = 0; i < /* this.components.length */ 1; i++) {
         this.scene.pushMatrix();
+
+        // Applies the animation
         this.scene.multMatrix(this.animation.getMatrix());
-        this.scene.multMatrix(this.transformations[i]);
+
+        // Puts the piece in the correct position
+        this.scene.multMatrix(this.relativeTransformations[i]);
+
+
         this.components[i].display();
         this.scene.popMatrix();
       }
@@ -285,24 +347,6 @@ export class MyChecker extends CGFobject {
   displayEaten() {
     this.scaleFactor = 0.4;
     this.scene.pushMatrix();
-    switch (this.color) {
-      case "white":
-        /*         this.checkerMaterial.setTexture(this.whiteTexture);
-        this.checkerMaterial.apply(); */
-        break;
-      case "red":
-        this.redMaterial.apply();
-        break;
-      case "black":
-        /*         this.checkerMaterial.setTexture(this.blackTexture);
-        this.checkerMaterial.apply(); */
-        break;
-      case "blue":
-        this.blueMaterial.apply();
-        break;
-      default:
-        break;
-    }
 
     // Outer torus
     this.color == "blue"
@@ -341,6 +385,8 @@ export class MyChecker extends CGFobject {
     this.scene.scale(0.18, 0.21 * this.scaleFactor, 0.18);
     this.components[3].display();
     this.scene.popMatrix();
+
+
   }
 
   /**
@@ -349,10 +395,6 @@ export class MyChecker extends CGFobject {
   display() {
     this.scene.pushMatrix();
 
-    if (this.wasEaten) {
-      this.displayEaten();
-      return;
-    }
 
     if (this.color == "red") {
       (this.available ? this.lightRedMaterial : this.redMaterial).apply();
@@ -362,6 +404,11 @@ export class MyChecker extends CGFobject {
     if (this.color == "blue") {
       (this.available ? this.lightBlueMaterial : this.blueMaterial).apply();
       this.selected ? this.selectedMaterial.apply() : null;
+    }
+
+    if (this.wasEaten) {
+      this.displayEaten();
+      return;
     }
 
     if (this.moving) {
