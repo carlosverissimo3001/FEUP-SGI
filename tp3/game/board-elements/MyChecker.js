@@ -119,8 +119,13 @@ export class MyChecker extends CGFobject {
       "checkerEatenAnimation"
     );
 
+    // Audio
+    this.audio = new Audio("sounds/slide.mp3");
+    this.audio.volume = 0.5;
+    this.audioActive = false;
+
     // Animation duration
-    this.animDuration = 0.75;
+    this.animDuration = 0.44;
 
     this.animation = null;
   }
@@ -244,11 +249,25 @@ export class MyChecker extends CGFobject {
       // No animation is being played
       this.animation = null;
       this.scene.popMatrix();
+
+      // Stop the audio
+      this.audio.pause();
+      this.audioActive = false;
+
       return;
     }
 
     // Otherwise, display the checker piece, with the animation
     else {
+      // Play the audio
+      if (!this.audioActive) {
+        this.audioActive = true;
+      }
+
+      this.audio.loop = true;
+      this.audio.play();
+
+
       for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
         this.scene.multMatrix(this.animation.getMatrix());

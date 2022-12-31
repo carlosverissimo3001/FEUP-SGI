@@ -22,6 +22,11 @@ export class MyGameOrchestrator {
     // Automatic camera rotation
     this.autoRotate = false;
 
+    // Audio
+    this.audio = new Audio("sounds/select.mp3");
+    this.audio.volume = 1;
+    this.audioActive = false;
+
     // Game state
     this.gameState = new MyGameStateTurn(scene, this, this.board);
 
@@ -269,6 +274,9 @@ export class MyGameOrchestrator {
                   alert(this.turn + ", please select a checker first");
                 }
               } else if (obj instanceof MyChecker) {
+                // play a sound
+                this.audio.play();
+
                 this.gameState.checkPick(obj, this.turn);
               }
             } else {
