@@ -737,42 +737,6 @@ export class MySceneGraph {
 
             var transfMatrix = this.parseNewTransformation(grandChildren);
 
-            /* for (var j = 0; j < grandChildren.length; j++) {
-                switch (grandChildren[j].nodeName) {
-                    // translate transformation
-                    case 'translate':
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
-
-                    // scale transformation
-                    case 'scale':
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID);
-                        if(!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
-                        break;
-
-                    // rotate transformation
-                    case 'rotate':
-                        var axis = this.reader.getString(grandChildren[j], "axis");
-                        if (axis != 'x' && axis != 'y' && axis != 'z')
-                            this.onXMLError("Invalid axis for transformation for ID " + transformationID);
-
-                        var angle = this.reader.getFloat(grandChildren[j], "angle");
-                        if (!(angle != null && !isNaN(angle)))
-                            return "unable to parse angle of the rotation transformation for ID = " + transformationID;
-
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
-
-                        break;
-                }
-            } */
-
             this.transformations[transformationID] = transfMatrix;
         }
         this.log("Parsed transformations");

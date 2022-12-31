@@ -99,6 +99,22 @@ export class MyTile {
     }
 
     /**
+     * Get the tile's x coordinate
+     * @returns {number} x coordinate
+    */
+    getX(){
+        return this.board.x + this.col;
+    }
+
+    /**
+     * Get the tile's z coordinate
+     * @returns {number} z coordinate
+     */
+    getZ(){
+        return this.board.z + this.row;
+    }
+
+    /**
      * Display the tile
      */
     display(){

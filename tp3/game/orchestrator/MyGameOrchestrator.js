@@ -65,9 +65,16 @@ export class MyGameOrchestrator {
     this.player2Camera = "Player 2 View";
   }
 
+  /**
+   * Updates the game
+   * @param {Number} time - Current time
+   */
   update(time) {
-    /* this.animator.update(time); */
-    this.gameState.update(time);
+    /* Update all checkers animations*/
+    for (let i = 0; i < this.board.checkers.length; i++) {
+      if (this.board.checkers[i].animation != null)
+        this.board.checkers[i].animation.update(time);
+    }
   }
 
   displayEatenCheckers() {
@@ -82,18 +89,6 @@ export class MyGameOrchestrator {
   display() {
     // Manage picking
     this.managePick();
-
-    /* // If current camera is player1camera, do not display the player
-    if (this.scene.cameraID == this.player1Camera) {
-      this.theme.displayPlayer1 = false;
-      this.theme.displayPlayer2 = true;
-    }
-
-    // If current camera is player2camera, do not display the player
-    else if (this.scene.cameraID == this.player2Camera) {
-      this.theme.displayPlayer1 = true;
-      this.theme.displayPlayer2 = false;
-    } */
 
     this.scene.clearPickRegistration();
 
@@ -115,13 +110,6 @@ export class MyGameOrchestrator {
   }
 
   changePlayerTurn() {
-    /* if (!this.interfaceUpdated){
-      this.interfaceUpdated = true;
-      this.scene.interface.updateInterface();
-    } */
-
-  console.log(this.eatenChecker)
-
     // Only change the turn if a checker was not eaten
     if (!this.eatenChecker) {
       this.turn == "Player 1"
@@ -182,6 +170,14 @@ export class MyGameOrchestrator {
 
         // Sets the new avaliable tiles, with a light color
         this.setAvailable(this.availableTiles);
+      }
+
+      // Assume a double click in the same checker as an unselect
+      else{
+        this.gameState.checker.unsetSelected();
+        this.gameState.checker = null;
+        this.unsetAvailable(this.availableTiles)
+        return;
       }
 
       // Creates a copy of the available tiles
