@@ -421,9 +421,9 @@ export class MyChecker extends CGFobject {
     this.animDuration *= 0.5;
 
     // Create 10 keyframes for the animation, to simulate an arc-like movement
-    for (var i = 0; i < 11; i++) {
+    for (var i = 0; i < 10; i++) {
       // Increase the instant by 10% of the animation duration
-      var instant = deltaTime + (i * this.animDuration) / 11;
+      var instant = deltaTime + (i * this.animDuration) / 10;
 
       // x and z go from 0 to their deltas
       var x = (instant - deltaTime) * deltaX / this.animDuration;
@@ -546,6 +546,8 @@ export class MyChecker extends CGFobject {
       this.initDepositTransformations();
       this.yUpdated = true;
     }
+
+    /* console.log(this.depositLocation[1]) */
 
     for (var i = 0; i < this.components.length; i++) {
       this.scene.pushMatrix();
