@@ -54,6 +54,8 @@ export class MyGameOrchestrator {
     this.eatenChecker = null;
 
     this.movingCheckers = [];
+
+    this.hasEatenCheckerFinished = false;
   }
 
   /** Initializes the scene graph
@@ -107,11 +109,16 @@ export class MyGameOrchestrator {
         this.displayMovingChecker(this.movingCheckers[i]);
       // If the checker has finished moving, check some conditions
       else {
-        /* this.turnOnLights(); */
         // If the moving checker is not an eaten checker, we need to set its tile so that it can be displayed
         if (!this.movingCheckers[i].wasEaten) {
           this.movingCheckers[i].tile.set(this.movingCheckers[i]);
           this.movingCheckers[i].updatePos();
+
+          // If no checker was eaten, turn the lights back on after the attacking animation has finished
+          // OTHERWISE, the lights will be turned on when the eaten checker has finished moving
+          if (!this.eatenChecker)
+            this.turnOnLights();
+
 
           // Remove the checker from the moving checkers array
           this.movingCheckers.splice(i, 1);
@@ -120,6 +127,12 @@ export class MyGameOrchestrator {
 
         // If the moving checker was an eaten checker, the orchestrator is the one responsible for displaying it
         else {
+          // Only turn the lights back on when the eaten checker has finished moving
+          if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat){
+            this.hasEatenCheckerFinished = true;
+            this.eatenChecker = null;
+            this.turnOnLights();
+          }
           this.movingCheckers[i].display();
         }
       }
@@ -141,7 +154,7 @@ export class MyGameOrchestrator {
         : (this.turn = "Player 1");
     }
 
-    // Change the camera
+    // Change the camera, if auto rotate is on
     if (this.autoRotate) {
       if (this.scene.cameraID == this.player1Camera)
         this.scene.updateCamera(this.player2Camera);
@@ -149,7 +162,7 @@ export class MyGameOrchestrator {
         this.scene.updateCamera(this.player1Camera);
     }
 
-    this.eatenChecker = null;
+    /* this.eatenChecker = null; */
   }
 
   clearPicked() {
@@ -293,8 +306,6 @@ export class MyGameOrchestrator {
             if (obj) {
               // is this a valid pick?
               if (obj instanceof MyTile) {
-                console.log("Clicked on a tile with id " + objid);
-
                 if (this.gameState.checker != null) {
                   this.gameState.checkPick(obj, this.turn);
                 } else {
