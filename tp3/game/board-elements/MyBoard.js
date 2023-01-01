@@ -68,8 +68,11 @@ export class MyBoard {
     this.player2MarkerNumber = 0;
 
     // Initialize the board
+    this.tiles = []
+    this.checkers = [];
     this.initialized = false;
     this.initBoard();
+
   }
 
   /**
@@ -80,12 +83,11 @@ export class MyBoard {
     let light = true;
     let row = 0;
     let col = 0;
-    let tiles = [];
 
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         var id = i + "," + j;
-        tiles.push(new MyTile(this.scene, id, this, row, col, light, null));
+        this.tiles.push(new MyTile(this.scene, id, this, row, col, light, null));
         light = !light;
         col++;
       }
@@ -94,7 +96,7 @@ export class MyBoard {
       col = 0;
     }
 
-    this.initTiles(tiles);
+    this.initTiles(this.tiles);
 
     this.initCheckers();
 
@@ -176,6 +178,8 @@ export class MyBoard {
       console.error("There is already a checker in this tile");
 
     this.board[row][col].set(checker);
+
+    this.checkers.push(checker);
   }
 
   /**
