@@ -490,6 +490,20 @@ export class MyChecker extends CGFobject {
       // Get translation deltas for the spotlight
       var deltas = this.animation.getTranslationMatrix();
 
+      console.log(this.movementDir)
+
+      if (this.movementDir == "right" && this.color == "red")
+        deltas[0] *= -1;
+
+      if (this.movementDir == "left" && this.color == "blue"){
+        deltas[2] *= -1;
+      }
+
+      if (this.movementDir == "right" && this.color == "blue"){
+        deltas[0] *= -1;
+        deltas[2] *= -1;
+      }
+
       // Create the light
       this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
 

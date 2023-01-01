@@ -77,7 +77,7 @@ export class XMLscene extends CGFscene {
 
 
     this.displayAxis = true;
-    this.showLights = false;
+    this.showLights = true;
 
     this.lightsVal = [];
 
