@@ -1,7 +1,7 @@
 <sxs>
     <scene root="pool_day" axis_length="17"/>
 
-    <views default="Top">
+    <views default="Player 1">
         <perspective id="Public" near="0.1" far="500" angle="30">
             <from x="1" y="8" z="46" />
             <to x="10" y="3" z="46" />
@@ -34,7 +34,7 @@
             <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </omni>
 
-        <omni id="boardLight" enabled="false" angle="-45.0" exponent="2">
+        <omni id="boardLight" enabled="true" angle="-45.0" exponent="2">
             <location x="14.75" y="5" z="46" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />

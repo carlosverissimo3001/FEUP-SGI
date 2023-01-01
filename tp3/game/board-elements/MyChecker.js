@@ -31,6 +31,13 @@ export class MyChecker extends CGFobject {
     // Inner sphere
     this.components.push(new MySphere(scene, "none", 1, 40, 40));
 
+    // Checker piece height
+    this.stackDelta = 2.075;
+
+    // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
+    this.isKing = false
+
+
     this.x = 0.5;
     this.y = 2.1;
     this.z = 0.5;
@@ -40,7 +47,6 @@ export class MyChecker extends CGFobject {
     this.color = color;
 
     this.transformations = [];
-    this.initTransformations();
 
     this.row = row;
     this.col = col;
@@ -147,43 +153,55 @@ export class MyChecker extends CGFobject {
 
   /**
    * These are the transformations relative to the tile
+   * @param {boolean} isKing - Is this piece a king?
    */
-  initTransformations() {
+  initTransformations(isKing) {
     // Outer torus
     var transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    var transformations = [];
+
+    var x = this.x;
+    var y = this.y;
+    var z = this.z;
+
+    if (isKing)
+      y+=this.stackDelta
+
+    transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.3, 0.3, 10]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
 
     // Whole sphere
     transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.3, 0.3, 0.75]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
 
     // Inner torus
     transf = mat4.create();
 
-    mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    mat4.translate(transf, transf, [x, y, z]);
     mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     mat4.scale(transf, transf, [0.065 * 3, 0.065 * 3, 10]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
 
     // Inner sphere
     transf = mat4.create();
 
-    mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    mat4.translate(transf, transf, [x, y, z]);
     mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     mat4.scale(transf, transf, [0.055 * 3, 0.055 * 3, 1]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
+
+    return transformations;
   }
 
   /**
@@ -620,12 +638,26 @@ export class MyChecker extends CGFobject {
     }
 
     // Standard display
+    var transformations = this.initTransformations(false);
+
     for (var i = 0; i < this.components.length; i++) {
       this.scene.pushMatrix();
-      this.scene.multMatrix(this.transformations[i]);
+      this.scene.multMatrix(transformations[i]);
       this.components[i].display();
       this.scene.popMatrix();
     }
+
+    if (this.isKing) {
+      var transformations = this.initTransformations(true);
+
+      for (var i = 0; i < this.components.length; i++) {
+        this.scene.pushMatrix();
+        this.scene.multMatrix(transformations[i]);
+        this.components[i].display();
+        this.scene.popMatrix();
+      }
+    }
+
 
     this.scene.popMatrix();
   }
@@ -640,24 +672,33 @@ export class MyChecker extends CGFobject {
     //
   }
 
-  // If a checker is selected, the material will change to  green
+  // Set the checker piece as selected
   setSelected() {
     this.selected = true;
   }
 
+  // Set the checker piece as unselected
   unsetSelected() {
     this.selected = false;
   }
 
+  // Set the checker piece as available
   setAvailable() {
     this.available = true;
   }
 
+  // Set the checker piece as unavailable
   unsetAvailable() {
     this.available = false;
   }
 
+  // Set the scene orchestrator
   setOrchestrator(orchestrator) {
     this.orchestrator = orchestrator;
+  }
+
+  // Set the checker piece as king
+  setKing(){
+    this.isKing = true;
   }
 }

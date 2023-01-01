@@ -180,6 +180,13 @@ export class MyGameStateTurn extends MyGameState {
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
 
+    // Check if the checker became a king
+    if (this.checker.color == "red" && this.destinationTile.row == 0) {
+      this.checker.setKing();
+    } else if (this.checker.color == "blue" && this.destinationTile.row == 7) {
+      this.checker.setKing();
+    }
+
     // Update the checker's tile
     this.checker.tile = this.destinationTile;
     this.checker.row = this.destinationTile.row;
