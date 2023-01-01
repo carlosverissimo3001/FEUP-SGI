@@ -575,7 +575,9 @@ export class MyBoard {
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
 
             if (tile.checker.isKing){
-              //
+              if (nextTile["up left"] != null && nextTile["up left"].checker == null && tile == diagonalTiles["up left"]) {
+                availableTiles.push(nextTile["up left"]);
+              }
             }
 
             else{
@@ -598,8 +600,16 @@ export class MyBoard {
             var deltaZ = tile.row - checker.row;
             var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["up right"]) {
-              availableTiles.push(nextTile["right"]);
+
+            if (tile.checker.isKing){
+              if (nextTile["up right"] != null && nextTile["up right"].checker == null && tile == diagonalTiles["up right"]) {
+                availableTiles.push(nextTile["up right"]);
+              }
+            }
+            else{
+              if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["up right"]) {
+                availableTiles.push(nextTile["right"]);
+              }
             }
           }
         }
@@ -615,8 +625,17 @@ export class MyBoard {
             var deltaZ = tile.row - checker.row;
             var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (nextTile["left"] != null && nextTile["left"].checker == null && tile == diagonalTiles["down left"]) {
-              availableTiles.push(nextTile["left"]);
+
+            if (tile.checker.isKing){
+              if (nextTile["down left"] != null && nextTile["down left"].checker == null && tile == diagonalTiles["down left"]) {
+                availableTiles.push(nextTile["down left"]);
+              }
+            }
+
+            else {
+              if (nextTile["left"] != null && nextTile["left"].checker == null && tile == diagonalTiles["down left"]) {
+                availableTiles.push(nextTile["left"]);
+              }
             }
           }
         }
@@ -632,8 +651,17 @@ export class MyBoard {
             var deltaZ = tile.row - checker.row;
             var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["down right"]) {
-              availableTiles.push(nextTile["right"]);
+
+            if (tile.checker.isKing){
+              if (nextTile["down right"] != null && nextTile["down right"].checker == null && tile == diagonalTiles["down right"]) {
+                availableTiles.push(nextTile["down right"]);
+              }
+            }
+
+            else {
+              if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["down right"]) {
+                availableTiles.push(nextTile["right"]);
+              }
             }
           }
         }
