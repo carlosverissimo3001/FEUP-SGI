@@ -24,6 +24,8 @@ export class MyKeyframeAnimation extends MyAnimation {
     this.active = false;
 
     this.finished = false;
+
+    this.trannslationMatrix = []
   }
 
   /**
@@ -54,8 +56,6 @@ export class MyKeyframeAnimation extends MyAnimation {
    * @param {integer} t - time since last call
    */
   update(t) {
-    if (this.animationId == "checkerNormalAnimation")
-      console.log("checkerNormalAnimation");
     this.totalTime += t;
 
     /* Check if the animation is active */
@@ -104,6 +104,14 @@ export class MyKeyframeAnimation extends MyAnimation {
   }
 
   /**
+   * Get the translation matrix
+   * @return {mat4} matrix - translation matrix
+   */
+  getTranslationMatrix() {
+    return this.translationMatrix
+  }
+
+  /**
    * apply animation matrix to scene
    */
   apply() {
@@ -139,8 +147,14 @@ export class MyKeyframeAnimation extends MyAnimation {
     ];
     vec3.lerp(translation, lastTranslation, nextTranslation, timepercentage);
 
+    var deltaX = Math.abs((nextFrame.translation[0] - lastFrame.translation[0]) * timepercentage)
+    var deltaZ = Math.abs((nextFrame.translation[2] - lastFrame.translation[2]) * timepercentage)
+    this.translationMatrix = [deltaX, 0, deltaZ]
+
+
     // Apply the interpolated translation to the transformation matrix
     mat4.translate(transfMatrix, transfMatrix, translation);
+
 
     // Interpolation between rotation transformation of previous and next keyframes
     // This should read: rotation angle in x, rotation angle in y, rotation angle in z

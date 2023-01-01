@@ -24,13 +24,7 @@ export class MyGameMove {
         // Pointer to the board before the move
         this.oldBoard = oldBoard;
 
-        this.animation = null;
-
         // Checker that was eaten, can be null
         this.eatenChecker = eatenChecker;
-    }
-
-    animate() {
-
     }
 }

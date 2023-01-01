@@ -1,5 +1,4 @@
 import { MyGameSequence } from "./game-sequence/MyGameSequence.js";
-import { MyAnimator } from "../MyAnimator.js";
 import { MySceneGraph } from "../../MySceneGraph.js";
 import { MyBoard } from "../board-elements/MyBoard.js";
 import { MyGameState } from "./game-state/MyGameState.js";
@@ -12,7 +11,8 @@ export class MyGameOrchestrator {
     this.scene = scene;
 
     this.gameSequence = new MyGameSequence(this.scene);
-    this.animator = new MyAnimator(scene, this, this.gameSequence);
+
+    // Set the board
     this.board = new MyBoard(scene, 8);
 
     // Scene graph
@@ -55,19 +55,28 @@ export class MyGameOrchestrator {
 
     this.eatenChecker = null;
 
-    /* this.interfaceUpdated = false; */
+    this.movingCheckers = [];
+
+    this.hasEatenCheckerFinished = false;
   }
 
   /** Initializes the scene graph
    * @param {MySceneGraph} sceneGraph
    */
   init(sceneGraph) {
+    // Set the scene graph
     this.theme = sceneGraph;
+
+    // Finish loading
     this.hasLoaded = true;
 
     // Set the cameras
-    this.player1Camera = "Player 1 View";
-    this.player2Camera = "Player 2 View";
+    this.player1Camera = "Player 1";
+    this.player2Camera = "Player 2";
+
+    for (var i = 0; i < this.board.checkers.length; i++) {
+      this.board.checkers[i].setOrchestrator(this);
+    }
   }
 
   /**
@@ -75,46 +84,75 @@ export class MyGameOrchestrator {
    * @param {Number} time - Current time
    */
   update(time) {
-    /* Update all checkers animations*/
+    /* Update all ongoing checkers animations, includes normal animation, and deposit animation*/
     for (let i = 0; i < this.board.checkers.length; i++) {
-      if (this.board.checkers[i].animation != null)
+      if (this.board.checkers[i].animation != null) {
+        // If this checker is not in the moving checkers array, add it
+        if (!this.movingCheckers.includes(this.board.checkers[i]))
+          this.movingCheckers.push(this.board.checkers[i]);
+
         this.board.checkers[i].animation.update(time);
-        this.board.checkers[i].display();
+      }
     }
   }
 
-  displayEatenCheckers() {
-    for (let i = 0; i < this.player1Eat.length; i++) {
-      this.player1Eat[i].display();
-    }
-    for (let i = 0; i < this.player2Eat.length; i++) {
-      this.player2Eat[i].display();
-    }
+  /** Displays the moving checkers
+   * @param {MyChecker} checker - The checker to be displayed
+   */
+  displayMovingChecker(checker) {
+    checker.display();
   }
 
-
-  display() {
+  display(time) {
     // Manage picking
     this.managePick();
 
     this.scene.clearPickRegistration();
 
     // Display the scene graph
-    this.theme.displayScene();
+    /* this.theme.displayScene(); */
 
     // Display the board
     this.board.display();
 
-    // Display the eaten checkers
-    this.displayEatenCheckers();
+    for (let i = 0; i < this.movingCheckers.length; i++) {
+      // If the checker is moving, display it
+      if (this.movingCheckers[i].moving)
+        this.displayMovingChecker(this.movingCheckers[i]);
+      // If the checker has finished moving, check some conditions
+      else {
+        // If the moving checker is not an eaten checker, we need to set its tile so that it can be displayed
+        if (!this.movingCheckers[i].wasEaten) {
+          this.movingCheckers[i].tile.set(this.movingCheckers[i]);
+          this.movingCheckers[i].updatePos();
+
+          // If no checker was eaten, turn the lights back on after the attacking animation has finished
+          // OTHERWISE, the lights will be turned on when the eaten checker has finished moving
+          if (!this.eatenChecker){
+            this.turnOnLights();
+            this.deleteSpotlight();
+          }
+
+          // Remove the checker from the moving checkers array
+          this.movingCheckers.splice(i, 1);
+          i--;
+        }
+
+        // If the moving checker was an eaten checker, the orchestrator is the one responsible for displaying it
+        else {
+          // Only turn the lights back on when the eaten checker has finished moving
+          if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat){
+            this.hasEatenCheckerFinished = true;
+            this.eatenChecker = null;
+            this.deleteSpotlight();
+            this.turnOnLights();
+          }
+          this.movingCheckers[i].display();
+        }
+      }
+    }
   }
 
-  /** Changes the game state
-   * @param {MyGameState} state - The new game state
-   */
-  changeState(state) {
-    this.gameState = state;
-  }
 
   changePlayerTurn() {
     // Only change the turn if a checker was not eaten
@@ -124,15 +162,23 @@ export class MyGameOrchestrator {
         : (this.turn = "Player 1");
     }
 
-    // Change the camera
+    // Change the camera, if auto rotate is on
     if (this.autoRotate) {
+      // If current camera is player 1, change to player 2
       if (this.scene.cameraID == this.player1Camera)
         this.scene.updateCamera(this.player2Camera);
+      // If current camera is player 2, change to player 1
       else if (this.scene.cameraID == this.player2Camera)
         this.scene.updateCamera(this.player1Camera);
-    }
+      // If current camera is not player 1 or 2, change the next player's camera
+      else{
+        if (this.turn == "Player 1")
+          this.scene.updateCamera(this.player1Camera);
+        else
+          this.scene.updateCamera(this.player2Camera);
+      }
 
-    this.eatenChecker = null;
+    }
   }
 
   clearPicked() {
@@ -180,10 +226,10 @@ export class MyGameOrchestrator {
       }
 
       // Assume a double click in the same checker as an unselect
-      else{
+      else {
         this.gameState.checker.unsetSelected();
         this.gameState.checker = null;
-        this.unsetAvailable(this.availableTiles)
+        this.unsetAvailable(this.availableTiles);
         return;
       }
 
@@ -203,6 +249,12 @@ export class MyGameOrchestrator {
         // Move the checker to the tile
         this.gameState.moveChecker(this.eatenChecker);
 
+        // Get the lights that were turned on
+        this.getTurnedOnLights();
+
+        // Turn off the lights
+        this.turnOffLights();
+
         // Unset the avaliable tiles and checkers
         this.unsetAvailable(availableCheckers);
         this.unsetAvailable(this.availableTiles);
@@ -220,31 +272,34 @@ export class MyGameOrchestrator {
   }
 
   eatCheckers() {
-    console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
+    /* console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
     console.log("Player 2 has eaten " + this.player2Eat.length + " checkers");
-
+ */
     this.board.player1MarkerNumber = this.player1Eat.length;
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
         if (!this.player1Eat[i].wasEaten) {
-          this.player1Eat[i].y_eat += 0.17 * i;
+          this.player1Eat[i].depositLocation[1] += 0.165 * i;
+          // The tile no longer has a checker. The display method will be called by the orchestrator
           this.player1Eat[i].tile.remove();
+
+          // The checker has been eaten
           this.player1Eat[i].wasEaten = true;
+
+          // The checker that was eaten
           this.eatenChecker = this.player1Eat[i];
         }
-        this.player1Eat[i].display();
       }
     }
     this.board.player2MarkerNumber = this.player2Eat.length;
     if (this.player2Eat.length > 0) {
       for (let i = 0; i < this.player2Eat.length; i++) {
         if (!this.player2Eat[i].wasEaten) {
-          this.player2Eat[i].y_eat += 0.17 * i;
+          this.player2Eat[i].depositLocation[1] += 0.17 * i;
           this.player2Eat[i].tile.remove();
           this.player2Eat[i].wasEaten = true;
           this.eatenChecker = this.player2Eat[i];
         }
-        this.player2Eat[i].display();
       }
     }
   }
@@ -265,7 +320,6 @@ export class MyGameOrchestrator {
             var objid = this.scene.pickResults[i][1]; // get the id of the nth pick result
 
             if (obj) {
-              console.log(objid);
               // is this a valid pick?
               if (obj instanceof MyTile) {
                 if (this.gameState.checker != null) {
@@ -273,7 +327,7 @@ export class MyGameOrchestrator {
                 } else {
                   alert(this.turn + ", please select a checker first");
                 }
-              } else if (obj instanceof MyChecker) {
+              } else if (obj instanceof MyChecker && !obj.wasEaten) {
                 // play a sound
                 this.audio.play();
 
@@ -395,5 +449,117 @@ export class MyGameOrchestrator {
       "Are you sure you want to watch the movie of the game? The state of the game will be preserved"
     );
     if (!confirmation) return;
+  }
+
+  /**
+   * Get the lights that are turned on at the moment
+   */
+  getTurnedOnLights() {
+    this.turnedOnLights = [];
+    var lightNames = this.scene.lightsVal;
+
+    for (var key in lightNames) {
+      if (lightNames.hasOwnProperty(key)) {
+        if (lightNames[key]) this.turnedOnLights.push(key);
+      }
+    }
+  }
+
+  /**
+   * Called after the movement of a checker. Turns on the lights that were on before the movement
+   */
+  turnOnLights() {
+    var lights = this.scene.lights;
+    var i = 0;
+
+    for (var key in this.turnedOnLights) {
+      // If the light was on before the movement
+      if (this.turnedOnLights.hasOwnProperty(key)) {
+        // Turn it on
+        lights[i].enable();
+
+        // Check the checkbox
+        this.scene.lightsVal[this.turnedOnLights[key]] = true;
+
+        lights[i].update();
+        i++;
+      }
+    }
+  }
+
+  /**
+   * Called before the movement of a checker. Turns off all the lights
+   */
+  turnOffLights() {
+    var lightNames = this.scene.lightsVal;
+    var lights = this.scene.lights;
+    var i = 0;
+
+    // For each light
+    for (var key in lightNames) {
+      if (lightNames.hasOwnProperty(key)) {
+        // Turn it off
+        lights[i].disable();
+
+        // Uncheck the checkbox
+        lightNames[key] = false;
+
+        lights[i].update();
+        i++;
+      }
+    }
+  }
+
+  /**
+   * Adds a light to the scene
+   * @param {Array} target The target position of the light
+   */
+  addSpotlight(target){
+    // Get the number of lights
+    var i = this.scene.lightsVal.length;
+
+    var xPos = target[0] - 1;
+    var yPos = target[1]
+    var zPos = target[2] - 1;
+
+    // Position of the light
+    this.scene.lights[i].setPosition(
+      xPos,
+      1, // It positions the light above the checker
+      zPos,
+      1
+    );
+
+    // Set the light ambient, diffuse and specular
+    this.scene.lights[i].setAmbient(0, 0, 0, 1);
+    this.scene.lights[i].setDiffuse(1, 1, 1, 1);
+    this.scene.lights[i].setSpecular(1, 1, 1, 1);
+
+    // Set the light cutoff and exponent
+    this.scene.lights[i].setSpotCutOff(0);
+    this.scene.lights[i].setSpotExponent(1);
+
+    // Set the target of the light -> board
+    this.scene.lights[i].setSpotDirection(xPos, 0, zPos);
+
+    // Enable the light
+    this.scene.lights[i].enable();
+
+    // Update the light
+    this.scene.lights[i].update();
+
+  }
+
+  deleteSpotlight(){
+    // Get the number of lights
+    var i = this.scene.lightsVal.length;
+
+    // Disable the light
+    this.scene.lights[i].disable();
+
+    // No need to remove, as the next created light will overwrite the last one
+
+    // Update the light
+    this.scene.lights[i].update();
   }
 }

@@ -25,7 +25,10 @@ export class MyInterface extends CGFinterface {
 
         // add a group of controls (and open/expand by defult)
         //Checkbox element in GUI
-        this.gui.add(this.scene, 'displayAxis').name('Display Axis');
+
+        var miscFolder = this.gui.addFolder('Misc');
+
+        miscFolder.add(this.scene, 'displayAxis').name('Display Axis');
 
         this.initKeys();
 
@@ -64,7 +67,6 @@ export class MyInterface extends CGFinterface {
     createInterface(){
         this.addLightsFolder();
         this.addViewsFolder();
-        this.createCheckboxes();
         this.initTheme();
         this.initGameElements();
     }
@@ -75,24 +77,25 @@ export class MyInterface extends CGFinterface {
         var lightsFolder = this.gui.addFolder('Lights');
 
         var lights = this.scene.graphs[themeIndex].lights;
+        lightsFolder.closed = false;
 
         for (var i in lights){
             if(lights.hasOwnProperty(i)){
                 this.scene.lightsVal[i] = lights[i][0]
                 lightsFolder.add(this.scene.lightsVal, i).onChange(this.scene.setLights.bind(this.scene))
+                this.scene.lightsVal.length++;
             }
         }
 
-        lightsFolder.closed = false;
+        lightsFolder.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
+
     }
 
     addViewsFolder(){
         var cameraNames = this.scene.cameraNames;
-        this.gui.add(this.scene, "cameraID", cameraNames).onChange(val => this.scene.updateCamera(val)).name("Camera");
-    }
+        var viewsFolder = this.gui.addFolder('Views');
 
-    createCheckboxes(){
-        this.gui.add(this.scene, 'showLights').name('Show Lights').onChange(this.scene.setLights());
+        viewsFolder.add(this.scene, "cameraID", cameraNames).onChange(val => this.scene.updateCamera(val)).name("View");
     }
 
     initTheme(){
@@ -113,14 +116,6 @@ export class MyInterface extends CGFinterface {
         this.gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
         this.gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
         this.gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
-        /* if (this.scene.gameOrchestrator.gameSequence.moves.length == 0)
-            this.gameFolder.add(this.scene.gameOrchestrator, 'initialTurn', this.scene.gameOrchestrator.playersArray).name('First Turn'); */
 
     }
-
-    /* updateInterface(){
-        this.gui.removeFolder(this.gameFolder);
-
-        this.initGameElements();
-    } */
 }
