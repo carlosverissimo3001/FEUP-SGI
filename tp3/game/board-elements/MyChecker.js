@@ -47,7 +47,7 @@ export class MyChecker extends CGFobject {
     this.stackDelta = 2.075;
 
     // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
-    this.isKing = (this.id == "5,4") ? true : false;
+    this.isKing = (this.id == "5,4" || this.id == "2,3") ? true : false;
 
     this.transformations = [];
 
