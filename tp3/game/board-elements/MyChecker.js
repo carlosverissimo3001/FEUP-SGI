@@ -319,9 +319,8 @@ export class MyChecker extends CGFobject {
   /**
    * Sets up the animation for the checker piece
    * @param {MyTile} tile - Destination tile
-   * @param {boolean} eatMove - true if the checker piece is moving to eat another piece
    */
-  startAnimation(tile, eatMove) {
+  startAnimation(tile) {
     // Get the movement direction
     this.getMovementDirection(tile);
 
@@ -532,7 +531,7 @@ export class MyChecker extends CGFobject {
 
     // Otherwise, display the checker piece, with the animation
     else {
-      var transformations = this.initRelativeTransformations(true, false);
+      var transformations = this.initRelativeTransformations(false);
 
       for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
@@ -617,7 +616,7 @@ export class MyChecker extends CGFobject {
       this.scene.popMatrix();
     }
 
-    if (this.isKing || this.id == "4,5") {
+    if (this.isKing) {
       var transformations = this.initTransformations(true);
 
       for (var i = 0; i < this.components.length; i++) {

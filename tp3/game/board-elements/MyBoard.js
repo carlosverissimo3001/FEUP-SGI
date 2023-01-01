@@ -568,6 +568,10 @@ export class MyBoard {
         else {
           if (tile.checker.color != color) {
             // Get the diagnoal tiles of the tile with the checker
+            // Which color to send? If the movement of the king is up, we send red
+            // If the movement of the king is down, we send blue
+            var deltaZ = tile.row - checker.row;
+            var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
 
             if (tile.checker.isKing){
@@ -591,6 +595,8 @@ export class MyBoard {
         // If there is a checker in the tile, check if there is an empty tile ahead
         else {
           if (tile.checker.color != color) {
+            var deltaZ = tile.row - checker.row;
+            var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
             if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["up right"]) {
               availableTiles.push(nextTile["right"]);
@@ -606,6 +612,8 @@ export class MyBoard {
         // If there is a checker in the tile, check if there is an empty tile ahead
         else {
           if (tile.checker.color != color) {
+            var deltaZ = tile.row - checker.row;
+            var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
             if (nextTile["left"] != null && nextTile["left"].checker == null && tile == diagonalTiles["down left"]) {
               availableTiles.push(nextTile["left"]);
@@ -621,8 +629,10 @@ export class MyBoard {
         // If there is a checker in the tile, check if there is an empty tile ahead
         else {
           if (tile.checker.color != color) {
+            var deltaZ = tile.row - checker.row;
+            var color = deltaZ < 0 ? "red" : "blue";
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if ( nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["down right"]) {
+            if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["down right"]) {
               availableTiles.push(nextTile["right"]);
             }
           }
