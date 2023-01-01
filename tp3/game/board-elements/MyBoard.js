@@ -404,32 +404,35 @@ export class MyBoard {
   getDiagonalTiles(row, col, color) {
     let tiles = [];
 
-    // If the checker is white, it can only move up, that is
-    if (color == "red") {
-      // Diagonal up left
-      if (row >= 0 && col >= 0) {
-        tiles["left"] = this.board[row - 1][col - 1];
-      } else tiles["left"] = null;
-      // Diagonal up right
-      if (row >= 0 && col <= 7) {
-        tiles["right"] = this.board[row - 1][col + 1];
-      } else tiles["right"] = null;
-    }
+    // Is the checker a king?
+    if (!this.board[row][col].checker.isKing) {
+      // If the checker not a king and is red, it can only move up, that is
+      if (color == "red") {
+        // Diagonal up left
+        if (row >= 0 && col >= 0) {
+          tiles["left"] = this.board[row - 1][col - 1];
+        } else tiles["left"] = null;
+        // Diagonal up right
+        if (row >= 0 && col <= 7) {
+          tiles["right"] = this.board[row - 1][col + 1];
+        } else tiles["right"] = null;
+      }
 
-    // If the checker is black, it can only move down, that is
-    else {
-      // Diagonal down left
-      if (row <= 7 && col >= 0) {
-        tiles["left"] = this.board[row + 1][col - 1];
-      } else tiles["left"] = null;
-      // Diagonal down right
-      if (row <= 7 && col <= 7) {
-        tiles["right"] = this.board[row + 1][col + 1];
-      } else tiles["right"] = null;
+      // If the checker is not a king and is blue, it can only move down, that is
+      else {
+        // Diagonal down left
+        if (row <= 7 && col >= 0) {
+          tiles["left"] = this.board[row + 1][col - 1];
+        } else tiles["left"] = null;
+        // Diagonal down right
+        if (row <= 7 && col <= 7) {
+          tiles["right"] = this.board[row + 1][col + 1];
+        } else tiles["right"] = null;
+      }
     }
 
     // However, if the checker is a king, it can move in both directions
-    if (this.board[row][col].checker.isKing) {
+    else {
       // Diagonal up left
       if (row >= 0 && col >= 0) {
         tiles["up left"] = this.board[row - 1][col - 1];
@@ -522,21 +525,24 @@ export class MyBoard {
 
     // If the checker is a king, it can move in both directions
     else {
+      if (checker.isKing && checker.selected) {
+        console.log(availableTiles);
+      }
+
       var tile = diagonalTiles["up left"];
       if (tile != null) {
         if (tile.checker == null) {
           availableTiles.push(tile);
         }
-        // If there is a checker in the tile, check if there is an empty tile ahead
+        // If there is a checker from the other player in the tile, check if there is an empty tile ahead
         else {
           if (tile.checker.color != color) {
+            // Get the diagnoal tiles of the tile with the checker
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (
-              nextTile["up left"] != null &&
-              nextTile["up left"].checker == null &&
-              tile == diagonalTiles["up left"]
-            ) {
-              availableTiles.push(nextTile["up left"]);
+
+            // If the tile ahead is empty, add it to the available tiles
+            if (nextTile["left"] != null && nextTile["left"].checker == null && tile == diagonalTiles["up left"]) {
+              availableTiles.push(nextTile["left"]);
             }
           }
         }
@@ -550,12 +556,8 @@ export class MyBoard {
         else {
           if (tile.checker.color != color) {
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (
-              nextTile["up right"] != null &&
-              nextTile["up right"].checker == null &&
-              tile == diagonalTiles["up right"]
-            ) {
-              availableTiles.push(nextTile["up right"]);
+            if (nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["up right"]) {
+              availableTiles.push(nextTile["right"]);
             }
           }
         }
@@ -569,12 +571,8 @@ export class MyBoard {
         else {
           if (tile.checker.color != color) {
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (
-              nextTile["down left"] != null &&
-              nextTile["down left"].checker == null &&
-              tile == diagonalTiles["down left"]
-            ) {
-              availableTiles.push(nextTile["down left"]);
+            if (nextTile["left"] != null && nextTile["left"].checker == null && tile == diagonalTiles["down left"]) {
+              availableTiles.push(nextTile["left"]);
             }
           }
         }
@@ -588,21 +586,13 @@ export class MyBoard {
         else {
           if (tile.checker.color != color) {
             var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-            if (
-              nextTile["down right"] != null &&
-              nextTile["down right"].checker == null &&
-              tile == diagonalTiles["down right"]
-            ) {
-              availableTiles.push(nextTile["down right"]);
+            if ( nextTile["right"] != null && nextTile["right"].checker == null && tile == diagonalTiles["down right"]) {
+              availableTiles.push(nextTile["right"]);
             }
           }
         }
       }
     }
-
-    /* if (checker.isKing) {
-      console.log(availableTiles);
-    } */
 
     return availableTiles;
   }
