@@ -35,7 +35,7 @@ export class MyChecker extends CGFobject {
     this.y = 2.1;
     this.z = 0.5;
 
-    this.y_eat = 0.27;
+    this.y_eat_ini = 0.335;
 
     this.color = color;
 
@@ -99,8 +99,18 @@ export class MyChecker extends CGFobject {
 
     this.tile = this.board.getTile(tileID.split(",")[0], tileID.split(",")[1]);
 
+    // Will store the transformation matrix so the piece can be displayed in the correct position, while its movement is being animated
     this.relativeTransformations = [];
 
+    // Location of the deposit where the piece will be placed when it is eaten. Only the y coordinate will change, depending on the number of pieces already in the deposit
+    this.depositLocation =
+      this.color == "blue"
+        ? [9.27, this.y_eat_ini, 42.5]
+        : [20.27, this.y_eat_ini, 49.5];
+
+    // As this matrix is fixed (the deposits are always in the same place), it will be initialized only once, in the constructor
+    this.depositTransformations = [];
+    this.initDepositTransformations();
 
     this.initialPos = [];
     this.initialPos.push(this.tile.getX() + this.x);
@@ -109,15 +119,20 @@ export class MyChecker extends CGFobject {
 
     this.animation = null;
 
+    this.yUpdated = false;
+
     // Audio
     this.audio = new Audio("sounds/slide.mp3");
     this.audio.volume = 0.5;
     this.audioActive = false;
 
     // Animation duration
-    this.animDuration = 3.44;
+    this.animDuration = 1;
 
     this.movementDir = "";
+
+    // Is this piece moving to the eat location?
+    this.isMoving_eat = false;
   }
 
   /**
@@ -127,7 +142,7 @@ export class MyChecker extends CGFobject {
     this.initialPos[0] = this.tile.getX() + this.x;
     this.initialPos[2] = this.tile.getZ() + this.z;
 
-    this.relativeTransformations = [];
+    if (!this.isMoving_eat) this.relativeTransformations = [];
   }
 
   /**
@@ -175,45 +190,77 @@ export class MyChecker extends CGFobject {
    * Computes the checker piece movement direction
    * @param {MyTile} tile - destination tile
    */
-  getMovementDirection(tile){
+  getMovementDirection(tile) {
     var x = tile.getX() - this.tile.getX();
 
-   (x < 0) ? this.movementDir = "left" : this.movementDir = "right";
+    x < 0 ? (this.movementDir = "left") : (this.movementDir = "right");
   }
 
   /**
    * These are the transformations relative to the origin
+   * @param {boolean} eatMove - true if the checker piece is moving to eat another piece
    */
-  initRelativeTransformations() {
+  initRelativeTransformations(eatMove, goingToDeposit) {
     // Outer torus
     var transf = mat4.create();
 
     // The x and z coordinates are relative to the tile' absolute position + offset
 
-    console.log(this.tile.id)
+    var x,
+      y = 0.3,
+      z;
 
-    var x, y = 0.3, z;
-
-    if (this.color == "red"){
-      if (this.movementDir == "right"){
+    // Red checker piece
+    if (this.color == "red") {
+      // Checker piece is moving to the right
+      if (this.movementDir == "right") {
         x = this.tile.getX() + 1.5;
         z = this.tile.getZ() - 0.5;
+
+        if (eatMove) {
+          x += 1;
+          z -= 1;
+        }
       }
-      else{
+      // Checker piece is moving to the left
+      else {
         x = this.tile.getX() - 0.5;
         z = this.tile.getZ() - 0.5;
+
+        if (eatMove) {
+          x -= 1;
+          z -= 1;
+        }
       }
     }
 
-    else{
-      if (this.movementDir == "right"){
+    // Blue checker piece
+    else {
+      // Checker piece is moving to the right
+      if (this.movementDir == "right") {
         x = this.tile.getX() + 1.5;
         z = this.tile.getZ() + 1.5;
+
+        if (eatMove) {
+          x += 1;
+          z += 1;
+        }
       }
-      else{
+      // Checker piece is moving to the left
+      else {
         x = this.tile.getX() - 0.5;
         z = this.tile.getZ() + 1.5;
+
+        if (eatMove) {
+          x -= 1;
+          z += 1;
+        }
       }
+    }
+
+    if (goingToDeposit){
+      x = this.tile.getX() + this.x;
+      z = this.tile.getZ() + this.z;
     }
 
     transf = mat4.translate(transf, transf, [x, y, z]);
@@ -249,30 +296,67 @@ export class MyChecker extends CGFobject {
   }
 
   /**
-   * Starts the animation for the checker piece
-   * @param {MyTile} tile - Destination tile
+   * Computes the checker piece absolute transformations to the deposit location
    */
-  startAnimation(tile) {
-    /* Since the checker is being displayed within the tile scene, the first frame of
-      the animation will be the checker's initial position, which is the center of the old tile.
+  initDepositTransformations() {
+    var scaleFactor = 0.4;
+    var transf = mat4.create();
 
-      The final frame of the animation will be the checker's final position, which is the center of the new tile.
-      So no tranlation is needed for the last kf.
-    */
+    var x = this.depositLocation[0];
+    var y = this.depositLocation[1];
+    var z = this.depositLocation[2];
 
-    console.log("Checker with color " + this.color + " has initial position: " + this.initialPos);
+    // Outer torus
 
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
+    transf = mat4.scale(transf, transf, [0.3, 0.3, 1.75 * scaleFactor]);
+
+    this.depositTransformations.push(transf);
+
+    // Whole sphere
+
+    transf = mat4.create();
+
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.scale(transf, transf, [0.32, 0.16 * scaleFactor, 0.32]);
+
+    this.depositTransformations.push(transf);
+
+    // Inner torus
+
+    transf = mat4.create();
+
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
+    transf = mat4.scale(transf, transf, [0.2, 0.2, 2 * scaleFactor]);
+
+    this.depositTransformations.push(transf);
+
+    // Inner sphere
+
+    transf = mat4.create();
+
+    transf = mat4.translate(transf, transf, [x, y, z]);
+    transf = mat4.scale(transf, transf, [0.18, 0.21 * scaleFactor, 0.18]);
+
+    this.depositTransformations.push(transf);
+  }
+
+  /**
+   * Sets up the animation for the checker piece
+   * @param {MyTile} tile - Destination tile
+   * @param {boolean} eatMove - true if the checker piece is moving to eat another piece
+   */
+  startAnimation(tile, eatMove) {
     // Get the movement direction
     this.getMovementDirection(tile);
 
     // Get transformations relative to the origin
-    this.initRelativeTransformations();
+    this.initRelativeTransformations(eatMove);
 
     // Create the animation
-    this.animation = new MyKeyframeAnimation(
-      this.scene,
-      "checkerAnimation"
-    );
+    this.animation = new MyKeyframeAnimation(this.scene, "checkerAnimation");
 
     // Get the destination tile coordinates
     var x = tile.getX() + 0.5;
@@ -310,6 +394,66 @@ export class MyChecker extends CGFobject {
     this.moving = true;
   }
 
+  /**
+   * Sets up the animation for the checker piece when it will be deposited in the eat locaiton
+   */
+  startEatAnimation() {
+    // Transformations relative to the origin, to the current tile
+    this.initRelativeTransformations(false, true);
+
+    // Create the animation
+    this.animation = new MyKeyframeAnimation(this.scene, "jumpAnimation");
+
+    var deltaX = this.depositLocation[0] - this.initialPos[0];
+
+    // Distance from current y, to the top of the deposit location
+    var deltaY = this.depositLocation[1] - this.initialPos[1];
+
+    var deltaZ = this.depositLocation[2] - this.initialPos[2];
+
+    // Time it takes for the checker eating to collide with this piece
+    var deltaTime = 0.26;
+
+    // The duration of the animation will vary depending on the distance between the initial and final positions
+    this.animDuration = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ) / 2;
+
+    // Remove 50% of the duration, to make the animation faster
+    this.animDuration *= 0.5;
+
+
+
+    // Create 10 keyframes for the animation, to simulate an arc-like movement
+    for (var i = 0; i < 11; i++) {
+      // Increase the instant by 10% of the animation duration
+      var instant = deltaTime + (i * this.animDuration) / 11;
+
+      // x and z go from 0 to their deltas
+      var x = (instant - deltaTime) * deltaX / this.animDuration;
+      var z = (instant - deltaTime) * deltaZ / this.animDuration;
+
+      // y starts at 0, then reaches 0.5 in the middle of the animation, and then goes to deltaY
+      var y = 0.5 * Math.sin((instant - deltaTime) * Math.PI / this.animDuration);
+
+      var kf = new MyKeyframe(
+        instant,
+        [x, y, z],
+        [0, 0, 0],
+        [1, 1, 1]
+      );
+
+      this.animation.addKeyframe(kf);
+    }
+
+    // This only needs to be called due to an oversight in the MyKeyframeAnimation class -> the startTime and endTime are only set when the update_order method is called
+    this.animation.update_order();
+
+    // Start the animation
+    this.isMoving_eat = true;
+  }
+
+  /**
+   * Displays the checker piece, when moving to a tile
+   */
   displayMoving() {
     this.scene.pushMatrix();
 
@@ -339,7 +483,6 @@ export class MyChecker extends CGFobject {
       this.audio.loop = true;
       this.audio.play();
 
-
       for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
 
@@ -357,51 +500,59 @@ export class MyChecker extends CGFobject {
   }
 
   /**
-   * Displays the checker piece, when it it has been eaten
+   * Displays the checker piece, when it it being eaten
    */
   displayEaten() {
-    this.scaleFactor = 0.4;
     this.scene.pushMatrix();
 
-    // Outer torus
-    this.color == "blue"
-      ? this.scene.translate(20.27, this.y_eat, 49.5)
-      : this.scene.translate(9.27, this.y_eat, 42.5);
+    // Has the animation finished?
+    if (this.animation.finished) {
+      // If so, checker piece is no longer moving
+      this.isMoving_eat = false;
 
-    this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.scene.scale(0.3, 0.3, 1.75 * this.scaleFactor);
-    this.components[0].display();
+      // No animation is being played
+      this.animation = null;
+      this.scene.popMatrix();
+      return;
+    }
+
+    // Otherwise, display the checker piece, with the animation
+    else {
+      // Play the audio
+      for (var i = 0; i < this.components.length; i++) {
+        this.scene.pushMatrix();
+
+        // Applies the animation
+        this.scene.multMatrix(this.animation.getMatrix());
+
+        // Puts the piece in the correct position
+        this.scene.multMatrix(this.relativeTransformations[i]);
+
+        this.components[i].display();
+        this.scene.popMatrix();
+      }
+    }
     this.scene.popMatrix();
+  }
 
-    // Whole sphere
-    this.scene.pushMatrix();
-    this.color == "blue"
-      ? this.scene.translate(20.27, this.y_eat, 49.5)
-      : this.scene.translate(9.27, this.y_eat, 42.5);
-    this.scene.scale(0.32, 0.16 * this.scaleFactor, 0.32);
-    this.components[1].display();
-    this.scene.popMatrix();
+  /**
+   * Displays the checker piece, when it is deposited in the eat location
+   */
+  displayDeposited() {
+    // Used to update the transformations to the deposit location
+    if (!this.yUpdated){
+      // this.depositLocation[1] has been updated, so the checker piece can be displayed in the correct position
+      this.depositTransformations = [];
+      this.initDepositTransformations();
+      this.yUpdated = true;
+    }
 
-    // Inner torus
-    this.scene.pushMatrix();
-    this.color == "blue"
-      ? this.scene.translate(20.27, this.y_eat, 49.5)
-      : this.scene.translate(9.27, this.y_eat, 42.5);
-    this.scene.rotate(Math.PI / 2, 1, 0, 0);
-    this.scene.scale(0.2, 0.2, 2 * this.scaleFactor);
-    this.components[2].display();
-    this.scene.popMatrix();
-
-    // Inner sphere
-    this.scene.pushMatrix();
-    this.color == "blue"
-      ? this.scene.translate(20.27, this.y_eat, 49.5)
-      : this.scene.translate(9.27, this.y_eat, 42.5);
-    this.scene.scale(0.18, 0.21 * this.scaleFactor, 0.18);
-    this.components[3].display();
-    this.scene.popMatrix();
-
-
+    for (var i = 0; i < this.components.length; i++) {
+      this.scene.pushMatrix();
+      this.scene.multMatrix(this.depositTransformations[i]);
+      this.components[i].display();
+      this.scene.popMatrix();
+    }
   }
 
   /**
@@ -420,17 +571,26 @@ export class MyChecker extends CGFobject {
       this.selected ? this.selectedMaterial.apply() : null;
     }
 
-    if (this.wasEaten) {
+    // Arc animation to deposit the checker piece
+    if (this.isMoving_eat) {
       this.displayEaten();
       return;
     }
 
+    // If the animation was completed, the condition above is false, so this function is called
+    if (this.wasEaten) {
+      // Display the checker piece in the eat location
+      this.displayDeposited();
+      return;
+    }
+
+    // If the piece is moving, display the animation
     if (this.moving) {
       this.displayMoving();
       return;
     }
 
-    // Display components
+    // Standard display
     for (var i = 0; i < this.components.length; i++) {
       this.scene.pushMatrix();
       this.scene.multMatrix(this.transformations[i]);

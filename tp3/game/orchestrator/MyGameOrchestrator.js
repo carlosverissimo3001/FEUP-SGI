@@ -1,5 +1,4 @@
 import { MyGameSequence } from "./game-sequence/MyGameSequence.js";
-import { MyAnimator } from "../MyAnimator.js";
 import { MySceneGraph } from "../../MySceneGraph.js";
 import { MyBoard } from "../board-elements/MyBoard.js";
 import { MyGameState } from "./game-state/MyGameState.js";
@@ -12,7 +11,6 @@ export class MyGameOrchestrator {
     this.scene = scene;
 
     this.gameSequence = new MyGameSequence(this.scene);
-    this.animator = new MyAnimator(scene, this, this.gameSequence);
     this.board = new MyBoard(scene, 8);
 
     // Scene graph
@@ -55,9 +53,7 @@ export class MyGameOrchestrator {
 
     this.eatenChecker = null;
 
-    this.movingChecker = null;
-
-    /* this.interfaceUpdated = false; */
+    this.movingCheckers = [];
   }
 
   /** Initializes the scene graph
@@ -77,26 +73,20 @@ export class MyGameOrchestrator {
    * @param {Number} time - Current time
    */
   update(time) {
-    /* Update all checkers animations*/
+    /* Update all ongoing checkers animations, includes normal animation, and deposit animation*/
     for (let i = 0; i < this.board.checkers.length; i++) {
       if (this.board.checkers[i].animation != null) {
-        if (!this.movingChecker) this.movingChecker = this.board.checkers[i];
+        // If this checker is not in the moving checkers array, add it
+        if (!this.movingCheckers.includes(this.board.checkers[i]))
+          this.movingCheckers.push(this.board.checkers[i]);
+
         this.board.checkers[i].animation.update(time);
       }
     }
   }
 
-  displayEatenCheckers() {
-    for (let i = 0; i < this.player1Eat.length; i++) {
-      this.player1Eat[i].display();
-    }
-    for (let i = 0; i < this.player2Eat.length; i++) {
-      this.player2Eat[i].display();
-    }
-  }
-
-  displayMovingChecker() {
-    this.movingChecker.display();
+  displayMovingChecker(checker) {
+    checker.display();
   }
 
   display() {
@@ -111,23 +101,29 @@ export class MyGameOrchestrator {
     // Display the board
     this.board.display();
 
-    // Display the eaten checkers
-    this.displayEatenCheckers();
+    for (let i = 0; i < this.movingCheckers.length; i++) {
+      // If the checker is moving, display it
+      if (this.movingCheckers[i].moving)
+        this.displayMovingChecker(this.movingCheckers[i]);
 
-    // Display the moving checkers
-    if (this.movingChecker)
-      if (this.movingChecker.moving)
-        this.displayMovingChecker();
+      // If the checker has finished moving, check some conditions
       else {
-        // If the checker has finished moving, set the tile's checker
-        // Now its display will be called by the tile, and not here
-        this.movingChecker.tile.set(this.movingChecker);
+        // If the moving checker is not an eaten checker, we need to set its tile so that it can be displayed
+        if (!this.movingCheckers[i].wasEaten){
+          this.movingCheckers[i].tile.set(this.movingCheckers[i]);
+          this.movingCheckers[i].updatePos();
 
-        this.movingChecker.updatePos();
+          // Remove the checker from the moving checkers array
+          this.movingCheckers.splice(i, 1);
+          i--;
+        }
 
-        // No checker is moving anymore
-        this.movingChecker = null;
+        // If the moving checker was an eaten checker, the orchestrator is the one responsible for displaying it
+        else {
+          this.movingCheckers[i].display();
+        }
       }
+    }
   }
 
   /** Changes the game state
@@ -248,24 +244,27 @@ export class MyGameOrchestrator {
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
         if (!this.player1Eat[i].wasEaten) {
-          this.player1Eat[i].y_eat += 0.17 * i;
+          this.player1Eat[i].depositLocation[1] += 0.165 * i;
+          // The tile no longer has a checker. The display method will be called by the orchestrator
           this.player1Eat[i].tile.remove();
+
+          // The checker has been eaten
           this.player1Eat[i].wasEaten = true;
+
+          // The checker that was eaten
           this.eatenChecker = this.player1Eat[i];
         }
-        this.player1Eat[i].display();
       }
     }
     this.board.player2MarkerNumber = this.player2Eat.length;
     if (this.player2Eat.length > 0) {
       for (let i = 0; i < this.player2Eat.length; i++) {
         if (!this.player2Eat[i].wasEaten) {
-          this.player2Eat[i].y_eat += 0.17 * i;
+          this.player2Eat[i].depositLocation[1]  += 0.17 * i;
           this.player2Eat[i].tile.remove();
           this.player2Eat[i].wasEaten = true;
           this.eatenChecker = this.player2Eat[i];
         }
-        this.player2Eat[i].display();
       }
     }
   }
@@ -364,6 +363,8 @@ export class MyGameOrchestrator {
         this.player2Eat.pop();
       }
     }
+
+
 
     // Change the player turn
     this.changePlayerTurn();
