@@ -71,8 +71,8 @@ export class MyGameOrchestrator {
     this.hasLoaded = true;
 
     // Set the cameras
-    this.player1Camera = "Player 1 View";
-    this.player2Camera = "Player 2 View";
+    this.player1Camera = "Player 1";
+    this.player2Camera = "Player 2";
 
     for (var i = 0; i < this.board.checkers.length; i++) {
       this.board.checkers[i].setOrchestrator(this);
@@ -153,12 +153,6 @@ export class MyGameOrchestrator {
     }
   }
 
-  /** Changes the game state
-   * @param {MyGameState} state - The new game state
-   */
-  changeState(state) {
-    this.gameState = state;
-  }
 
   changePlayerTurn() {
     // Only change the turn if a checker was not eaten
@@ -170,10 +164,20 @@ export class MyGameOrchestrator {
 
     // Change the camera, if auto rotate is on
     if (this.autoRotate) {
+      // If current camera is player 1, change to player 2
       if (this.scene.cameraID == this.player1Camera)
         this.scene.updateCamera(this.player2Camera);
+      // If current camera is player 2, change to player 1
       else if (this.scene.cameraID == this.player2Camera)
         this.scene.updateCamera(this.player1Camera);
+      // If current camera is not player 1 or 2, change the next player's camera
+      else{
+        if (this.turn == "Player 1")
+          this.scene.updateCamera(this.player1Camera);
+        else
+          this.scene.updateCamera(this.player2Camera);
+      }
+
     }
 
     /* this.eatenChecker = null; */

@@ -71,12 +71,13 @@ export class XMLscene extends CGFscene {
     this.cameraNames = [];
     this.cameraID;
     this.intermediateCamera = null;
+    this.initCameras();
 
     /* ************************************************** */
 
 
-    this.displayAxis = true;
-    this.showLights = true;
+    this.displayAxis = false;
+    this.showLights = false;
 
     this.lightsVal = [];
 

@@ -1,20 +1,20 @@
 <sxs>
     <scene root="pool_day" axis_length="17"/>
 
-    <views default="Top View">
+    <views default="Top">
         <perspective id="Public" near="0.1" far="500" angle="30">
             <from x="1" y="8" z="46" />
             <to x="10" y="3" z="46" />
         </perspective>
-        <perspective id="Player 1 View" near="0.1" far="500" angle="60">
+        <perspective id="Player 1" near="0.1" far="500" angle="60">
             <from x="14.75" y="6" z="53" />
             <to x="14.75" y="2" z="49" />
         </perspective>
-        <perspective id="Player 2 View" near="0.1" far="500" angle="60">
+        <perspective id="Player 2" near="0.1" far="500" angle="60">
             <from x="14.75" y="6" z="39" />
             <to x="14.75" y="2" z="43" />
         </perspective>
-        <perspective id="Top View" near="0.1" far="500" angle="70">
+        <perspective id="Top" near="0.1" far="500" angle="70">
             <from x="14.75" y="7" z="46.01" />
             <to x="14.75" y="1" z="46.0" />
         </perspective>
