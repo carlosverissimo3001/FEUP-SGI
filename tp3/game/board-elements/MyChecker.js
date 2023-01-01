@@ -406,8 +406,8 @@ export class MyChecker extends CGFobject {
 
     var deltaX = this.depositLocation[0] - this.initialPos[0];
 
-    // Distance from current y, to the top of the deposit location
-    var deltaY = this.depositLocation[1] - this.initialPos[1];
+    // Y position on top of the deposit location
+    var deltaY = this.depositLocation[1]
 
     var deltaZ = this.depositLocation[2] - this.initialPos[2];
 
@@ -420,8 +420,6 @@ export class MyChecker extends CGFobject {
     // Remove 50% of the duration, to make the animation faster
     this.animDuration *= 0.5;
 
-
-
     // Create 10 keyframes for the animation, to simulate an arc-like movement
     for (var i = 0; i < 11; i++) {
       // Increase the instant by 10% of the animation duration
@@ -431,8 +429,10 @@ export class MyChecker extends CGFobject {
       var x = (instant - deltaTime) * deltaX / this.animDuration;
       var z = (instant - deltaTime) * deltaZ / this.animDuration;
 
-      // y starts at 0, then reaches 0.5 in the middle of the animation, and then goes to deltaY
+      // TODO: Change this so, when the animation is finished, the y value is at deltaY
       var y = 0.5 * Math.sin((instant - deltaTime) * Math.PI / this.animDuration);
+
+      console.log("At instant " + i + ", y = " + y + "")
 
       var kf = new MyKeyframe(
         instant,
