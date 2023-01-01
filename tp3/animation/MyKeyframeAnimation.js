@@ -54,8 +54,6 @@ export class MyKeyframeAnimation extends MyAnimation {
    * @param {integer} t - time since last call
    */
   update(t) {
-    if (this.animationId == "checkerNormalAnimation")
-      console.log("checkerNormalAnimation");
     this.totalTime += t;
 
     /* Check if the animation is active */

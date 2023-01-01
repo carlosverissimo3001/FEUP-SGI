@@ -154,21 +154,6 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
-  /**
-   * Manages the animations
-   * @param {MyChecker} checker - Checker to be animated
-   * @param {Boolean} jump - Did the checker eat another?
-  */
-  animateChecker(jump){
-    // Select the animation to be played
-    (jump)
-      ? this.checker.animation = this.checker.eatingAnimation
-      : this.checker.animation = this.checker.normalAnimation;
-
-    // Start the animation by passing the destination tile
-    this.checker.startAnimation(this.destinationTile);
-  }
-
   moveChecker(eatenChecker) {
     // Remove selected material from the checker
     this.checker.unsetSelected();
@@ -182,14 +167,16 @@ export class MyGameStateTurn extends MyGameState {
       eatenChecker
     );
 
-    /* if (eatenChecker){
-      eatenChecker.animation = eatenChecker.eatenAnimation;
-    } */
-
+    // Add the move to the game sequence
     this.orchestrator.gameSequence.addMove(move);
 
+    // If a checker was eaten, animate it, in an arc-like movement, to the eaten checkers' stack
+    if (eatenChecker){
+      eatenChecker.startEatAnimation();
+    }
+
     // Animate the checker. If eaten checker is not null, then the checker ate another one
-    this.animateChecker(eatenChecker != null);
+    this.checker.startAnimation(this.destinationTile, eatenChecker != null);
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
 
@@ -198,9 +185,6 @@ export class MyGameStateTurn extends MyGameState {
     this.checker.row = this.destinationTile.row;
     this.checker.col = this.destinationTile.col;
     this.checker.id = this.destinationTile.id;
-
-    // Add the checker to the destination tile
-    this.destinationTile.set(this.checker);
 
     // Remove the checker from the origin tile
     this.originTile.remove();
