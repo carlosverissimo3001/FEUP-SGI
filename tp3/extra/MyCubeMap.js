@@ -79,14 +79,15 @@ export class MyCubeMap extends CGFobject {
 		this.scene.popMatrix();
 
 		//bottom
-		// this.quadMaterial.setTexture(this.texture_bot);
-		// this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
-		// this.scene.pushMatrix();
-		// this.scene.translate(0, 0, 1);
-		// this.scene.rotate(-Math.PI/2,1,0,0);
-		// this.quadMaterial.apply();
-		// this.quad.display();
-		// this.scene.popMatrix();
+		this.scene.pushMatrix();
+		this.scene.translate(0, 2.87, 1);
+		this.scene.rotate(-Math.PI/2,1,0,0);
+		this.scene.setActiveShader(this.scene.sandShader);
+		this.scene.texture2.bind(1);
+		this.scene.texture.bind(0);
+		this.quad.display();
+		this.scene.setActiveShader(this.scene.defaultShader);
+		this.scene.popMatrix();
 
 		//top
 		// this.quadMaterial.setTexture(this.texture_top);

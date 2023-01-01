@@ -31,9 +31,9 @@ export class MySeaFloor extends CGFobject {
   display(){
     
     this.scene.pushMatrix();
-    this.scene.translate(0,2.9,60);
-    this.scene.rotate(-Math.PI/2,1,0,0);
-    this.scene.scale(50,50,1);
+    // this.scene.translate(0,2.4,60);
+    // this.scene.rotate(-Math.PI/2,1,0,0);
+    // this.scene.scale(50,50,1);
     this.scene.setActiveShader(this.scene.sandShader);
     this.scene.texture2.bind(1);
     this.scene.texture.bind(0);
