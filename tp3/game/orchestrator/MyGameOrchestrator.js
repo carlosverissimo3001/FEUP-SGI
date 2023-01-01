@@ -96,7 +96,7 @@ export class MyGameOrchestrator {
     this.scene.clearPickRegistration();
 
     // Display the scene graph
-    /* this.theme.displayScene(); */
+    this.theme.displayScene();
 
     // Display the board
     this.board.display();

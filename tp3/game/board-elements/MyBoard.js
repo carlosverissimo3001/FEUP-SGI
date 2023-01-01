@@ -272,7 +272,7 @@ export class MyBoard {
 
   displayCaptureZone(){
     this.scene.pushMatrix();
-    this.scene.translate(this.x + 9, this.y, this.z + 7);
+    this.scene.translate(this.x - 2, this.y, this.z + 7);
     this.scene.scale(1, 0.15, 1)
     this.player1CaptureZoneMaterial.apply();
     this.player1CaptureZone.display();
@@ -286,7 +286,7 @@ export class MyBoard {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(this.x + 9, this.y, this.z + 5);
+    this.scene.translate(this.x -2, this.y, this.z + 5);
     this.scene.scale(1, 0.15, 1)
     this.player1CaptureZoneMaterial.apply();
     this.player1MarkerZone.display();
@@ -296,8 +296,8 @@ export class MyBoard {
 
     this.appearance.apply();
 
-    this.scene.translate(0.4,0,-0.3);
-    this.scene.rotate(-Math.PI/2,0,1,0);
+    this.scene.translate(0.7,0,1.6);
+    this.scene.rotate(Math.PI/2,0,1,0);
     this.scene.scale(3, 8, 3);
 
     this.scene.textShader.setUniformsValues({'charCoords': [this.player1MarkerNumber,3]});

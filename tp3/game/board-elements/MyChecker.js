@@ -105,8 +105,8 @@ export class MyChecker extends CGFobject {
     // Location of the deposit where the piece will be placed when it is eaten. Only the y coordinate will change, depending on the number of pieces already in the deposit
     this.depositLocation =
       this.color == "blue"
-        ? [9.27, this.y_eat_ini, 42.5]
-        : [20.27, this.y_eat_ini, 49.5];
+        ? [9.27, this.y_eat_ini, 49.5]
+        : [9.27, this.y_eat_ini, 42.5];
 
     // As this matrix is fixed (the deposits are always in the same place), it will be initialized only once, in the constructor
     this.depositTransformations = [];
