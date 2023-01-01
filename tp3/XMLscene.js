@@ -71,7 +71,6 @@ export class XMLscene extends CGFscene {
     this.cameraNames = [];
     this.cameraID;
     this.intermediateCamera = null;
-    this.initCameras();
 
     /* ************************************************** */
 
