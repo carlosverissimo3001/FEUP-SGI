@@ -11,6 +11,8 @@ export class MyGameOrchestrator {
     this.scene = scene;
 
     this.gameSequence = new MyGameSequence(this.scene);
+
+    // Set the board
     this.board = new MyBoard(scene, 8);
 
     // Scene graph
@@ -62,12 +64,19 @@ export class MyGameOrchestrator {
    * @param {MySceneGraph} sceneGraph
    */
   init(sceneGraph) {
+    // Set the scene graph
     this.theme = sceneGraph;
+
+    // Finish loading
     this.hasLoaded = true;
 
     // Set the cameras
     this.player1Camera = "Player 1 View";
     this.player2Camera = "Player 2 View";
+
+    for (var i = 0; i < this.board.checkers.length; i++) {
+      this.board.checkers[i].setOrchestrator(this);
+    }
   }
 
   /**
@@ -87,11 +96,14 @@ export class MyGameOrchestrator {
     }
   }
 
+  /** Displays the moving checkers
+   * @param {MyChecker} checker - The checker to be displayed
+   */
   displayMovingChecker(checker) {
     checker.display();
   }
 
-  display() {
+  display(time) {
     // Manage picking
     this.managePick();
 
@@ -116,9 +128,10 @@ export class MyGameOrchestrator {
 
           // If no checker was eaten, turn the lights back on after the attacking animation has finished
           // OTHERWISE, the lights will be turned on when the eaten checker has finished moving
-          if (!this.eatenChecker)
+          if (!this.eatenChecker){
             this.turnOnLights();
-
+            this.deleteSpotlight();
+          }
 
           // Remove the checker from the moving checkers array
           this.movingCheckers.splice(i, 1);
@@ -131,6 +144,7 @@ export class MyGameOrchestrator {
           if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat){
             this.hasEatenCheckerFinished = true;
             this.eatenChecker = null;
+            this.deleteSpotlight();
             this.turnOnLights();
           }
           this.movingCheckers[i].display();
@@ -492,5 +506,54 @@ export class MyGameOrchestrator {
         i++;
       }
     }
+  }
+
+  /**
+   * Adds a light to the scene
+   * @param {Array} target The target position of the light
+   */
+  addSpotlight(target){
+    // Get the number of lights
+    var i = this.scene.lightsVal.length;
+
+    // Position of the light
+    this.scene.lights[i].setPosition(
+      target[0],
+      target[1], // It positions the light above the checker
+      target[2],
+      1
+    );
+
+    // Set the light ambient, diffuse and specular
+    this.scene.lights[i].setAmbient(0, 0, 0, 1);
+    this.scene.lights[i].setDiffuse(1, 1, 1, 1);
+    this.scene.lights[i].setSpecular(1, 1, 1, 1);
+
+    // Set the light cutoff and exponent
+    this.scene.lights[i].setSpotCutOff(30);
+    this.scene.lights[i].setSpotExponent(2);
+
+    // Set the target of the light -> board
+    this.scene.lights[i].setSpotDirection(target[0], 0, target[2]);
+
+    // Enable the light
+    this.scene.lights[i].enable();
+
+    // Update the light
+    this.scene.lights[i].update();
+
+  }
+
+  deleteSpotlight(){
+    // Get the number of lights
+    var i = this.scene.lightsVal.length;
+
+    // Disable the light
+    this.scene.lights[i].disable();
+
+    // No need to remove, as the next created light will overwrite the last one
+
+    // Update the light
+    this.scene.lights[i].update();
   }
 }

@@ -368,6 +368,15 @@ export class MyChecker extends CGFobject {
     var deltaY = 0;
     var deltaZ = this.initialPos[2] - z;
 
+    this.deltasX = [];
+    this.deltasZ = [];
+
+    // We will only update the spotlight each 0.1 second, since the animation is 1 second long
+    for (var i = 0; i < 10; i++) {
+      this.deltasX.push(deltaX / 10);
+      this.deltasZ.push(deltaZ / 10);
+    }
+
     // Initial frame -> Deltas to old position
     var initialkf = new MyKeyframe(
       0,
@@ -477,6 +486,12 @@ export class MyChecker extends CGFobject {
       if (!this.audioActive) {
         this.audioActive = true;
       }
+
+      // Get translation deltas for the spotlight
+      var deltas = this.animation.getTranslationMatrix();
+
+      // Create the light
+      this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
 
       this.audio.loop = true;
       this.audio.play();
@@ -626,5 +641,9 @@ export class MyChecker extends CGFobject {
 
   unsetAvailable() {
     this.available = false;
+  }
+
+  setOrchestrator(orchestrator) {
+    this.orchestrator = orchestrator;
   }
 }
