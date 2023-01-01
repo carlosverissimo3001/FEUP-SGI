@@ -87,6 +87,8 @@ export class MyGameOrchestrator {
 
   displayMovingChecker(checker) {
     checker.display();
+
+    this.turnOffLights();
   }
 
   display() {
@@ -105,11 +107,11 @@ export class MyGameOrchestrator {
       // If the checker is moving, display it
       if (this.movingCheckers[i].moving)
         this.displayMovingChecker(this.movingCheckers[i]);
-
       // If the checker has finished moving, check some conditions
       else {
+        this.turnOnLights();
         // If the moving checker is not an eaten checker, we need to set its tile so that it can be displayed
-        if (!this.movingCheckers[i].wasEaten){
+        if (!this.movingCheckers[i].wasEaten) {
           this.movingCheckers[i].tile.set(this.movingCheckers[i]);
           this.movingCheckers[i].updatePos();
 
@@ -220,6 +222,9 @@ export class MyGameOrchestrator {
         // Move the checker to the tile
         this.gameState.moveChecker(this.eatenChecker);
 
+        // Get the lights that were turned on
+        this.getTurnedOnLights();
+
         // Unset the avaliable tiles and checkers
         this.unsetAvailable(availableCheckers);
         this.unsetAvailable(this.availableTiles);
@@ -260,7 +265,7 @@ export class MyGameOrchestrator {
     if (this.player2Eat.length > 0) {
       for (let i = 0; i < this.player2Eat.length; i++) {
         if (!this.player2Eat[i].wasEaten) {
-          this.player2Eat[i].depositLocation[1]  += 0.17 * i;
+          this.player2Eat[i].depositLocation[1] += 0.17 * i;
           this.player2Eat[i].tile.remove();
           this.player2Eat[i].wasEaten = true;
           this.eatenChecker = this.player2Eat[i];
@@ -364,8 +369,6 @@ export class MyGameOrchestrator {
       }
     }
 
-
-
     // Change the player turn
     this.changePlayerTurn();
   }
@@ -416,5 +419,58 @@ export class MyGameOrchestrator {
       "Are you sure you want to watch the movie of the game? The state of the game will be preserved"
     );
     if (!confirmation) return;
+  }
+
+  getTurnedOnLights() {
+    this.turnedOnLights = [];
+    var lightNames = this.scene.lightsVal;
+
+    for (var key in lightNames) {
+      if (lightNames.hasOwnProperty(key)) {
+        if (lightNames[key]) this.turnedOnLights.push(key);
+      }
+    }
+  }
+
+  /**
+   * Called after the movement of a checker. Turns on the lights that were on before the movement
+   */
+  turnOnLights() {
+    var lights = this.scene.lights;
+    var i = 0;
+
+    for (var key in this.turnedOnLights) {
+      // If the light was on before the movement
+      if (this.turnedOnLights.hasOwnProperty(key)) {
+        // Turn it on
+        lights[i].enable();
+
+        // Check the checkbox
+        this.scene.lightsVal[this.turnedOnLights[key]] = true;
+
+        lights[i].update();
+        i++;
+      }
+    }
+  }
+
+  turnOffLights() {
+    var lightNames = this.scene.lightsVal;
+    var lights = this.scene.lights;
+    var i = 0;
+
+    // For each light
+    for (var key in lightNames) {
+      if (lightNames.hasOwnProperty(key)) {
+        // Turn it off
+        lights[i].disable();
+
+        // Uncheck the checkbox
+        lightNames[key] = false;
+
+        lights[i].update();
+        i++;
+      }
+    }
   }
 }
