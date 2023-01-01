@@ -22,7 +22,10 @@ export class MyBoard {
 
     this.appearance = new CGFappearance(scene);
 
-    this.fontTexture = new CGFtexture(scene, "scenes/images/textures/oolite-font.trans.png");
+    this.fontTexture = new CGFtexture(
+      scene,
+      "scenes/images/textures/oolite-font.trans.png"
+    );
     this.appearance.setTexture(this.fontTexture);
 
     this.border = [];
@@ -44,10 +47,13 @@ export class MyBoard {
     this.player1CaptureZoneMaterial.setSpecular(1.0, 0.0, 0.0, 1);
     this.player1CaptureZoneMaterial.setShininess(120);
 
-    this.video_game_text = new CGFtexture(scene, "scenes/images/textures/retro_game.jpg");
+    this.video_game_text = new CGFtexture(
+      scene,
+      "scenes/images/textures/retro_game.jpg"
+    );
 
     this.player1CaptureZoneMaterial.setTexture(this.video_game_text);
-    this.player1CaptureZoneMaterial.setTextureWrap('REPEAT', 'REPEAT');
+    this.player1CaptureZoneMaterial.setTextureWrap("REPEAT", "REPEAT");
 
     this.player2CaptureZoneMaterial = new CGFappearance(scene);
 
@@ -57,8 +63,9 @@ export class MyBoard {
     this.player2CaptureZoneMaterial.setShininess(120);
 
     this.player2CaptureZoneMaterial.setTexture(this.video_game_text);
-    this.player2CaptureZoneMaterial.setTextureWrap('REPEAT', 'REPEAT');
+    this.player2CaptureZoneMaterial.setTextureWrap("REPEAT", "REPEAT");
 
+    this.debug = false;
 
     this.x = 10.75;
     this.y = 0.1;
@@ -68,11 +75,10 @@ export class MyBoard {
     this.player2MarkerNumber = 0;
 
     // Initialize the board
-    this.tiles = []
+    this.tiles = [];
     this.checkers = [];
     this.initialized = false;
     this.initBoard();
-
   }
 
   /**
@@ -87,7 +93,9 @@ export class MyBoard {
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         var id = i + "," + j;
-        this.tiles.push(new MyTile(this.scene, id, this, row, col, light, null));
+        this.tiles.push(
+          new MyTile(this.scene, id, this, row, col, light, null)
+        );
         light = !light;
         col++;
       }
@@ -270,24 +278,24 @@ export class MyBoard {
     this.addChecker(newTile.id, checker);
   }
 
-  displayCaptureZone(){
+  displayCaptureZone() {
     this.scene.pushMatrix();
     this.scene.translate(this.x + 9, this.y, this.z + 7);
-    this.scene.scale(1, 0.15, 1)
+    this.scene.scale(1, 0.15, 1);
     this.player1CaptureZoneMaterial.apply();
     this.player1CaptureZone.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(this.x - 2, this.y, this.z  );
-    this.scene.scale(1, 0.15, 1)
+    this.scene.translate(this.x - 2, this.y, this.z);
+    this.scene.scale(1, 0.15, 1);
     this.player2CaptureZoneMaterial.apply();
     this.player2CaptureZone.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
     this.scene.translate(this.x + 9, this.y, this.z + 5);
-    this.scene.scale(1, 0.15, 1)
+    this.scene.scale(1, 0.15, 1);
     this.player1CaptureZoneMaterial.apply();
     this.player1MarkerZone.display();
     this.scene.setActiveShader(this.scene.textShader);
@@ -296,11 +304,13 @@ export class MyBoard {
 
     this.appearance.apply();
 
-    this.scene.translate(0.4,0,1.5);
-    this.scene.rotate(Math.PI/2,0,1,0);
+    this.scene.translate(0.4, 0, 1.5);
+    this.scene.rotate(Math.PI / 2, 0, 1, 0);
     this.scene.scale(3, 8, 3);
 
-    this.scene.textShader.setUniformsValues({'charCoords': [this.player1MarkerNumber,3]});
+    this.scene.textShader.setUniformsValues({
+      charCoords: [this.player1MarkerNumber, 3],
+    });
     this.player1Marker.display();
     this.scene.popMatrix();
 
@@ -309,8 +319,8 @@ export class MyBoard {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(this.x - 2, this.y, this.z + 2  );
-    this.scene.scale(1, 0.15, 1)
+    this.scene.translate(this.x - 2, this.y, this.z + 2);
+    this.scene.scale(1, 0.15, 1);
     this.player2CaptureZoneMaterial.apply();
     this.player2MarkerZone.display();
     this.scene.setActiveShader(this.scene.textShader);
@@ -319,11 +329,13 @@ export class MyBoard {
 
     this.appearance.apply();
 
-    this.scene.translate(1,0,0);
-    this.scene.rotate(-Math.PI/2,0,1,0);
+    this.scene.translate(1, 0, 0);
+    this.scene.rotate(-Math.PI / 2, 0, 1, 0);
     this.scene.scale(3, 8, 3);
 
-    this.scene.textShader.setUniformsValues({'charCoords': [this.player2MarkerNumber,3]});
+    this.scene.textShader.setUniformsValues({
+      charCoords: [this.player2MarkerNumber, 3],
+    });
     this.player2Marker.display();
     this.scene.popMatrix();
 
@@ -332,32 +344,31 @@ export class MyBoard {
     this.scene.popMatrix();
   }
 
-  displayBorder(){
+  displayBorder() {
     this.scene.pushMatrix();
     this.scene.translate(this.x - 0.3, this.y, this.z);
-    this.scene.scale(0.3, 0.25, 8)
+    this.scene.scale(0.3, 0.25, 8);
     this.borderMaterial.apply();
     this.border[0].display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
     this.scene.translate(this.x + 8, this.y, this.z);
-    this.scene.scale(0.3, 0.25, 8)
+    this.scene.scale(0.3, 0.25, 8);
     this.borderMaterial.apply();
     this.border[0].display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(this.x - 0.3 , this.y, this.z - 0.3);
-    this.scene.scale(8.6, 0.25, 0.3)
+    this.scene.translate(this.x - 0.3, this.y, this.z - 0.3);
+    this.scene.scale(8.6, 0.25, 0.3);
     this.borderMaterial.apply();
     this.border[0].display();
     this.scene.popMatrix();
-
 
     this.scene.pushMatrix();
     this.scene.translate(this.x - 0.3, this.y, this.z + 8);
-    this.scene.scale(8.6, 0.25, 0.3)
+    this.scene.scale(8.6, 0.25, 0.3);
     this.borderMaterial.apply();
     this.border[0].display();
     this.scene.popMatrix();
@@ -395,26 +406,49 @@ export class MyBoard {
 
     // If the checker is white, it can only move up, that is
     if (color == "red") {
-        // Diagonal up left
-        if (row >= 0 && col >= 0) {
-            tiles["left"] = this.board[row - 1][col - 1];
-        } else tiles["left"] = null;
-        // Diagonal up right
-        if (row >= 0 && col <= 7) {
-            tiles["right"] = this.board[row - 1][col + 1];
-        } else tiles["right"] = null;
+      // Diagonal up left
+      if (row >= 0 && col >= 0) {
+        tiles["left"] = this.board[row - 1][col - 1];
+      } else tiles["left"] = null;
+      // Diagonal up right
+      if (row >= 0 && col <= 7) {
+        tiles["right"] = this.board[row - 1][col + 1];
+      } else tiles["right"] = null;
     }
 
     // If the checker is black, it can only move down, that is
     else {
-        // Diagonal down left
-        if (row <= 7 && col >= 0) {
-            tiles["left"] = this.board[row + 1][col - 1];
-        } else tiles["left"] = null;
-        // Diagonal down right
-        if (row <= 7 && col <= 7) {
-            tiles["right"] = this.board[row + 1][col + 1];
-        } else tiles["right"] = null;
+      // Diagonal down left
+      if (row <= 7 && col >= 0) {
+        tiles["left"] = this.board[row + 1][col - 1];
+      } else tiles["left"] = null;
+      // Diagonal down right
+      if (row <= 7 && col <= 7) {
+        tiles["right"] = this.board[row + 1][col + 1];
+      } else tiles["right"] = null;
+    }
+
+    // However, if the checker is a king, it can move in both directions
+    if (this.board[row][col].checker.isKing) {
+      // Diagonal up left
+      if (row >= 0 && col >= 0) {
+        tiles["up left"] = this.board[row - 1][col - 1];
+      } else tiles["up left"] = null;
+
+      // Diagonal up right
+      if (row >= 0 && col <= 7) {
+        tiles["up right"] = this.board[row - 1][col + 1];
+      } else tiles["up right"] = null;
+
+      // Diagonal down left
+      if (row <= 7 && col >= 0) {
+        tiles["down left"] = this.board[row + 1][col - 1];
+      } else tiles["down left"] = null;
+
+      // Diagonal down right
+      if (row <= 7 && col <= 7) {
+        tiles["down right"] = this.board[row + 1][col + 1];
+      } else tiles["down right"] = null;
     }
 
     return tiles;
@@ -427,8 +461,8 @@ export class MyBoard {
     let checkers = [];
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
-        if (this.board[i][j].checker != null && this.board[i][j].checker.color == color){
-          if (this.validCheckerPosition(this.board[i][j].checker, color).length > 0){
+        if (this.board[i][j].checker != null && this.board[i][j].checker.color == color) {
+          if (this.validCheckerPosition(this.board[i][j].checker, color).length > 0) {
             checkers.push(this.board[i][j].checker);
           }
         }
@@ -439,46 +473,136 @@ export class MyBoard {
 
   validCheckerPosition(checker, color) {
     // get diagonal tiles
-    var diagonalTiles = this.getDiagonalTiles(
-      checker.row,
-      checker.col,
-      color
-    );
+    var diagonalTiles = this.getDiagonalTiles(checker.row, checker.col, color);
 
-    // A tile is deemed avaliable if it is empty, or if it has an enemy checker
+    // A tile is deemed avaliable if it is empty, or if a move to it, involves eating a checker
     var availableTiles = [];
-    var tile = diagonalTiles["left"];
-    if(tile != null) {
-      if (tile.checker == null) {
-        availableTiles.push(tile);
-      }
-      // If there is a checker in the tile, check if there is an empty tile ahead
-      else{
-        if (tile.checker.color != color){
-          var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-          if (nextTile["left"]!= null && nextTile["left"].checker == null && tile == diagonalTiles["left"]){
-            availableTiles.push(nextTile["left"]);
-          }
 
+    // If the checker is not a king, it can only move forward or backwards, not both
+    if (!checker.isKing) {
+      var tile = diagonalTiles["left"];
+      if (tile != null) {
+        if (tile.checker == null) {
+          availableTiles.push(tile);
+        }
+        // If there is a checker in the tile, check if there is an empty tile ahead
+        else {
+          if (tile.checker.color != color) {
+            var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+            if (
+              nextTile["left"] != null &&
+              nextTile["left"].checker == null &&
+              tile == diagonalTiles["left"]
+            ) {
+              availableTiles.push(nextTile["left"]);
+            }
+          }
+        }
+      }
+      var tile = diagonalTiles["right"];
+      if (tile != null) {
+        if (tile.checker == null) {
+          availableTiles.push(tile);
+        }
+        // If there is a checker in the tile, check if there is an empty tile ahead
+        else {
+          if (tile.checker.color != color) {
+            var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+            if (
+              nextTile["right"] != null &&
+              nextTile["right"].checker == null &&
+              tile == diagonalTiles["right"]
+            ) {
+              availableTiles.push(nextTile["right"]);
+            }
+          }
         }
       }
     }
-    var tile = diagonalTiles["right"];
-    if(tile != null) {
-      if (tile.checker == null) {
-        availableTiles.push(tile);
-      }
-      // If there is a checker in the tile, check if there is an empty tile ahead
-      else{
-        if (tile.checker.color != color){
-          var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
-          if (nextTile["right"]!= null && nextTile["right"].checker == null && tile == diagonalTiles["right"]){
-            availableTiles.push(nextTile["right"]);
-          }
 
+    // If the checker is a king, it can move in both directions
+    else {
+      var tile = diagonalTiles["up left"];
+      if (tile != null) {
+        if (tile.checker == null) {
+          availableTiles.push(tile);
+        }
+        // If there is a checker in the tile, check if there is an empty tile ahead
+        else {
+          if (tile.checker.color != color) {
+            var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+            if (
+              nextTile["up left"] != null &&
+              nextTile["up left"].checker == null &&
+              tile == diagonalTiles["up left"]
+            ) {
+              availableTiles.push(nextTile["up left"]);
+            }
+          }
+        }
+      }
+      var tile = diagonalTiles["up right"];
+      if (tile != null) {
+        if (tile.checker == null) {
+          availableTiles.push(tile);
+        }
+        // If there is a checker in the tile, check if there is an empty tile ahead
+        else {
+          if (tile.checker.color != color) {
+            var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+            if (
+              nextTile["up right"] != null &&
+              nextTile["up right"].checker == null &&
+              tile == diagonalTiles["up right"]
+            ) {
+              availableTiles.push(nextTile["up right"]);
+            }
+          }
+        }
+      }
+      var tile = diagonalTiles["down left"];
+      if (tile != null) {
+        if (tile.checker == null) {
+          availableTiles.push(tile);
+        }
+        // If there is a checker in the tile, check if there is an empty tile ahead
+        else {
+          if (tile.checker.color != color) {
+            var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+            if (
+              nextTile["down left"] != null &&
+              nextTile["down left"].checker == null &&
+              tile == diagonalTiles["down left"]
+            ) {
+              availableTiles.push(nextTile["down left"]);
+            }
+          }
+        }
+      }
+      var tile = diagonalTiles["down right"];
+      if (tile != null) {
+        if (tile.checker == null) {
+          availableTiles.push(tile);
+        }
+        // If there is a checker in the tile, check if there is an empty tile ahead
+        else {
+          if (tile.checker.color != color) {
+            var nextTile = this.getDiagonalTiles(tile.row, tile.col, color);
+            if (
+              nextTile["down right"] != null &&
+              nextTile["down right"].checker == null &&
+              tile == diagonalTiles["down right"]
+            ) {
+              availableTiles.push(nextTile["down right"]);
+            }
+          }
         }
       }
     }
+
+    /* if (checker.isKing) {
+      console.log(availableTiles);
+    } */
 
     return availableTiles;
   }
