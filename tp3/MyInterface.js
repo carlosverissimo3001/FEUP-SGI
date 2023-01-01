@@ -96,26 +96,27 @@ export class MyInterface extends CGFinterface {
         var viewsFolder = this.gui.addFolder('Views');
 
         viewsFolder.add(this.scene, "cameraID", cameraNames).onChange(val => this.scene.updateCamera(val)).name("View");
+
+        viewsFolder.open();
     }
 
     initTheme(){
-        this.themes = this.gui.addFolder('Themes');
+        var themes = this.gui.addFolder('Themes');
 
-        this.themes.add(this.scene, 'theme', this.scene.themes).name('Theme').onChange(this.scene.changeTheme.bind(this.scene));
+        themes.add(this.scene, 'theme', this.scene.themes).name('Theme').onChange(this.scene.changeTheme.bind(this.scene));
 
-        this.themes.closed = false;
+        themes.open();
     }
 
     initGameElements(){
-        this.gameFolder = this.gui.addFolder('Game');
+        var gameFolder = this.gui.addFolder('Game');
 
-        // Keep the folder open
-        this.gameFolder.closed = false;
+        // Open the folder
+        gameFolder.open();
 
-        this.gameFolder.add(this.scene.gameOrchestrator, 'undo').name('Undo');
-        this.gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
-        this.gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
-        this.gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
-
+        gameFolder.add(this.scene.gameOrchestrator, 'undo').name('Undo');
+        gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
+        gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
+        gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
     }
 }
