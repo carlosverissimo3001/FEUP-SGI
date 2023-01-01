@@ -179,8 +179,6 @@ export class MyGameOrchestrator {
       }
 
     }
-
-    /* this.eatenChecker = null; */
   }
 
   clearPicked() {
@@ -520,11 +518,15 @@ export class MyGameOrchestrator {
     // Get the number of lights
     var i = this.scene.lightsVal.length;
 
+    var xPos = target[0] - 1;
+    var yPos = target[1]
+    var zPos = target[2] - 1;
+
     // Position of the light
     this.scene.lights[i].setPosition(
-      target[0],
-      target[1], // It positions the light above the checker
-      target[2],
+      xPos,
+      1, // It positions the light above the checker
+      zPos,
       1
     );
 
@@ -534,11 +536,11 @@ export class MyGameOrchestrator {
     this.scene.lights[i].setSpecular(1, 1, 1, 1);
 
     // Set the light cutoff and exponent
-    this.scene.lights[i].setSpotCutOff(30);
-    this.scene.lights[i].setSpotExponent(2);
+    this.scene.lights[i].setSpotCutOff(0);
+    this.scene.lights[i].setSpotExponent(1);
 
     // Set the target of the light -> board
-    this.scene.lights[i].setSpotDirection(target[0], 0, target[2]);
+    this.scene.lights[i].setSpotDirection(xPos, 0, zPos);
 
     // Enable the light
     this.scene.lights[i].enable();
