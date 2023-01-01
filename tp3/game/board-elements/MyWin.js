@@ -22,7 +22,7 @@ export class MyWin extends CGFobject {
     
     this.w = new MyRectangle(scene, "none", 0, 1, 0, 1);
     this.i = new MyRectangle(scene, "none", 0, 1, 0, 1);
-    this.i = new MyRectangle(scene, "none", 0, 1, 0, 1);
+    this.n = new MyRectangle(scene, "none", 0, 1, 0, 1);
 
     this.appearance = new CGFappearance(scene);
 
@@ -32,18 +32,29 @@ export class MyWin extends CGFobject {
   }
 
   display(){
+    this.displayLetter(7,5,this.w);
+    this.displayLetter(9,4,this.i);
+    this.displayLetter(14,4,this.n);
+  }
+
+  displayLetter(x,y,rect) {
     this.scene.pushMatrix();
-    this.scene.translate(0,7.5,10);
-    this.scene.rotate(Math.PI/2,1,0,0);
-    this.scene.scale(50,50,50);
-    this.scene.setActiveShader(this.scene.surfaceShader);
-    this.scene.distortionmap.bind(1);
-    this.scene.waterpier.bind(0);
-    this.plane.display();
-    this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.setActiveShader(this.scene.textShader);
+
+    this.scene.pushMatrix();
+
+    this.appearance.apply();
+
+    this.scene.translate(0.4,0,-0.3);
+    this.scene.rotate(-Math.PI/2,0,1,0);
+    this.scene.scale(3, 8, 3);
+
+    this.scene.textShader.setUniformsValues({'charCoords': [x,y]});
+    rect.display();
     this.scene.popMatrix();
 
-
+    // reactivate default shader
+    this.scene.setActiveShader(this.scene.defaultShader);
   }
 
         /**
