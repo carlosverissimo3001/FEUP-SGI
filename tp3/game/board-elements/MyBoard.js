@@ -378,6 +378,9 @@ export class MyBoard {
       }
     }
 
+    // disable picking
+    this.scene.clearPickRegistration();
+
     this.displayCaptureZone();
   }
 

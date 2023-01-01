@@ -87,8 +87,6 @@ export class MyGameOrchestrator {
 
   displayMovingChecker(checker) {
     checker.display();
-
-    this.turnOffLights();
   }
 
   display() {
@@ -109,7 +107,7 @@ export class MyGameOrchestrator {
         this.displayMovingChecker(this.movingCheckers[i]);
       // If the checker has finished moving, check some conditions
       else {
-        this.turnOnLights();
+        /* this.turnOnLights(); */
         // If the moving checker is not an eaten checker, we need to set its tile so that it can be displayed
         if (!this.movingCheckers[i].wasEaten) {
           this.movingCheckers[i].tile.set(this.movingCheckers[i]);
@@ -225,6 +223,9 @@ export class MyGameOrchestrator {
         // Get the lights that were turned on
         this.getTurnedOnLights();
 
+        // Turn off the lights
+        this.turnOffLights();
+
         // Unset the avaliable tiles and checkers
         this.unsetAvailable(availableCheckers);
         this.unsetAvailable(this.availableTiles);
@@ -292,12 +293,14 @@ export class MyGameOrchestrator {
             if (obj) {
               // is this a valid pick?
               if (obj instanceof MyTile) {
+                console.log("Clicked on a tile with id " + objid);
+
                 if (this.gameState.checker != null) {
                   this.gameState.checkPick(obj, this.turn);
                 } else {
                   alert(this.turn + ", please select a checker first");
                 }
-              } else if (obj instanceof MyChecker) {
+              } else if (obj instanceof MyChecker && !obj.wasEaten) {
                 // play a sound
                 this.audio.play();
 
@@ -421,6 +424,9 @@ export class MyGameOrchestrator {
     if (!confirmation) return;
   }
 
+  /**
+   * Get the lights that are turned on at the moment
+   */
   getTurnedOnLights() {
     this.turnedOnLights = [];
     var lightNames = this.scene.lightsVal;
@@ -454,6 +460,9 @@ export class MyGameOrchestrator {
     }
   }
 
+  /**
+   * Called before the movement of a checker. Turns off all the lights
+   */
   turnOffLights() {
     var lightNames = this.scene.lightsVal;
     var lights = this.scene.lights;
