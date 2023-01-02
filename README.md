@@ -98,6 +98,62 @@ Outside the bar            |  Inside the bar
 
 ----
 
-### [TP3 - ...](tp3)
+### [TP3 - Checkers](tp3)
 
-- (items briefly describing main strong points)
+In the third assignment, we were asked to implement a checkers game. We decided to implement a 2 player game, where each player can play against the other. The game is played on a 8x8 board, where each player has 12 pieces. The pieces can move diagonally, and can only move forward. If a piece reaches the other side of the board, it becomes a king, and can move in any direction. The game ends when one of the players has no more pieces.
+
+There are 4 scenes(themes), each with a different setting. These can be changed through the interface.
+
+Links to the scenes:
+
+- [Pool](tp3/scenes/themes/pool.xml)
+- [Desert](tp3/scenes/themes/desert.xml)
+- [Space](tp3/scenes/themes/space.xml)
+- [Underwater](tp3/scenes/themes/under_sea.xml)
+
+#### Strong points of our project
+
+Some of the main points of the project include:
+- Realistic rendering of the board and pieces (textures and materials).
+- Smooth animations, including the arc-like movement of the eaten pieces to the deposit.
+- Smooth transitions between the different views of the scene.
+- Visual feedback when selecting a piece as well as the possible tiles to move to.
+- Sound effects for the piece selection and movement.
+- Interface that allows the user to configure some aspects of the game, some of them include:
+  * Theme of the scene
+  * Automatic rotation of the camera when the turn changes
+  * Setting the duration of the transitions between the different views of the scene
+  * Setting the duration of the animations of the pieces
+  * Setting the total time of the game
+  * Setting the time that the player has to make a move
+- The interface also allows users to do the following actions:
+  * Undo the last move
+  * Restart the game
+- Complex and visually modern timer system that displays the time remaining for each player, as well as the total time of the game.
+- Spotlight that follows the movement of the moving piece.
+
+
+#### **Themes**
+
+Pool        |  Space
+:-------------------------:|:-------------------------:
+![](tp3/scenes/images/screenshots/pool.png)  |  ![](tp3/scenes/images/screenshots/space.png)
+
+Desert        |  Underwater
+:-------------------------:|:-------------------------:
+![](tp3/scenes/images/screenshots/desert.png)  |  ![](tp3/scenes/images/screenshots/underwater.png)
+
+
+#### **Board Elements**
+
+Checker        |  Board
+:-------------------------:|:-------------------------:
+![](tp3/scenes/images/screenshots/piece.png)  |  ![](tp3/scenes/images/screenshots/board.png)
+
+
+#### **Interface and Timer**
+<br>
+
+<p align="center">
+  <img src="tp3/scenes/images/screenshots/timer_interface.png" height="400" >
+</p>

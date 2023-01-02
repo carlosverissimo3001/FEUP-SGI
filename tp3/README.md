@@ -40,7 +40,7 @@ In addition to the scene describe above, 3 other scenes were developed, with dif
 
 ------
 
-#### **Main Points**
+#### **Strong Points**
 
 Some of the main points of the project include:
 - Realistic rendering of the board and pieces (textures and materials).
