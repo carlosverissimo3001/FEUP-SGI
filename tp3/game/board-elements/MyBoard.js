@@ -15,6 +15,7 @@ export class MyBoard {
 
     this.captureZone = new MyCube(scene);
     this.winDisplay = new MyWin(scene);
+    this.lost = false;
 
     this.player1CaptureZone = new MyCube(scene);
     this.player2CaptureZone = new MyCube(scene);
@@ -415,6 +416,8 @@ export class MyBoard {
     this.scene.clearPickRegistration();
 
     this.displayCaptureZone();
+
+    if(this.lost) this.winDisplay.display();
   }
 
   /**

@@ -2473,19 +2473,6 @@
             </children>
         </component>
 
-        <component id="menu">
-            <transformation>
-                <translate x="5" y="5" z="5" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="text_texture"/>
-            <children>
-                <primitiveref id="rectanglePatch" />
-            </children>
-        </component>
-
         <component id="float1">
             <transformation>
                 <rotate axis="x" angle="90" />
@@ -2555,7 +2542,6 @@
                 <componentref id="shower" />
                 <componentref id="walls" />
                 <componentref id="door" />
-                <componentref id="menu" />
                 <componentref id="people" />
                 <componentref id="floats" />
             </children>

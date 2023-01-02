@@ -473,10 +473,11 @@ export class MyChecker extends CGFobject {
       }
 
       // Create the light
-      this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
-
       this.audio.loop = true;
       this.audio.play();
+
+      this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
+
 
       var transformations = this.initRelativeTransformations(false);
 
@@ -491,6 +492,7 @@ export class MyChecker extends CGFobject {
 
         this.components[i].display();
         this.scene.popMatrix();
+
       }
 
       if (this.isKing){

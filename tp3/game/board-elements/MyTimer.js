@@ -23,13 +23,16 @@ export class MyTimer extends CGFobject {
 
     this.min = 10;
     this.sec = 0;
-    this.timeToMakeMoveMin = 1;
-    this.timeToMakeMoveSec = 0;
+    this.msec = 59;
+    this.timeToMakeMoveMin = 0;
+    this.timeToMakeMoveSec = 20;
     this.player2Min = this.timeToMakeMoveMin;
     this.player2Sec = this.timeToMakeMoveSec;
+    this.player2MSec = 59;
     this.player1Min = 0;
     this.player1Sec = 0;
-    this.timeToMakeMove = 0.6;
+    this.player1MSec = 0;
+    this.timeToMakeMove = 0.2;
   }
 
   /**
@@ -181,35 +184,55 @@ export class MyTimer extends CGFobject {
   }
 
   update() {
-    if(this.sec == 0) {
+    if(this.msec == 0) {
+      if(this.sec == 0) {
         if(this.min > 0) {
           this.min = this.min - 1;
           this.sec = 59;
-        }
-    }
-    else {
-        this.sec = this.sec - 1;
-    }
-    if(this.turn == 2) {
-      if(this.player1Sec == 0) {
-        if(this.player1Min > 0) {
-          this.player1Min = this.player1Min - 1;
-          this.player1Sec = 59;
+          this.msec = 59;
         }
       }
       else {
-        this.player1Sec = this.player1Sec - 1;
+        this.sec = this.sec - 1;
+        this.msec = 59;
       }
-    } else {
+    }
+    else {
+        this.msec = this.msec - 1;
+    }
+    if(this.turn == 2) {
+      if(this.player1MSec == 0) {
+        if(this.player1Sec == 0) {
+          if(this.player1Min > 0) {
+            this.player1Min = this.player1Min - 1;
+            this.player1Sec = 59;
+            this.player1MSec = 59;
+          }
+        }
+        else {
+          this.player1Sec = this.player1Sec - 1;
+          this.player1MSec = 59;
+        }
+      }
+      else {
+          this.player1MSec = this.player1MSec - 1;
+      }
+    } if(this.player2MSec == 0) {
       if(this.player2Sec == 0) {
         if(this.player2Min > 0) {
           this.player2Min = this.player2Min - 1;
           this.player2Sec = 59;
+          this.player2MSec = 59;
         }
       }
       else {
         this.player2Sec = this.player2Sec - 1;
+        this.player2MSec = 59;
+
       }
+    }
+    else {
+        this.player2MSec = this.player2MSec - 1;
     }
   }
 

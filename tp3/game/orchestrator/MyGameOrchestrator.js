@@ -206,12 +206,14 @@ export class MyGameOrchestrator {
       this.board.timer.turn = 1;
       this.board.timer.player1Min = 0;
       this.board.timer.player1Sec = 0;
+      this.board.timer.player1MSec = 59;
     } else {
       this.board.timer.player1Min = this.board.timer.timeToMakeMoveMin;
       this.board.timer.player1Sec = this.board.timer.timeToMakeMoveSec;
       this.board.timer.turn = 2;
       this.board.timer.player2Min = 0;
       this.board.timer.player2Sec = 0;
+      this.board.timer.player2MSec = 59;
     }    
   }
 
@@ -293,7 +295,7 @@ export class MyGameOrchestrator {
           this.getTurnedOnLights();
 
           // Turn off the lights
-          this.turnOffLights();
+          // this.turnOffLights();
 
           // Unset the avaliable tiles and checkers
           this.unsetAvailable(availableCheckers);
