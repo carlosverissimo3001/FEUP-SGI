@@ -57,7 +57,7 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Day", "Night", "Desert", "UnderSea", "Space"];
+    this.themes = ["Day", "Desert", "UnderSea", "Space"];
     this.theme = "Day";
     this.loadedThemes = 1;
     this.graphs = [];
@@ -197,9 +197,6 @@ export class XMLscene extends CGFscene {
     this.pink.setShininess(100);
     this.pink.setTexture(this.video_game_text);
     this.pink.setTextureWrap('REPEAT', 'REPEAT');
-
-
-
   }
 
   changeTheme(newTheme) {
@@ -215,9 +212,6 @@ export class XMLscene extends CGFscene {
     if(this.theme == "Day") {
       this.graphs = [];
       var day = new MySceneGraph("themes/pool_day.xml", this);
-    } else if (this.theme == "Night"){
-      this.graphs = [];
-      var night = new MySceneGraph("themes/pool_night.xml", this);
     } else if(this.theme == "Desert") {
       this.graphs = [];
       var desert = new MySceneGraph("themes/desert.xml", this);

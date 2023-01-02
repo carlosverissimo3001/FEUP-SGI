@@ -150,6 +150,8 @@ export class MyGameOrchestrator {
             // Turn the lights back on
             this.turnOnLights();
 
+            this.updateInterface();
+
             // Delete the spotlight
             this.deleteSpotlight();
           }
@@ -230,7 +232,7 @@ export class MyGameOrchestrator {
       this.board.timer.player2Min = 0;
       this.board.timer.player2Sec = 0;
       this.board.timer.player2MSec = 59;
-    }    
+    }
     // If the game is restarting, set the state to player 1 turn
     if (restart){
       this.turn = "Player 1";
