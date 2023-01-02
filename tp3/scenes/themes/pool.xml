@@ -18,6 +18,10 @@
             <from x="14.75" y="7" z="46.01" />
             <to x="14.75" y="1" z="46.0" />
         </perspective>
+        <perspective id="Game Over" near="0.1" far="500" angle="60">
+            <from x="14.75" y="4" z="53" />
+            <to x="14.75" y="4" z="49" />
+        </perspective>
     </views>
 
     <ambient>
