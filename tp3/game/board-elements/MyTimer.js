@@ -21,7 +21,9 @@ export class MyTimer extends CGFobject {
 
     this.initBuffers();
 
-    this.min = 10;
+    this.gameTime = 10;
+    this.oldMin = this.gameTime;
+    this.min = this.gameTime;
     this.sec = 0;
     this.msec = 59;
     this.timeToMakeMoveMin = 0;
@@ -32,7 +34,7 @@ export class MyTimer extends CGFobject {
     this.player1Min = 0;
     this.player1Sec = 0;
     this.player1MSec = 0;
-    this.timeToMakeMove = 0.2;
+    this.timeToMakeMove = 20;
   }
 
   /**
@@ -258,12 +260,18 @@ export class MyTimer extends CGFobject {
     this.timeToMakeMove = duration;
     if(duration < 0.6){
       this.timeToMakeMoveMin = 0;
-      this.timeToMakeMoveSec = duration*100;
+      this.timeToMakeMoveSec = duration;
       console.log("ok: " + this.timeToMakeMoveSec);
     }else {
       this.timeToMakeMoveMin = 1;
       this.timeToMakeMoveSec = 0;
     }
+  }
+
+  updateGameTime(duration) {
+    this.gameTime = duration;
+    this.min = this.gameTime - (this.oldMin - this.min + 1);
+    this.oldMin = this.min;
   }
 
         /**

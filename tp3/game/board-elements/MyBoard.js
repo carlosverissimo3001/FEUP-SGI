@@ -5,6 +5,7 @@ import { MyRectangle } from "../../primitives/MyRectangle.js";
 import { CGFtexture, CGFappearance } from "../../../lib/CGF.js";
 import { MyTimer } from "./MyTimer.js";
 import { MyWin } from "./MyWin.js";
+import { MyTie } from "./MyTie.js";
 
 export class MyBoard {
   constructor(scene, size) {
@@ -15,7 +16,9 @@ export class MyBoard {
 
     this.captureZone = new MyCube(scene);
     this.winDisplay = new MyWin(scene);
+    this.tieDisplay = new MyTie(scene);
     this.lost = false;
+    this.tie = false;
 
     this.player1CaptureZone = new MyCube(scene);
     this.player2CaptureZone = new MyCube(scene);
@@ -414,6 +417,7 @@ export class MyBoard {
     this.displayCaptureZone();
 
     if(this.lost) this.winDisplay.display();
+    if(this.tie) this.tieDisplay.display();
   }
 
   /**

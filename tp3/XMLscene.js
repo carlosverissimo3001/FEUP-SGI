@@ -528,6 +528,19 @@ export class XMLscene extends CGFscene {
         }
       }
 
+      if(!this.gameOrchestrator.gameEnded){
+        if(this.gameOrchestrator.board.timer.min == 0 && this.gameOrchestrator.board.timer.sec == 0 && this.gameOrchestrator.board.timer.msec == 0){
+          if(this.gameOrchestrator.board.player1MarkerNumber == this.gameOrchestrator.board.player2MarkerNumber) {
+            this.gameOrchestrator.gameEnded = true;
+            this.gameOrchestrator.board.tie = true;
+          } else{
+            this.gameOrchestrator.board.lost = true;
+            this.gameOrchestrator.gameEnded = true;
+            this.gameOrchestrator.board.winDisplay.n = this.gameOrchestrator.board.player1MarkerNumber > this.gameOrchestrator.board.player2MarkerNumber ? 1 : 2;
+          }
+        }
+      }
+
     }
   }
 
