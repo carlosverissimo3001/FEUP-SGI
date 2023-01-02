@@ -14,6 +14,7 @@ export class MyGameOrchestrator {
 
     // Set the board
     this.board = new MyBoard(scene, 8);
+    this.originalBoard = new MyBoard(scene, 8);
 
     // Scene graph
     this.theme = null;
@@ -56,12 +57,16 @@ export class MyGameOrchestrator {
     // Copy of set of tiles that are avaliable to move to
     this.lastAvailableTiles = [];
 
+    // Set of tiles that are avaliable to move to
     this.availableTiles = [];
 
+    // Checker that was eaten, can be null
     this.eatenChecker = null;
 
+    // Checkers that are moving
     this.movingCheckers = [];
 
+    // Has the eaten checker finished its animation to the deposit location
     this.hasEatenCheckerFinished = false;
 
     this.gameEnded = false;
@@ -82,6 +87,7 @@ export class MyGameOrchestrator {
     this.player1Camera = "Player 1";
     this.player2Camera = "Player 2";
 
+    // Set the orchestrator for the checkers, so that they can access the orchestrator
     for (var i = 0; i < this.board.checkers.length; i++) {
       this.board.checkers[i].setOrchestrator(this);
     }
@@ -111,7 +117,10 @@ export class MyGameOrchestrator {
     checker.display();
   }
 
-  display(time) {
+  /**
+   * Standard display function
+   */
+  display() {
     // Manage picking
     this.managePick();
 
@@ -180,8 +189,7 @@ export class MyGameOrchestrator {
   /**
    * Changes the player turn
    */
-  changePlayerTurn() {
-
+  changePlayerTurn(restart = false) {
     if (this.turn == "Player 1"){
       this.state = "Player 2 Turn";
       this.turn = "Player 2"
@@ -223,15 +231,25 @@ export class MyGameOrchestrator {
       this.board.timer.player2Sec = 0;
       this.board.timer.player2MSec = 59;
     }    
+    // If the game is restarting, set the state to player 1 turn
+    if (restart){
+      this.turn = "Player 1";
+      this.state = "Player 1 Turn";
+    }
+
     // Update interface
     this.updateInterface();
 
   }
 
+  /**
+   * If a click is detected outside the board, this function is called
+   */
   clearPicked() {
-    // If a checker had been picked, unset it
+    // If a checker had been picked, unselect it
     if (this.gameState.checker != null) this.gameState.checker.unsetSelected();
 
+    // Unsets the checker and the destination tile
     this.gameState.checker = null;
     this.gameState.destinationTile = null;
 
@@ -239,9 +257,13 @@ export class MyGameOrchestrator {
     this.unsetAvailable(this.lastAvailableTiles);
   }
 
+  /**
+   * Deals with most of the game logic
+   */
   orchestrate() {
     this.availableTiles = [];
 
+    // Get the available checkers for the current player
     var availableCheckers = this.board.getCheckers(
       this.players[this.turn].color
     );
@@ -255,6 +277,52 @@ export class MyGameOrchestrator {
     if(!this.gameEnded) {
       // Sets the available checkers, with a light color
       this.setAvailable(availableCheckers);
+
+    // Was a checker picked?
+      if (this.gameState.checker != null) {
+      // If a checker is selected, get the available tiles for it
+      this.availableTiles = this.board.validCheckerPosition(
+        this.gameState.checker,
+        this.players[this.turn].color
+      );
+
+      // If no tiles are available, the checker cannot move
+      if (this.availableTiles.length == 0) {
+        alert("This checker cannot move");
+        this.gameState.checker = null;
+        return;
+      }
+
+      // If a new checker was picked
+      if (this.gameState.isNewChecker) {
+        // Unsets the last available tiles -> the checker has changed
+        this.unsetAvailable(this.lastAvailableTiles);
+
+        // Sets the new avaliable tiles, with a light color
+        this.setAvailable(this.availableTiles);
+      }
+
+      // Assume a double click in the same checker as an unselect
+      else {
+        this.gameState.checker.unsetSelected();
+        this.gameState.checker = null;
+        this.unsetAvailable(this.availableTiles);
+        return;
+      }
+
+      // Creates a copy of the available tiles
+      this.lastAvailableTiles = this.availableTiles;
+
+      // Sets the selected checker, with a green hue
+      this.gameState.checker.setSelected();
+    }
+
+    // Was a tile picked? Note that a tile can only be picked if a checker was picked, so this is not an else if
+    if (this.gameState.destinationTile != null) {
+      // If a tile has been picked, check if it is valid
+      if (this.availableTiles.includes(this.gameState.destinationTile)) {
+        // Check if this move involves eating a checker
+        this.eatCheckers();
 
       if (this.gameState.checker != null) {
         // If a checker is selected, get the available tiles for it
@@ -322,13 +390,13 @@ export class MyGameOrchestrator {
           return;
         }
       }
+    }
   }
+}
   }
 
+
   eatCheckers() {
-    /* console.log("Player 1 has eaten " + this.player1Eat.length + " checkers");
-    console.log("Player 2 has eaten " + this.player2Eat.length + " checkers");
- */
     this.board.player1MarkerNumber = this.player1Eat.length;
     if (this.player1Eat.length > 0) {
       for (let i = 0; i < this.player1Eat.length; i++) {
@@ -367,6 +435,9 @@ export class MyGameOrchestrator {
     }
   }
 
+  /**
+   * Manages the picking of the objects
+   */
   managePick() {
     var debug = false;
 
@@ -407,7 +478,10 @@ export class MyGameOrchestrator {
     }
   }
 
-  undo(isMovie) {
+  /**
+   * Undo the last move
+   */
+  undo() {
     if (this.eatenChecker != null && this.eatenChecker.isMoving_eat) {
       alert("Please wait for the checker to finish moving");
       return;
@@ -420,12 +494,9 @@ export class MyGameOrchestrator {
     }
 
     // Only ask for confirmation if the undo is not being called by a movie
-    if (!isMovie){
-      var confirmation = confirm(
-        "Are you sure you want to undo the last move? This action cannot be undone"
-      );
-      if (!confirmation) return;
-    }
+    var confirmation = confirm("Are you sure you want to undo the last move? This action cannot be undone");
+    if (!confirmation)
+      return;
 
     // Get the last move's board
     var lastMove = this.gameSequence.undo();
@@ -474,26 +545,41 @@ export class MyGameOrchestrator {
     this.changePlayerTurn();
   }
 
+  /**
+   * Given an array of either tiles or checkers, unset their available status
+   * @param {Array} arr - The array of tiles or checkers
+   */
   unsetAvailable(arr) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].unsetAvailable();
     }
   }
 
+  /**
+   * Given an array of either tiles or checkers, set their available status
+   * @param {Array} arr - The array of tiles or checkers
+   */
   setAvailable(arr) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].setAvailable();
     }
   }
 
+  /**
+   * Restart the game
+   */
   restart() {
     // Prompt a confirmation message
+
     var confirmation = confirm(
       "Are you sure you want to restart the game? This action cannot be undone"
     );
-    if (!confirmation) return;
+    if (!confirmation)
+      return;
 
-    this.board.initialized = false;
+    // If the board is equal to the original board, do nothing
+    if(this.equalBoards(this.board.board, this.originalBoard.board))
+      return
 
     // Reset the board
     this.board = new MyBoard(this.scene, 8);
@@ -510,8 +596,8 @@ export class MyGameOrchestrator {
     this.player1Eat = [];
     this.player2Eat = [];
 
-    // Reset the turn
-    this.turn = "Player 1";
+    // Change the player turn
+    this.changePlayerTurn(true);
 
     // Reset the game state
     this.gameState = new MyGameStateTurn(this.scene, this, this.board);
@@ -520,16 +606,9 @@ export class MyGameOrchestrator {
     this.lastAvailableTiles = [];
   }
 
+  // Not developed
   movie() {
-    var confirmation = confirm(
-      "Are you sure you want to watch the movie of the game? The state of the game will be preserved"
-    );
-    if (!confirmation) return;
 
-    // Keep popping moves until there are no more
-    while (this.gameSequence.moves.length > 0) {
-      this.undo(true);
-    }
   }
 
   /**
@@ -633,6 +712,9 @@ export class MyGameOrchestrator {
 
   }
 
+  /**
+   * Deletes the last light added to the scene -> The spotlight following the checker movement
+   */
   deleteSpotlight() {
     // Get the number of lights
     var i = this.scene.lightsVal.length;
@@ -646,13 +728,37 @@ export class MyGameOrchestrator {
     this.scene.lights[i].update();
   }
 
+  /**
+   * Called when the user changes the animation duration in the interface
+   * @param {Number} duration The new animation duration
+   */
   updateCheckerAnimationDuration(duration) {
+    // Update the animation duration of all the checkers
     for (var i = 0; i < this.board.checkers.length; i++) {
       this.board.checkers[i].updateAnimationDuration(duration);
     }
   }
 
+  /**
+   * Update the interface. Called when the state or the view changes
+   */
   updateInterface(){
     this.scene.interface.gui.updateDisplay();
+  }
+
+  /**
+   * Check if two boards are equal. Note that it receive the board property of the board object, not the board object itself
+   * @param {Array} board1 The first board
+   * @param {Array} board2 The second board
+   */
+  equalBoards(board1, board2) {
+    for (var i = 0; i < board1.length; i++) {
+      for (var j = 0; j < board1[i].length; j++) {
+        // If one has a checker and the other doesn't, return false
+        if (board1[i][j].hasChecker ^ board2[i][j].hasChecker)
+          return false;
+      }
+    }
+    return true;
   }
 }

@@ -10,37 +10,33 @@ export class MyTile {
 
         this.row = row;
         this.col = col;
+        this.color = color; // Light or dark
 
         // Pointer to the board
         this.board = board;
-        this.color = color;
 
         // Each tile is separated by 0.1 unit
         this.x = this.board.x + this.col;
         this.y = 0.1;
         this.z = this.board.z + this.row;
 
+        // Tile itself
         this.tile = new MyCube(this.scene);
 
+        // Does the tile have a checker?
         this.hasChecker = checker != null;
 
         // Pointer to the checker in the tile, if there is one
         this.checker = (this.hasChecker) ? checker : null;
 
-
+        // Is the tile available to move to?
         this.available = false;
 
-        // Create a bright green material for the border
-        this.borderMaterial = new CGFappearance(scene);
-        this.borderMaterial.setAmbient(0, 1, 0, 1);
-        this.borderMaterial.setDiffuse(0, 1, 0, 1);
-        this.borderMaterial.setSpecular(0, 1, 0, 1);
-        this.borderMaterial.setShininess(10.0);
-
-
+        // Texture
         var textureID = (color) ? "light_wood.png" : "dark_wood.png";
         var texture = new CGFtexture(scene, "scenes/images/textures/" + textureID);
 
+        // Available material, with a white hue
         this.availableMaterial = new CGFappearance(scene);
         this.availableMaterial.setAmbient(1.0, 1.0, 1.0, 1);
         this.availableMaterial.setDiffuse(1.0, 1.0, 1.0, 1);
@@ -48,6 +44,7 @@ export class MyTile {
         this.availableMaterial.setShininess(0.0);
         this.availableMaterial.setTexture(texture);
 
+        // Normal material, without any hue
         this.normalMaterial = new CGFappearance(scene);
         this.normalMaterial.setTexture(texture);
     }
@@ -86,18 +83,6 @@ export class MyTile {
         this.hasChecker = false;
     }
 
-    displayBorder(){
-        for (var i = 0; i < 4; i++) {
-            this.scene.pushMatrix();
-            this.scene.translate(0, 1, 0);
-            this.scene.rotate(i * Math.PI / 2, 0, 1, 0);
-            this.scene.scale(1, 0.1, 1);
-            this.borderMaterial.apply();
-            this.border[i].display();
-            this.scene.popMatrix();
-        }
-    }
-
     /**
      * Get the tile's x coordinate
      * @returns {number} x coordinate
@@ -122,10 +107,10 @@ export class MyTile {
         this.scene.translate(this.x, this.y, this.z);
         this.scene.scale(1, 0.1, 1);
 
+        // If the tile is available, change the material to the available material
         (this.available) ? this.availableMaterial.apply() : this.normalMaterial.apply();
 
         this.tile.display();
-        /* this.displayBorder(); */
         if (this.hasChecker) {
             // ! Pick ID start with 1, ex: tile at 0,0 has pick ID 1
             // ! So the pick ID is the row * board size + col + 1
@@ -136,11 +121,12 @@ export class MyTile {
         this.scene.popMatrix();
     }
 
-    /** If a tile is available,  the material is changed to a brighter color */
+    // Set the tile as avaliable to move to
     setAvailable() {
         this.available = true;
     }
 
+    // Set the tile as not avaliable to move to
     unsetAvailable() {
         this.available = false;
     }

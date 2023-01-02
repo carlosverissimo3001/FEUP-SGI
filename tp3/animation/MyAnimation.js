@@ -2,10 +2,13 @@ export class MyAnimation {
     constructor(scene) {
         this.scene = scene;
 
+        // Animation start time
         this.startTime;
-        this.endTime;
-        this.animationId;
 
+        // Animation end time
+        this.endTime;
+
+        // Total elapsed time since the animation started
         this.totalTime = 0;
 
         // Animation matix
@@ -16,6 +19,6 @@ export class MyAnimation {
     * @param {integer} t - elapsed time since last call
     */
     update(t) {
-        //
+        // Implement by child classes
     }
 }

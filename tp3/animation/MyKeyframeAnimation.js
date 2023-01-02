@@ -23,9 +23,11 @@ export class MyKeyframeAnimation extends MyAnimation {
     // Whether the animation is active
     this.active = false;
 
+    // Whether the animation has finished
     this.finished = false;
 
-    this.trannslationMatrix = []
+    // Current translation matrix, used to update the spotlight position
+    this.translationMatrix = []
   }
 
   /**
@@ -38,7 +40,7 @@ export class MyKeyframeAnimation extends MyAnimation {
   }
 
   /**
-   * Updates the start time of the animation based on the first keyframe //
+   * Updates the start time of the animation based on the first keyframe
    * Updates the end time of the animation based on the last keyframe
    */
   update_order() {
@@ -58,17 +60,19 @@ export class MyKeyframeAnimation extends MyAnimation {
   update(t) {
     this.totalTime += t;
 
-    /* Check if the animation is active */
+    // Check if the animation is active
     this.active = this.startTime < this.totalTime;
 
-    /* If inactive, return */
-    if (!this.active) return;
+    // If the animation is not active, return
+    if (!this.active)
+      return;
 
     // After the animation has finished, the object should stay at its last position
     if (this.totalTime > this.endTime) {
       this.finished = true;
       this.animation = this.computeFinalTransformationMatrix();
-    } else {
+    }
+    else {
       /* Check whether or not this is the last keyframe */
       var lastInstant = this.currInstant + 1 == this.frames.length;
 

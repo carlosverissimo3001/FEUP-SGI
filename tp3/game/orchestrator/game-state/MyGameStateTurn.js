@@ -31,6 +31,10 @@ export class MyGameStateTurn extends MyGameState {
     this.orchestrator = orchestrator;
   }
 
+  /**
+   * Update
+   * @param {Number} time - Current time
+   */
   update(time) {}
 
   /**
@@ -67,6 +71,14 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
+  /**
+   * Given a checker, and its destination tile, checks if the move involves eating another checker
+   * @param {MyChecker} checker - Checker to be moved
+   * @param {MyTile} destination - Destination tile
+   * @param {Array} eaten - Array of eaten checkers
+   * @param {String} player - Current player
+   * @param {String} color - Color of the checker to be moved
+   */
   checkEatenCheckers(checker, destination, eaten, player, color) {
     // Get the diagonal tiles of the origin checker
     var diagonalTiles = this.board.getDiagonalTiles(checker.row, checker.col, color);
@@ -240,7 +252,11 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
-  /** */
+  /**
+   * Given a checker and a turn, checks if the checker belongs to the player
+   * @param {MyChecker} checker - Checker to be checked
+   * @param {String} turn - Player 1 or Player 2
+  */
   validChecker(checker, turn) {
     // Checker color
     var checkerColor = turn == "Player 1" ? "red" : "blue";
@@ -254,10 +270,15 @@ export class MyGameStateTurn extends MyGameState {
     }
   }
 
+  /**
+   * Move a checker to a destination tile
+   * @param {MyChecker} eatenChecker - Was a checker eaten?
+   */
   moveChecker(eatenChecker) {
     // Remove selected material from the checker
     this.checker.unsetSelected();
 
+    // Create the move
     var move = new MyGameMove(
       this.scene,
       this.checker,
@@ -299,13 +320,20 @@ export class MyGameStateTurn extends MyGameState {
     this.reset();
   }
 
+
+  /**
+   * @param {MyChecker} checker
+   * @param {MyTile} originTile
+   * @param {MyTile} destinationTile
+  */
   forceMove(checker, originTile, destinationTile) {
     // Remove selected material from the checker
     checker.unsetSelected();
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
 
-    // Update the checker's tile
+    // If the move is undo
+
     checker.tile = originTile;
     checker.row = originTile.row;
     checker.col = originTile.col;

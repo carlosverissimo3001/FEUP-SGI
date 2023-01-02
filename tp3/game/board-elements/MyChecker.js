@@ -111,21 +111,22 @@ export class MyChecker extends CGFobject {
     this.depositTransformations = [];
     this.initDepositTransformations();
 
+    // Stores the initial position of the piece, and is updated every time the piece is moved
     this.initialPos = [];
     this.initialPos.push(this.tile.getX() + this.x);
     this.initialPos.push(this.y);
     this.initialPos.push(this.tile.getZ() + this.z);
 
+    // Animation
     this.animation = null;
+    this.animDuration = 1;
 
     // Audio
     this.audio = new Audio("sounds/slide.mp3");
     this.audio.volume = 0.5;
     this.audioActive = false;
 
-    // Animation duration
-    this.animDuration = 1;
-
+    // Direction of the movement
     this.movementDir = "";
 
     // Is this piece moving to the eat location?
@@ -143,7 +144,7 @@ export class MyChecker extends CGFobject {
   }
 
   /**
-   * These are the transformations relative to the tile
+   * These are the transformations relative to the tile, used in the normal display, called by MyTile
    * @param {boolean} isStakedPiece - true if the checker piece is a staked on top of another piece
    */
   initTransformations(isStakedPiece) {
@@ -196,7 +197,7 @@ export class MyChecker extends CGFobject {
   }
 
   /**
-   * Computes the checker piece movement direction
+   * Computes the checker piece movement direction to the destination tile
    * @param {MyTile} tile - destination tile
    */
   getMovementDirection(tile) {
@@ -206,7 +207,7 @@ export class MyChecker extends CGFobject {
   }
 
   /**
-   * These are the transformations relative to the origin
+   * These are the transformations relative to the origin, used in the animation display, called by the Orchestrator
    * @param {boolean} isStakedPiece - true if the checker piece is a staked on top of another piece
    * @returns {Array} - array of transformations
    */
@@ -694,6 +695,7 @@ export class MyChecker extends CGFobject {
     this.isKing = true;
   }
 
+  // When the user changes the animation duration value in the interface, this function is executed
   updateAnimationDuration(duration){
     this.animDuration = duration;
   }

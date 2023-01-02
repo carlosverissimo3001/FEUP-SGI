@@ -10,10 +10,16 @@
 export class MyKeyframe {
     constructor(instant, translation, rotation, scale) {
 
+        // Instant of the keyframe
         this.instant = instant;
 
+        // Translation array [x, y, z]
         this.translation = translation;
+
+        // Rotation array [anglex, angley, anglez]
         this.rotation = rotation;
+
+        // Scale array [x, y, z]
         this.scale = scale;
     }
 }
