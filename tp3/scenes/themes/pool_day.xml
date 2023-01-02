@@ -26,7 +26,7 @@
     </ambient>
 
     <lights>
-        <omni id="omniLight" enabled="false">
+        <omni id="omniLight" enabled="true">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -2473,19 +2473,6 @@
             </children>
         </component>
 
-        <component id="menu">
-            <transformation>
-                <translate x="5" y="5" z="5" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="text_texture"/>
-            <children>
-                <primitiveref id="rectanglePatch" />
-            </children>
-        </component>
-
         <component id="float1">
             <transformation>
                 <rotate axis="x" angle="90" />
@@ -2555,7 +2542,6 @@
                 <componentref id="shower" />
                 <componentref id="walls" />
                 <componentref id="door" />
-                <componentref id="menu" />
                 <componentref id="people" />
                 <componentref id="floats" />
             </children>

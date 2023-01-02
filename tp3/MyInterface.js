@@ -122,5 +122,8 @@ export class MyInterface extends CGFinterface {
         gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
         gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
         gameFolder.add(this.scene.gameOrchestrator, 'pieceAnimationDuration').name('Piece Animation Duration').min(0.1).max(5).step(0.1).onChange(this.scene.gameOrchestrator.updateCheckerAnimationDuration.bind(this.scene.gameOrchestrator));
+        gameFolder.add(this.scene.gameOrchestrator.board.timer, 'timeToMakeMove').name('Move Time').min(20).max(60).step(10).onChange(this.scene.gameOrchestrator.board.timer.updateTimeToMakeMove.bind(this.scene.gameOrchestrator.board.timer));
+        gameFolder.add(this.scene.gameOrchestrator.board.timer, 'gameTime').name('Game Time').min(10).max(60).step(10).onChange(this.scene.gameOrchestrator.board.timer.updateGameTime.bind(this.scene.gameOrchestrator.board.timer));
+
     }
 }

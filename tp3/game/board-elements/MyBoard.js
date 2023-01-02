@@ -3,6 +3,9 @@ import { MyChecker } from "./MyChecker.js";
 import { MyTile } from "./MyTile.js";
 import { MyRectangle } from "../../primitives/MyRectangle.js";
 import { CGFtexture, CGFappearance } from "../../../lib/CGF.js";
+import { MyTimer } from "./MyTimer.js";
+import { MyWin } from "./MyWin.js";
+import { MyTie } from "./MyTie.js";
 
 export class MyBoard {
   constructor(scene, size) {
@@ -12,11 +15,18 @@ export class MyBoard {
     this.size = size;
 
     this.captureZone = new MyCube(scene);
+    this.winDisplay = new MyWin(scene);
+    this.tieDisplay = new MyTie(scene);
+    this.lost = false;
+    this.tie = false;
 
     this.player1CaptureZone = new MyCube(scene);
     this.player2CaptureZone = new MyCube(scene);
     this.player1MarkerZone = new MyCube(scene);
     this.player2MarkerZone = new MyCube(scene);
+    this.timerZone1 = new MyCube(scene);
+    this.timerZone2 = new MyCube(scene);
+    this.timer = new MyTimer(scene);
     this.player1Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
     this.player2Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
 
@@ -273,8 +283,8 @@ export class MyBoard {
 
   displayCaptureZone() {
     this.scene.pushMatrix();
-    this.scene.translate(this.x + 9, this.y, this.z + 7);
-    this.scene.scale(1, 0.15, 1);
+    this.scene.translate(this.x - 2, this.y, this.z + 7);
+    this.scene.scale(1, 0.15, 1)
     this.player1CaptureZoneMaterial.apply();
     this.player1CaptureZone.display();
     this.scene.popMatrix();
@@ -287,8 +297,8 @@ export class MyBoard {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(this.x + 9, this.y, this.z + 5);
-    this.scene.scale(1, 0.15, 1);
+    this.scene.translate(this.x -2, this.y, this.z + 5);
+    this.scene.scale(1, 0.15, 1)
     this.player1CaptureZoneMaterial.apply();
     this.player1MarkerZone.display();
     this.scene.setActiveShader(this.scene.textShader);
@@ -297,8 +307,8 @@ export class MyBoard {
 
     this.appearance.apply();
 
-    this.scene.translate(0.4, 0, 1.5);
-    this.scene.rotate(Math.PI / 2, 0, 1, 0);
+    this.scene.translate(0.7,0,1.6);
+    this.scene.rotate(Math.PI/2,0,1,0);
     this.scene.scale(3, 8, 3);
 
     this.scene.textShader.setUniformsValues({
@@ -322,8 +332,8 @@ export class MyBoard {
 
     this.appearance.apply();
 
-    this.scene.translate(1, 0, 0);
-    this.scene.rotate(-Math.PI / 2, 0, 1, 0);
+    this.scene.translate(0.8,0,1.7);
+    this.scene.rotate(Math.PI/2,0,1,0);
     this.scene.scale(3, 8, 3);
 
     this.scene.textShader.setUniformsValues({
@@ -334,6 +344,20 @@ export class MyBoard {
 
     // reactivate default shader
     this.scene.setActiveShader(this.scene.defaultShader);
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x + 9, this.y, this.z  );
+    this.scene.scale(1, 0.15, 4)
+    this.player2CaptureZoneMaterial.apply();
+    this.timerZone1.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x + 9, this.y, this.z + 4  );
+    this.scene.scale(1, 0.15, 4);
+    this.player1CaptureZoneMaterial.apply();
+    this.timerZone2.display();
     this.scene.popMatrix();
   }
 
@@ -373,6 +397,8 @@ export class MyBoard {
   display() {
     // Display the border
     this.displayBorder();
+    this.timer.display();
+
 
     // Display the tiles and subsquent checkers, with picking id set
     var id = 1;
@@ -389,6 +415,9 @@ export class MyBoard {
 
     // Display the capture zone
     this.displayCaptureZone();
+
+    if(this.lost) this.winDisplay.display();
+    if(this.tie) this.tieDisplay.display();
   }
 
   /**
@@ -454,8 +483,9 @@ export class MyBoard {
     return tiles;
   }
 
+
   /**
-   * Gets the checerks that have more than 1 available jump
+   * Gets the checerks that have ate least 1 available jump
    */
   getCheckers(color) {
     let checkers = [];
@@ -666,3 +696,4 @@ export class MyBoard {
     return availableTiles;
   }
 }
+

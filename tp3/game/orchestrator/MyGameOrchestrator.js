@@ -69,6 +69,8 @@ export class MyGameOrchestrator {
     // Has the eaten checker finished its animation to the deposit location
     this.hasEatenCheckerFinished = false;
 
+    this.gameEnded = false;
+    this.ongoingAnimation = false;
   }
 
   /** Initializes the scene graph
@@ -125,7 +127,7 @@ export class MyGameOrchestrator {
     this.scene.clearPickRegistration();
 
     // Display the scene graph
-    /* this.theme.displayScene(); */
+    this.theme.displayScene();
 
     // Display the board
     this.board.display();
@@ -214,6 +216,21 @@ export class MyGameOrchestrator {
       }
     }
 
+    if(this.turn == "Player 1") {
+      this.board.timer.player2Min = this.board.timer.timeToMakeMoveMin;
+      this.board.timer.player2Sec = this.board.timer.timeToMakeMoveSec;
+      this.board.timer.turn = 1;
+      this.board.timer.player1Min = 0;
+      this.board.timer.player1Sec = 0;
+      this.board.timer.player1MSec = 59;
+    } else {
+      this.board.timer.player1Min = this.board.timer.timeToMakeMoveMin;
+      this.board.timer.player1Sec = this.board.timer.timeToMakeMoveSec;
+      this.board.timer.turn = 2;
+      this.board.timer.player2Min = 0;
+      this.board.timer.player2Sec = 0;
+      this.board.timer.player2MSec = 59;
+    }    
     // If the game is restarting, set the state to player 1 turn
     if (restart){
       this.turn = "Player 1";
@@ -251,13 +268,20 @@ export class MyGameOrchestrator {
       this.players[this.turn].color
     );
 
-    // Sets the available checkers, with a light color
-    this.setAvailable(availableCheckers);
+    if(availableCheckers == []) {
+      this.gameEnded = true;
+      this.board.winDisplay.n = this.turn == 1 ? 2 : 1;
+      this.board.winDisplay.display();
+    }
+
+    if(!this.gameEnded) {
+      // Sets the available checkers, with a light color
+      this.setAvailable(availableCheckers);
 
     // Was a checker picked?
-    if (this.gameState.checker != null) {
+      if (this.gameState.checker != null) {
       // If a checker is selected, get the available tiles for it
-      this.availableTiles = this.board.validCheckerPosition(
+        this.availableTiles = this.board.validCheckerPosition(
         this.gameState.checker,
         this.players[this.turn].color
       );
@@ -323,6 +347,7 @@ export class MyGameOrchestrator {
         return;
       }
     }
+}
   }
 
 

@@ -47,7 +47,7 @@ export class MyChecker extends CGFobject {
     this.stackDelta = 2.075;
 
     // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
-    this.isKing = (this.id == "5,4" || this.id == "2,3") ? true : false;
+    this.isKing = false;
 
     // Was the checker piece eaten?
     this.wasEaten = false;
@@ -103,9 +103,9 @@ export class MyChecker extends CGFobject {
 
     // Location of the deposit where the piece will be placed when it is eaten. Only the y coordinate will change, depending on the number of pieces already in the deposit
     this.depositLocation =
-    this.color == "blue"
-      ? [20.27, this.y_eat_ini, 49.5]
-      : [9.27, this.y_eat_ini, 42.5];
+      this.color == "blue"
+        ? [9.27, this.y_eat_ini, 49.5]
+        : [9.27, this.y_eat_ini, 42.5];
 
     // As this matrix is fixed (the deposits are always in the same place), it will be initialized only once, in the constructor
     this.depositTransformations = [];
@@ -461,23 +461,39 @@ export class MyChecker extends CGFobject {
       // Get translation deltas for the spotlight
       var deltas = this.animation.getTranslationMatrix();
 
-      if (this.movementDir == "right" && this.color == "red")
-        deltas[0] *= -1;
+      // Deltas are always positive, so we need to check the movement direction to know if we need to add or subtract the deltas
 
-      if (this.movementDir == "left" && this.color == "blue"){
-        deltas[2] *= -1;
+      if (this.color == "red") {
+        if (this.movementDir == "right") {
+          if (deltas[0] > 0) {
+            deltas[0] *= -1;
+          }
+        }
+        else {
+          // Do nothing, deltas are ok
+        }
       }
-
-      if (this.movementDir == "right" && this.color == "blue"){
-        deltas[0] *= -1;
-        deltas[2] *= -1;
+      else {
+        if (this.movementDir == "right") {
+          if (deltas[0] > 0) {
+            deltas[0] *= -1;
+          }
+          if (deltas[2] > 0) {
+            deltas[2] *= -1;
+          }
+        }
+        else {
+          if (deltas[2] > 0) {
+            deltas[2] *= -1;
+          }
+        }
       }
 
       // Create the light
-      this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
-
       this.audio.loop = true;
       this.audio.play();
+
+      this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
 
       var transformations = this.initRelativeTransformations(false);
 
@@ -492,6 +508,7 @@ export class MyChecker extends CGFobject {
 
         this.components[i].display();
         this.scene.popMatrix();
+
       }
 
       if (this.isKing){
