@@ -1,6 +1,9 @@
 import {CGFobject, CGFappearance, CGFtexture} from "../../../lib/CGF.js";
 import { MyRectangle } from '../../primitives/MyRectangle.js';
 import { MyCube } from "../../primitives/MyCube.js";
+import { MyTorus } from "../../primitives/MyTorus.js";
+import { MySphere } from "../../primitives/MySphere.js";
+import { CGFOBJModel } from "../../extra/CGFOBJModel.js";
 
 export class MyTimer extends CGFobject {
   /**
@@ -38,6 +41,8 @@ export class MyTimer extends CGFobject {
 
     this.timeBox = new MyCube(this.scene);
     this.miniTimerBox = new MyCube(this.scene);
+    this.crown1 = new CGFOBJModel(this.scene, "scenes/obj/crown.obj");
+    this.crown2 = new CGFOBJModel(this.scene, "scenes/obj/crown.obj");
     this.min1_square = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
     this.min2_square = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
     this.sec1_square = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
@@ -63,6 +68,52 @@ export class MyTimer extends CGFobject {
     this.fontTexture = new CGFtexture(this.scene, "scenes/images/textures/oolite-font.trans.png");
     this.appearance.setTexture(this.fontTexture);
 
+    this.components1 = [];
+    // Outer torus
+    this.components1.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
+    // Whole sphere
+    this.components1.push(new MySphere(this.scene, "none", 1, 40, 40));
+    // Inner torus
+    this.components1.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
+    // Inner sphere
+    this.components1.push(new MySphere(this.scene, "none", 1, 40, 40));
+
+    this.components2 = [];
+    // Outer torus
+    this.components2.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
+    // Whole sphere
+    this.components2.push(new MySphere(this.scene, "none", 1, 40, 40));
+    // Inner torus
+    this.components2.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
+    // Inner sphere
+    this.components2.push(new MySphere(this.scene, "none", 1, 40, 40));
+
+    // Blue material for the checker
+    this.blueMaterial = new CGFappearance(this.scene);
+    this.blueMaterial.setAmbient(0, 0, 1, 1);
+    this.blueMaterial.setDiffuse(0, 0, 1, 1);
+    this.blueMaterial.setSpecular(0, 0, 1, 1);
+    this.blueMaterial.setShininess(10.0);
+
+    // Light blue material for the checker
+    this.lightBlueMaterial = new CGFappearance(this.scene);
+    this.lightBlueMaterial.setAmbient(0, 0.5, 1, 1);
+    this.lightBlueMaterial.setDiffuse(0, 0.5, 1, 1);
+    this.lightBlueMaterial.setSpecular(0, 0.5, 1, 1);
+
+    // Red material for the checker
+    this.redMaterial = new CGFappearance(this.scene);
+    this.redMaterial.setAmbient(1, 0, 0, 1);
+    this.redMaterial.setDiffuse(1, 0, 0, 1);
+    this.redMaterial.setSpecular(1, 0, 0, 1);
+    this.redMaterial.setShininess(10.0);
+
+    // Light red material for the checker
+    this.lightRedMaterial = new CGFappearance(this.scene);
+    this.lightRedMaterial.setAmbient(1, 0.5, 0.5, 1);
+    this.lightRedMaterial.setDiffuse(1, 0.5, 0.5, 1);
+    this.lightRedMaterial.setSpecular(1, 0.5, 0.5, 1);
+
   }
 
   display() {
@@ -87,6 +138,8 @@ export class MyTimer extends CGFobject {
     this.displayLetter(this.sec%10,3,this.sec2_square,this.x + 8.5, this.y+1, this.z+4.9,1, 2, 1 );
 
     this.displayPlayerTimers();
+
+    this.displayCheckers();
 
 
   }
@@ -123,6 +176,43 @@ export class MyTimer extends CGFobject {
 
     // reactivate default shader
     this.scene.setActiveShader(this.scene.defaultShader);
+  }
+
+  displayCheckers() {
+    this.scene.pushMatrix();
+    if(this.turn == 1) {
+      this.lightRedMaterial.apply();
+    }else {
+      this.redMaterial.apply();
+    }
+    // for (var i = 0; i < this.components1.length; i++) {
+    //   this.scene.pushMatrix();
+    //   this.components1[i].display();
+    //   this.scene.popMatrix();
+    // }
+    this.scene.translate(this.x + 11, this.y + 3.1, this.z + 6.5);
+    this.scene.scale(0.01,0.01,0.01);
+    this.crown1.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    if(this.turn == 2) {
+      this.lightBlueMaterial.apply();
+    }else {
+      this.blueMaterial.apply();
+    }
+    // for (var i = 0; i < this.components2.length; i++) {
+    //   this.scene.pushMatrix();
+    //   this.scene.translate(this.x + 9, this.y + 3.1, this.z);
+    //   this.scene.rotate(Math.PI, 0, 0, 1);
+    //   this.scene.scale(1.2,1.2,1);
+    //   this.components2[i].display();
+    //   this.scene.popMatrix();
+    // }
+    this.scene.translate(this.x + 11, this.y + 3.1, this.z + 0.5);
+    this.scene.scale(0.01,0.01,0.01);
+    this.crown2.display();
+    this.scene.popMatrix();
   }
 
   update() {
