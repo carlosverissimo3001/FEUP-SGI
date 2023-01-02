@@ -461,16 +461,32 @@ export class MyChecker extends CGFobject {
       // Get translation deltas for the spotlight
       var deltas = this.animation.getTranslationMatrix();
 
-      if (this.movementDir == "right" && this.color == "red")
-        deltas[0] *= -1;
+      // Deltas are always positive, so we need to check the movement direction to know if we need to add or subtract the deltas
 
-      if (this.movementDir == "left" && this.color == "blue"){
-        deltas[2] *= -1;
+      if (this.color == "red") {
+        if (this.movementDir == "right") {
+          if (deltas[0] > 0) {
+            deltas[0] *= -1;
+          }
+        }
+        else {
+          // Do nothing, deltas are ok
+        }
       }
-
-      if (this.movementDir == "right" && this.color == "blue"){
-        deltas[0] *= -1;
-        deltas[2] *= -1;
+      else {
+        if (this.movementDir == "right") {
+          if (deltas[0] > 0) {
+            deltas[0] *= -1;
+          }
+          if (deltas[2] > 0) {
+            deltas[2] *= -1;
+          }
+        }
+        else {
+          if (deltas[2] > 0) {
+            deltas[2] *= -1;
+          }
+        }
       }
 
       // Create the light
@@ -478,7 +494,6 @@ export class MyChecker extends CGFobject {
       this.audio.play();
 
       this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
-
 
       var transformations = this.initRelativeTransformations(false);
 
