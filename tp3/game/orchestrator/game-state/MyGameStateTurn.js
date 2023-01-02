@@ -98,12 +98,13 @@ export class MyGameStateTurn extends MyGameState {
         }
         return true;
       }
+
       else {
         if (diagonalTiles["left"] && diagonalTiles["left"].hasChecker && diagonalTiles["left"].checker.color != color) {
           var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["left"].checker.row, diagonalTiles["left"].checker.col, color);
 
           if(diagonalTiles["left"].checker.isKing){
-            if ((nextDiagonal["down left"] && !nextDiagonal["down left"].hasChecker) || (nextDiagonal["down right"] && !nextDiagonal["down right"].hasChecker)) {
+            if ((nextDiagonal["down left"] && !nextDiagonal["down left"].hasChecker)) {
               let eat = eaten;
               eat.push(diagonalTiles["left"].checker);
               return this.checkEatenCheckers(diagonalTiles["left"].checker, destination, eat, player, color);
@@ -111,25 +112,25 @@ export class MyGameStateTurn extends MyGameState {
           }
 
           else{
-            if ((nextDiagonal["left"] && !nextDiagonal["left"].hasChecker) || (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)) {
+            if ((nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)) {
               let eat = eaten;
               eat.push(diagonalTiles["left"].checker);
               return this.checkEatenCheckers(diagonalTiles["left"].checker, destination, eat, player, color);
             }
           }
         }
-        else if (diagonalTiles["right"] && diagonalTiles["right"].hasChecker && diagonalTiles["right"].checker.color != color) {
+        if (diagonalTiles["right"] && diagonalTiles["right"].hasChecker && diagonalTiles["right"].checker.color != color) {
           var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["right"].checker.row, diagonalTiles["right"].checker.col, color);
 
           if(diagonalTiles["right"].checker.isKing){
-            if ((nextDiagonal["down right"] && !nextDiagonal["down right"].hasChecker) || (nextDiagonal["down left"] && !nextDiagonal["down left"].hasChecker)) {
+            if ((nextDiagonal["down right"] && !nextDiagonal["down right"].hasChecker)) {
               let eat = eaten;
               eat.push(diagonalTiles["right"].checker);
               return this.checkEatenCheckers(diagonalTiles["right"].checker, destination, eat, player, color);
             }
           }
           else{
-            if ((nextDiagonal["right"] && !nextDiagonal["right"].hasChecker) || (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)) {
+            if ((nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)) {
               let eat = eaten;
               eat.push(diagonalTiles["right"].checker);
               return this.checkEatenCheckers(diagonalTiles["right"].checker, destination, eat, player, color);
@@ -180,7 +181,7 @@ export class MyGameStateTurn extends MyGameState {
         }
 
         // DOWN RIGHT
-        else if (diagonalTiles["down right"] && diagonalTiles["down right"].hasChecker && diagonalTiles["down right"].checker.color != color) {
+        if (diagonalTiles["down right"] && diagonalTiles["down right"].hasChecker && diagonalTiles["down right"].checker.color != color) {
           var deltaZ = diagonalTiles["down right"].row - checker.row
           var color = (deltaZ < 0) ? "red" : "blue"
 
@@ -204,7 +205,7 @@ export class MyGameStateTurn extends MyGameState {
         }
 
         // UP LEFT
-        else if (diagonalTiles["up left"] && diagonalTiles["up left"].hasChecker && diagonalTiles["up left"].checker.color != color) {
+        if (diagonalTiles["up left"] && diagonalTiles["up left"].hasChecker && diagonalTiles["up left"].checker.color != color) {
           var deltaZ = diagonalTiles["up left"].row - checker.row
           var color = (deltaZ < 0) ? "red" : "blue"
           var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["up left"].checker.row, diagonalTiles["up left"].checker.col, color);
@@ -226,7 +227,7 @@ export class MyGameStateTurn extends MyGameState {
         }
 
         // UP RIGHT
-        else if (diagonalTiles["up right"] && diagonalTiles["up right"].hasChecker && diagonalTiles["up right"].checker.color != color) {
+        if (diagonalTiles["up right"] && diagonalTiles["up right"].hasChecker && diagonalTiles["up right"].checker.color != color) {
           var deltaZ = diagonalTiles["up right"].row - checker.row
           var color = (deltaZ < 0) ? "red" : "blue"
 

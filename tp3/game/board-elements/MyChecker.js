@@ -47,6 +47,7 @@ export class MyChecker extends CGFobject {
     this.stackDelta = 2.075;
 
     // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
+    /* this.isKing = (this.id=="5,4"); */
     this.isKing = false;
 
     // Was the checker piece eaten?
@@ -599,7 +600,7 @@ export class MyChecker extends CGFobject {
       this.scene.popMatrix();
     }
 
-    /* if (this.isKing){
+    if (this.isKing){
       transformations = this.initDepositTransformations(true);
 
       for (var i = 0; i < this.components.length; i++) {
@@ -608,7 +609,7 @@ export class MyChecker extends CGFobject {
         this.components[i].display();
         this.scene.popMatrix();
       }
-    } */
+    }
   }
 
   /**
