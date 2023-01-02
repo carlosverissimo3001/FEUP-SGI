@@ -112,26 +112,44 @@ export class MyTimer extends CGFobject {
     this.miniTimerBox.display();
     this.scene.popMatrix();
 
+    this.scene.pushMatrix();
+    this.scene.setActiveShader(this.scene.textShader);
+
+    this.displayMainTimer();
+
+    this.displayPlayerTimers();
+
+    this.scene.popMatrix();
+
+    // reactivate default shader
+    this.scene.setActiveShader(this.scene.defaultShader);
+
+    this.displayCrowns();
+
+  }
+
+  displayMainTimer() {
     this.displayLetter(Math.floor(this.min/10),3,this.min1_square,this.x + 8.5, this.y+0.8, this.z+3,1, 2, 1 );
     this.displayLetter(this.min%10,3,this.min2_square,this.x + 8.5, this.y+0.8, this.z+3.4,1, 2, 1 );
     this.displayLetter(10,3,this.point_square,this.x + 8.5, this.y+0.8, this.z+3.8,1, 2, 1 );
     this.displayLetter(Math.floor(this.sec/10),3,this.sec1_square,this.x + 8.5, this.y+0.8, this.z+4.2,1, 2, 1 );
     this.displayLetter(this.sec%10,3,this.sec2_square,this.x + 8.5, this.y+0.8, this.z+4.6,1, 2, 1 );
-
-    this.displayPlayerTimers();
-
-    this.displayCrowns();
-
-
   }
 
   displayPlayerTimers() {
+    this.displayTimer1();
+    this.displayTimer2();
+  }
+
+  displayTimer1() {
     this.displayLetter(Math.floor(this.player1Min/10),3,this.minp1_square,this.x + 8.9, this.y+1, this.z+0.5, 0.5, 1, 0.5 );
     this.displayLetter(this.player1Min%10,3,this.minp12_square,this.x + 8.9, this.y+1, this.z+0.7, 0.5, 1, 0.5 );
     this.displayLetter(10,3,this.point1_square,this.x + 8.9, this.y+1, this.z+0.9, 0.5, 1, 0.5 );
     this.displayLetter(Math.floor(this.player1Sec/10),3,this.secp1_square,this.x + 8.9, this.y+1, this.z+1.1, 0.5, 1, 0.5 );
     this.displayLetter(this.player1Sec%10,3,this.secp12_square,this.x + 8.9, this.y+1, this.z+1.3, 0.5, 1, 0.5 );
+  }
 
+  displayTimer2() {
     this.displayLetter(Math.floor(this.player2Min/10),3,this.minp2_square,this.x + 8.9, this.y+1, this.z+6.5, 0.5, 1, 0.5 );
     this.displayLetter(this.player2Min%10,3,this.minp22_square,this.x + 8.9, this.y+1, this.z+6.7, 0.5, 1, 0.5 );
     this.displayLetter(10,3,this.point2_square,this.x + 8.9, this.y+1, this.z+6.9, 0.5, 1, 0.5 );
@@ -139,9 +157,9 @@ export class MyTimer extends CGFobject {
     this.displayLetter(this.player2Sec%10,3,this.secp22_square,this.x + 8.9, this.y+1, this.z+7.3, 0.5, 1, 0.5 );
   }
 
+
+
   displayLetter(x,y,rect,t,u,v,scale_x,scale_y,scale_z) {
-    this.scene.pushMatrix();
-    this.scene.setActiveShader(this.scene.textShader);
 
     this.scene.pushMatrix();
 
@@ -155,8 +173,6 @@ export class MyTimer extends CGFobject {
     rect.display();
     this.scene.popMatrix();
 
-    // reactivate default shader
-    this.scene.setActiveShader(this.scene.defaultShader);
   }
 
   displayCrowns() {

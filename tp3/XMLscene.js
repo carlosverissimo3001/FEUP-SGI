@@ -515,13 +515,13 @@ export class XMLscene extends CGFscene {
 
 
       if(this.gameOrchestrator.board.timer.turn == 1) {
-        if(this.gameOrchestrator.board.timer.player2Min == 0 && this.gameOrchestrator.board.timer.player2Sec == 0 && this.gameOrchestrator.board.timer.player2MSec == 0) {
+        if(this.gameOrchestrator.board.timer.player2Min == 0 && this.gameOrchestrator.board.timer.player2Sec == 0 && this.gameOrchestrator.board.timer.player2MSec <= 0) {
           this.gameOrchestrator.board.lost = true;
           this.gameOrchestrator.gameEnded = true;
           this.gameOrchestrator.board.winDisplay.n = 2;
         }
       } else {
-        if(this.gameOrchestrator.board.timer.player1Min == 0 && this.gameOrchestrator.board.timer.player1Sec == 0 && this.gameOrchestrator.board.timer.player1MSec == 0) {
+        if(this.gameOrchestrator.board.timer.player1Min == 0 && this.gameOrchestrator.board.timer.player1Sec == 0 && this.gameOrchestrator.board.timer.player1MSec <= 0) {
           this.gameOrchestrator.board.lost = true;
           this.gameOrchestrator.gameEnded = true;
           this.gameOrchestrator.board.winDisplay.n = 1;
