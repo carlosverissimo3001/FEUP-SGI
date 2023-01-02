@@ -555,9 +555,9 @@ export class MyBoard {
 
     // If the checker is a king, it can move in both directions
     else {
-      if (checker.selected) {
+      /* if (checker.selected) {
         console.log(availableTiles);
-      }
+      } */
 
       var tile = diagonalTiles["up left"];
       if (tile != null) {

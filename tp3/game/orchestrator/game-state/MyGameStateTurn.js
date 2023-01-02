@@ -314,6 +314,9 @@ export class MyGameStateTurn extends MyGameState {
     // Add the checker to the destination tile
     originTile.set(checker);
 
+    // Update the checker's position
+    checker.updatePos();
+
     // Remove the checker from the origin tile
     destinationTile.remove();
 
