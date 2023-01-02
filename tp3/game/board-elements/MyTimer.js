@@ -159,8 +159,6 @@ export class MyTimer extends CGFobject {
     this.displayLetter(this.player2Sec%10,3,this.secp22_square,this.x + 8.9, this.y+1, this.z+7.3, 0.5, 1, 0.5 );
   }
 
-
-
   displayLetter(x,y,rect,t,u,v,scale_x,scale_y,scale_z) {
 
     this.scene.pushMatrix();
@@ -256,16 +254,13 @@ export class MyTimer extends CGFobject {
   }
   }
 
+
   updateTimeToMakeMove(duration) {
+    console.log("duration: " + duration);
+
     this.timeToMakeMove = duration;
-    if(duration < 0.6){
-      this.timeToMakeMoveMin = 0;
-      this.timeToMakeMoveSec = duration;
-      console.log("ok: " + this.timeToMakeMoveSec);
-    }else {
-      this.timeToMakeMoveMin = 1;
-      this.timeToMakeMoveSec = 0;
-    }
+    this.timeToMakeMoveMin = Math.floor(this.timeToMakeMove/60);
+    this.timeToMakeMoveSec = this.timeToMakeMove%60;
   }
 
   updateGameTime(duration) {

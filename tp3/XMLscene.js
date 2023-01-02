@@ -40,7 +40,7 @@ export class XMLscene extends CGFscene {
     this.sceneInited = false;
     this.graphLoaded = false;
 
-    this.setUpdatePeriod(20);
+    this.setUpdatePeriod(50);
 
     // the activation of picking capabilities in WebCGF
     // will use a shader for picking purposes (lib\shaders\picking\vertex.glsl and lib\shaders\picking\fragment.glsl)
