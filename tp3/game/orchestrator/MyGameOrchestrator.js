@@ -108,25 +108,13 @@ export class MyGameOrchestrator {
   }
 
   display(time) {
-    this.isAnyCheckerMoving = 0;
-
-    for (let i = 0; i < this.movingCheckers.length; i++) {
-      // If this is a eaten checker, check the is_moving_eat flag
-      if (this.movingCheckers[i].wasEaten && this.movingCheckers[i].isMoving_eat){
-        this.isAnyCheckerMoving++;
-      }
-    }
-
-    console.log(this.isAnyCheckerMoving);
-
-
     // Manage picking
     this.managePick();
 
     this.scene.clearPickRegistration();
 
     // Display the scene graph
-    this.theme.displayScene();
+    /* this.theme.displayScene(); */
 
     // Display the board
     this.board.display();
@@ -160,10 +148,8 @@ export class MyGameOrchestrator {
 
         // If the moving checker was an eaten checker, the orchestrator is the one responsible for displaying it
         else {
-          if (this.gameState.checker && this.gameState.checker.selected)
-            console.log("DEBUG")
           // Only turn the lights back on when the eaten checker has finished moving
-          if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat && this.isAnyCheckerMoving == 0) {
+          if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat) {
             this.hasEatenCheckerFinished = true;
 
             // Unset the eaten checker
@@ -175,8 +161,11 @@ export class MyGameOrchestrator {
             // Turn the lights back on
             this.turnOnLights();
           }
+
+          //! This is a hotfix that fixes the bug when a checker would be displayed in the deposit, but would return to the board, in the next turn
           if (this.eatenChecker)
             this.eatenChecker = null;
+
           this.movingCheckers[i].display();
         }
       }
@@ -425,14 +414,13 @@ export class MyGameOrchestrator {
 
       if (lastMove.eatenChecker.color == "blue") {
         // Update the scoreboard
-        this.board.player1MarkerNumber =
-          lastMove.oldBoard.player1MarkerNumber - 1;
+        this.board.player1MarkerNumber = lastMove.oldBoard.player1MarkerNumber - 1;
 
         // Remove the checker from the eaten checkers array
         this.player1Eat.pop();
       } else if (lastMove.eatenChecker.color == "red") {
         // Update the scoreboard
-        this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber;
+        this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber - 1;
 
         // Remove the checker from the eaten checkers array
         this.player2Eat.pop();
