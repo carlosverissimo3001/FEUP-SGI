@@ -214,7 +214,7 @@ export class MyTimer extends CGFobject {
       }
     }
     else {
-        this.msec = this.msec - 5;
+        this.msec = this.msec - 3;
     }
     if(this.turn == 2) {
       if(this.player1MSec <= 0) {
@@ -231,7 +231,7 @@ export class MyTimer extends CGFobject {
         }
       }
       else {
-          this.player1MSec = this.player1MSec - 5;
+          this.player1MSec = this.player1MSec - 3;
       }
     } else {
     if(this.player2MSec <= 0) {
@@ -249,7 +249,7 @@ export class MyTimer extends CGFobject {
       }
     }
     else {
-        this.player2MSec = this.player2MSec - 5;
+        this.player2MSec = this.player2MSec - 3;
     }
   }
   }
