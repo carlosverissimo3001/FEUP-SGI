@@ -11,6 +11,18 @@ export class MyChecker extends CGFobject {
 
     this.scene = scene;
 
+    this.row = row;
+    this.col = col;
+    this.board = board;
+    this.id = row + "," + col;
+
+    this.x = 0.5;
+    this.y = 2.1;
+    this.z = 0.5;
+
+    this.y_eat_ini = 0.335;
+
+    this.color = color;
     /*
       The checker piece will be composed by 4 parts:
       - 2 torus
@@ -31,21 +43,13 @@ export class MyChecker extends CGFobject {
     // Inner sphere
     this.components.push(new MySphere(scene, "none", 1, 40, 40));
 
-    this.x = 0.5;
-    this.y = 2.1;
-    this.z = 0.5;
+    // Checker piece height
+    this.stackDelta = 2.075;
 
-    this.y_eat_ini = 0.335;
-
-    this.color = color;
+    // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
+    this.isKing = (this.id == "5,4" || this.id == "2,3") ? true : false;
 
     this.transformations = [];
-    this.initTransformations();
-
-    this.row = row;
-    this.col = col;
-    this.board = board;
-    this.id = row + "," + col;
 
     // Was the checker piece eaten?
     this.wasEaten = false;
@@ -104,9 +108,15 @@ export class MyChecker extends CGFobject {
 
     // Location of the deposit where the piece will be placed when it is eaten. Only the y coordinate will change, depending on the number of pieces already in the deposit
     this.depositLocation =
+<<<<<<< HEAD
       this.color == "blue"
         ? [9.27, this.y_eat_ini, 49.5]
         : [9.27, this.y_eat_ini, 42.5];
+=======
+    this.color == "blue"
+      ? [20.27, this.y_eat_ini, 49.5]
+      : [9.27, this.y_eat_ini, 42.5];
+>>>>>>> main
 
     // As this matrix is fixed (the deposits are always in the same place), it will be initialized only once, in the constructor
     this.depositTransformations = [];
@@ -147,43 +157,55 @@ export class MyChecker extends CGFobject {
 
   /**
    * These are the transformations relative to the tile
+   * @param {boolean} isStakedPiece - true if the checker piece is a staked on top of another piece
    */
-  initTransformations() {
+  initTransformations(isStakedPiece) {
     // Outer torus
     var transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    var transformations = [];
+
+    var x = this.x;
+    var y = this.y;
+    var z = this.z;
+
+    if (isStakedPiece)
+      y+=this.stackDelta
+
+    transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.3, 0.3, 10]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
 
     // Whole sphere
     transf = mat4.create();
 
-    transf = mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.3, 0.3, 0.75]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
 
     // Inner torus
     transf = mat4.create();
 
-    mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    mat4.translate(transf, transf, [x, y, z]);
     mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     mat4.scale(transf, transf, [0.065 * 3, 0.065 * 3, 10]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
 
     // Inner sphere
     transf = mat4.create();
 
-    mat4.translate(transf, transf, [this.x, this.y, this.z]);
+    mat4.translate(transf, transf, [x, y, z]);
     mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     mat4.scale(transf, transf, [0.055 * 3, 0.055 * 3, 1]);
 
-    this.transformations.push(transf);
+    transformations.push(transf);
+
+    return transformations;
   }
 
   /**
@@ -198,76 +220,31 @@ export class MyChecker extends CGFobject {
 
   /**
    * These are the transformations relative to the origin
-   * @param {boolean} eatMove - true if the checker piece is moving to eat another piece
+   * @param {boolean} isStakedPiece - true if the checker piece is a staked on top of another piece
+   * @returns {Array} - array of transformations
    */
-  initRelativeTransformations(eatMove, goingToDeposit) {
+  initRelativeTransformations(isStakedPiece) {
     // Outer torus
     var transf = mat4.create();
 
+    var relativeTransformations = [];
+
     // The x and z coordinates are relative to the tile' absolute position + offset
 
-    var x,
-      y = 0.3,
-      z;
-
     // Red checker piece
-    if (this.color == "red") {
-      // Checker piece is moving to the right
-      if (this.movementDir == "right") {
-        x = this.tile.getX() + 1.5;
-        z = this.tile.getZ() - 0.5;
+    var x = this.tile.getX() + this.x;
+    var y = 0.3
+    var z = this.tile.getZ() + this.z;
 
-        if (eatMove) {
-          x += 1;
-          z -= 1;
-        }
-      }
-      // Checker piece is moving to the left
-      else {
-        x = this.tile.getX() - 0.5;
-        z = this.tile.getZ() - 0.5;
-
-        if (eatMove) {
-          x -= 1;
-          z -= 1;
-        }
-      }
-    }
-
-    // Blue checker piece
-    else {
-      // Checker piece is moving to the right
-      if (this.movementDir == "right") {
-        x = this.tile.getX() + 1.5;
-        z = this.tile.getZ() + 1.5;
-
-        if (eatMove) {
-          x += 1;
-          z += 1;
-        }
-      }
-      // Checker piece is moving to the left
-      else {
-        x = this.tile.getX() - 0.5;
-        z = this.tile.getZ() + 1.5;
-
-        if (eatMove) {
-          x -= 1;
-          z += 1;
-        }
-      }
-    }
-
-    if (goingToDeposit){
-      x = this.tile.getX() + this.x;
-      z = this.tile.getZ() + this.z;
+    if (isStakedPiece){
+      y+=0.2
     }
 
     transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.3, 0.3, 1]);
 
-    this.relativeTransformations.push(transf);
+    relativeTransformations.push(transf);
 
     // Whole sphere
     transf = mat4.create();
@@ -275,7 +252,7 @@ export class MyChecker extends CGFobject {
     transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.scale(transf, transf, [0.32, 0.064, 0.32]);
 
-    this.relativeTransformations.push(transf);
+    relativeTransformations.push(transf);
 
     // Inner torus
     transf = mat4.create();
@@ -284,7 +261,7 @@ export class MyChecker extends CGFobject {
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.2, 0.2, 1.04]);
 
-    this.relativeTransformations.push(transf);
+    relativeTransformations.push(transf);
 
     // Inner sphere
     transf = mat4.create();
@@ -292,7 +269,9 @@ export class MyChecker extends CGFobject {
     transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.scale(transf, transf, [0.18, 0.084, 0.234]);
 
-    this.relativeTransformations.push(transf);
+    relativeTransformations.push(transf);
+
+    return relativeTransformations;
   }
 
   /**
@@ -346,14 +325,10 @@ export class MyChecker extends CGFobject {
   /**
    * Sets up the animation for the checker piece
    * @param {MyTile} tile - Destination tile
-   * @param {boolean} eatMove - true if the checker piece is moving to eat another piece
    */
-  startAnimation(tile, eatMove) {
+  startAnimation(tile) {
     // Get the movement direction
     this.getMovementDirection(tile);
-
-    // Get transformations relative to the origin
-    this.initRelativeTransformations(eatMove);
 
     // Create the animation
     this.animation = new MyKeyframeAnimation(this.scene, "checkerAnimation");
@@ -367,6 +342,15 @@ export class MyChecker extends CGFobject {
     var deltaX = this.initialPos[0] - x;
     var deltaY = 0;
     var deltaZ = this.initialPos[2] - z;
+
+    this.deltasX = [];
+    this.deltasZ = [];
+
+    // We will only update the spotlight each 0.1 second, since the animation is 1 second long
+    for (var i = 0; i < 10; i++) {
+      this.deltasX.push(deltaX / 10);
+      this.deltasZ.push(deltaZ / 10);
+    }
 
     // Initial frame -> Deltas to old position
     var initialkf = new MyKeyframe(
@@ -399,7 +383,6 @@ export class MyChecker extends CGFobject {
    */
   startEatAnimation() {
     // Transformations relative to the origin, to the current tile
-    this.initRelativeTransformations(false, true);
 
     // Create the animation
     this.animation = new MyKeyframeAnimation(this.scene, "jumpAnimation");
@@ -412,7 +395,7 @@ export class MyChecker extends CGFobject {
     var deltaZ = this.depositLocation[2] - this.initialPos[2];
 
     // Time it takes for the checker eating to collide with this piece
-    var deltaTime = 0.26;
+    var deltaTime = 0.26*this.animDuration;
 
     // The duration of the animation will vary depending on the distance between the initial and final positions
     this.animDuration = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ) / 2;
@@ -431,8 +414,6 @@ export class MyChecker extends CGFobject {
 
       // TODO: Change this so, when the animation is finished, the y value is at deltaY
       var y = 0.5 * Math.sin((instant - deltaTime) * Math.PI / this.animDuration);
-
-      console.log("At instant " + i + ", y = " + y + "")
 
       var kf = new MyKeyframe(
         instant,
@@ -480,8 +461,28 @@ export class MyChecker extends CGFobject {
         this.audioActive = true;
       }
 
+      // Get translation deltas for the spotlight
+      var deltas = this.animation.getTranslationMatrix();
+
+      if (this.movementDir == "right" && this.color == "red")
+        deltas[0] *= -1;
+
+      if (this.movementDir == "left" && this.color == "blue"){
+        deltas[2] *= -1;
+      }
+
+      if (this.movementDir == "right" && this.color == "blue"){
+        deltas[0] *= -1;
+        deltas[2] *= -1;
+      }
+
+      // Create the light
+      this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
+
       this.audio.loop = true;
       this.audio.play();
+
+      var transformations = this.initRelativeTransformations(false);
 
       for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
@@ -490,14 +491,32 @@ export class MyChecker extends CGFobject {
         this.scene.multMatrix(this.animation.getMatrix());
 
         // Puts the piece in the correct position
-        this.scene.multMatrix(this.relativeTransformations[i]);
+        this.scene.multMatrix(transformations[i]);
 
         this.components[i].display();
         this.scene.popMatrix();
       }
+
+      if (this.isKing){
+        var transformations = this.initRelativeTransformations(true);
+
+        for (var i = 0; i < this.components.length; i++) {
+          this.scene.pushMatrix();
+
+          // Applies the animation
+          this.scene.multMatrix(this.animation.getMatrix());
+
+          // Puts the piece in the correct position
+          this.scene.multMatrix(transformations[i]);
+
+          this.components[i].display();
+          this.scene.popMatrix();
+        }
+      }
+
     }
-    this.scene.popMatrix();
   }
+
 
   /**
    * Displays the checker piece, when it it being eaten
@@ -518,7 +537,8 @@ export class MyChecker extends CGFobject {
 
     // Otherwise, display the checker piece, with the animation
     else {
-      // Play the audio
+      var transformations = this.initRelativeTransformations(false);
+
       for (var i = 0; i < this.components.length; i++) {
         this.scene.pushMatrix();
 
@@ -526,10 +546,27 @@ export class MyChecker extends CGFobject {
         this.scene.multMatrix(this.animation.getMatrix());
 
         // Puts the piece in the correct position
-        this.scene.multMatrix(this.relativeTransformations[i]);
+        this.scene.multMatrix(transformations[i]);
 
         this.components[i].display();
         this.scene.popMatrix();
+      }
+
+      if (this.isKing){
+        transformations = this.initRelativeTransformations(true);
+
+        for (var i = 0; i < this.components.length; i++) {
+          this.scene.pushMatrix();
+
+          // Applies the animation
+          this.scene.multMatrix(this.animation.getMatrix());
+
+          // Puts the piece in the correct position
+          this.scene.multMatrix(transformations[i]);
+
+          this.components[i].display();
+          this.scene.popMatrix();
+        }
       }
     }
     this.scene.popMatrix();
@@ -593,11 +630,24 @@ export class MyChecker extends CGFobject {
     }
 
     // Standard display
+    var transformations = this.initTransformations(false);
+
     for (var i = 0; i < this.components.length; i++) {
       this.scene.pushMatrix();
-      this.scene.multMatrix(this.transformations[i]);
+      this.scene.multMatrix(transformations[i]);
       this.components[i].display();
       this.scene.popMatrix();
+    }
+
+    if (this.isKing) {
+      var transformations = this.initTransformations(true);
+
+      for (var i = 0; i < this.components.length; i++) {
+        this.scene.pushMatrix();
+        this.scene.multMatrix(transformations[i]);
+        this.components[i].display();
+        this.scene.popMatrix();
+      }
     }
 
     this.scene.popMatrix();
@@ -613,20 +663,37 @@ export class MyChecker extends CGFobject {
     //
   }
 
-  // If a checker is selected, the material will change to  green
+  // Set the checker piece as selected
   setSelected() {
     this.selected = true;
   }
 
+  // Set the checker piece as unselected
   unsetSelected() {
     this.selected = false;
   }
 
+  // Set the checker piece as available
   setAvailable() {
     this.available = true;
   }
 
+  // Set the checker piece as unavailable
   unsetAvailable() {
     this.available = false;
+  }
+
+  // Set the scene orchestrator
+  setOrchestrator(orchestrator) {
+    this.orchestrator = orchestrator;
+  }
+
+  // Set the checker piece as king
+  setKing(){
+    this.isKing = true;
+  }
+
+  updateAnimationDuration(duration){
+    this.animDuration = duration;
   }
 }
