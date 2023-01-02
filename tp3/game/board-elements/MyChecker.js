@@ -493,8 +493,6 @@ export class MyChecker extends CGFobject {
       this.audio.loop = true;
       this.audio.play();
 
-      console.log(deltas)
-
       this.orchestrator.addSpotlight([this.initialPos[0] - deltas[0], 1, this.initialPos[2] - deltas[2]]);
 
       var transformations = this.initRelativeTransformations(false);
