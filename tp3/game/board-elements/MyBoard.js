@@ -432,7 +432,8 @@ export class MyBoard {
       if (color == "red") {
         // Diagonal up left
         if (row >= 0 && col >= 0) {
-          tiles["left"] = this.board[row - 1][col - 1];
+          if (this.board[row - 1][col - 1] != null)
+            tiles["left"] = this.board[row - 1][col - 1];
         } else tiles["left"] = null;
         // Diagonal up right
         if (row >= 0 && col <= 7) {
@@ -577,9 +578,9 @@ export class MyBoard {
 
     // If the checker is a king, it can move in both directions
     else {
-      if (checker.selected) {
+      /* if (checker.selected) {
         console.log(availableTiles);
-      }
+      } */
 
       var tile = diagonalTiles["up left"];
       if (tile != null) {

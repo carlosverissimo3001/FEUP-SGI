@@ -49,8 +49,6 @@ export class MyChecker extends CGFobject {
     // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
     this.isKing = false;
 
-    this.transformations = [];
-
     // Was the checker piece eaten?
     this.wasEaten = false;
 
@@ -59,9 +57,6 @@ export class MyChecker extends CGFobject {
 
     // Is this piece selected?
     this.selected = false;
-
-    // Is this the first move of this piece?
-    this.firstMove = true;
 
     // Is this piece moving? If so, straight or jumping?
     this.moving = false;
@@ -122,8 +117,6 @@ export class MyChecker extends CGFobject {
     this.initialPos.push(this.tile.getZ() + this.z);
 
     this.animation = null;
-
-    this.yUpdated = false;
 
     // Audio
     this.audio = new Audio("sounds/slide.mp3");
@@ -270,14 +263,21 @@ export class MyChecker extends CGFobject {
 
   /**
    * Computes the checker piece absolute transformations to the deposit location
+   * @param {boolean} isStackedPiece - true if the checker piece is a staked on top of another piece
    */
-  initDepositTransformations() {
+  initDepositTransformations(isStackedPiece) {
     var scaleFactor = 0.4;
     var transf = mat4.create();
+
+    var transformations = [];
 
     var x = this.depositLocation[0];
     var y = this.depositLocation[1];
     var z = this.depositLocation[2];
+
+    if (isStackedPiece) {
+      y += 0.15;
+    }
 
     // Outer torus
 
@@ -285,7 +285,7 @@ export class MyChecker extends CGFobject {
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.3, 0.3, 1.75 * scaleFactor]);
 
-    this.depositTransformations.push(transf);
+    transformations.push(transf);
 
     // Whole sphere
 
@@ -294,7 +294,7 @@ export class MyChecker extends CGFobject {
     transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.scale(transf, transf, [0.32, 0.16 * scaleFactor, 0.32]);
 
-    this.depositTransformations.push(transf);
+    transformations.push(transf);
 
     // Inner torus
 
@@ -304,7 +304,7 @@ export class MyChecker extends CGFobject {
     transf = mat4.rotate(transf, transf, Math.PI / 2, [1, 0, 0]);
     transf = mat4.scale(transf, transf, [0.2, 0.2, 2 * scaleFactor]);
 
-    this.depositTransformations.push(transf);
+    transformations.push(transf);
 
     // Inner sphere
 
@@ -313,7 +313,9 @@ export class MyChecker extends CGFobject {
     transf = mat4.translate(transf, transf, [x, y, z]);
     transf = mat4.scale(transf, transf, [0.18, 0.21 * scaleFactor, 0.18]);
 
-    this.depositTransformations.push(transf);
+    transformations.push(transf);
+
+    return transformations;
   }
 
   /**
@@ -570,22 +572,25 @@ export class MyChecker extends CGFobject {
    * Displays the checker piece, when it is deposited in the eat location
    */
   displayDeposited() {
-    // Used to update the transformations to the deposit location
-    if (!this.yUpdated){
-      // this.depositLocation[1] has been updated, so the checker piece can be displayed in the correct position
-      this.depositTransformations = [];
-      this.initDepositTransformations();
-      this.yUpdated = true;
-    }
-
-    /* console.log(this.depositLocation[1]) */
+    var transformations = this.initDepositTransformations(false);
 
     for (var i = 0; i < this.components.length; i++) {
       this.scene.pushMatrix();
-      this.scene.multMatrix(this.depositTransformations[i]);
+      this.scene.multMatrix(transformations[i]);
       this.components[i].display();
       this.scene.popMatrix();
     }
+
+    /* if (this.isKing){
+      transformations = this.initDepositTransformations(true);
+
+      for (var i = 0; i < this.components.length; i++) {
+        this.scene.pushMatrix();
+        this.scene.multMatrix(transformations[i]);
+        this.components[i].display();
+        this.scene.popMatrix();
+      }
+    } */
   }
 
   /**

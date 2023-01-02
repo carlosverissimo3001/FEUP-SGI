@@ -62,6 +62,7 @@ export class MyGameOrchestrator {
     this.hasEatenCheckerFinished = false;
 
     this.gameEnded = false;
+    this.ongoingAnimation = false;
   }
 
   /** Initializes the scene graph
@@ -121,8 +122,9 @@ export class MyGameOrchestrator {
 
     for (let i = 0; i < this.movingCheckers.length; i++) {
       // If the checker is moving, display it
-      if (this.movingCheckers[i].moving)
+      if (this.movingCheckers[i].moving) {
         this.displayMovingChecker(this.movingCheckers[i]);
+      }
       // If the checker has finished moving, check some conditions
       else {
         // If the moving checker is not an eaten checker, we need to set its tile so that it can be displayed
@@ -132,32 +134,49 @@ export class MyGameOrchestrator {
 
           // If no checker was eaten, turn the lights back on after the attacking animation has finished
           // OTHERWISE, the lights will be turned on when the eaten checker has finished moving
-          if (!this.eatenChecker){
+          if (!this.eatenChecker) {
+            // Turn the lights back on
             this.turnOnLights();
+
+            // Delete the spotlight
             this.deleteSpotlight();
           }
 
           // Remove the checker from the moving checkers array
           this.movingCheckers.splice(i, 1);
-          i--;
+          /* i--; */
         }
 
         // If the moving checker was an eaten checker, the orchestrator is the one responsible for displaying it
         else {
           // Only turn the lights back on when the eaten checker has finished moving
-          if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat){
+          if (!this.hasEatenCheckerFinished && !this.movingCheckers[i].isMoving_eat) {
             this.hasEatenCheckerFinished = true;
+
+            // Unset the eaten checker
             this.eatenChecker = null;
+
+            // Delete the spotlight
             this.deleteSpotlight();
+
+            // Turn the lights back on
             this.turnOnLights();
           }
+
+          //! This is a hotfix that fixes the bug when a checker would be displayed in the deposit, but would return to the board, in the next turn
+          if (this.eatenChecker)
+            this.eatenChecker = null;
+
           this.movingCheckers[i].display();
         }
       }
     }
+
   }
 
-
+  /**
+   * Changes the player turn
+   */
   changePlayerTurn() {
 
     this.turn == "Player 1"
@@ -173,13 +192,12 @@ export class MyGameOrchestrator {
       else if (this.scene.cameraID == this.player2Camera)
         this.scene.updateCamera(this.player1Camera);
       // If current camera is not player 1 or 2, change the next player's camera
-      else{
+      else {
         if (this.turn == "Player 1")
           this.scene.updateCamera(this.player1Camera);
         else
           this.scene.updateCamera(this.player2Camera);
       }
-
     }
 
     if(this.turn == "Player 1") {
@@ -211,7 +229,6 @@ export class MyGameOrchestrator {
   orchestrate() {
     this.availableTiles = [];
 
-    // Get the available checkers
     var availableCheckers = this.board.getCheckers(
       this.players[this.turn].color
     );
@@ -312,6 +329,8 @@ export class MyGameOrchestrator {
 
           // The checker that was eaten
           this.eatenChecker = this.player1Eat[i];
+          /* if (this.eatenChecker.isKing)
+            this.board.player1MarkerNumber += 1; */
         }
       }
     }
@@ -321,8 +340,15 @@ export class MyGameOrchestrator {
         if (!this.player2Eat[i].wasEaten) {
           this.player2Eat[i].depositLocation[1] += 0.17 * i;
           this.player2Eat[i].tile.remove();
+
+          // The checker that was eaten
           this.player2Eat[i].wasEaten = true;
+
+          // The checker that was eaten
           this.eatenChecker = this.player2Eat[i];
+
+          /* if (this.eatenChecker.isKing)
+            this.board.player2MarkerNumber += 1; */
         }
       }
     }
@@ -369,6 +395,11 @@ export class MyGameOrchestrator {
   }
 
   undo() {
+    if (this.eatenChecker != null && this.eatenChecker.isMoving_eat) {
+      alert("Please wait for the checker to finish moving");
+      return;
+    }
+
     // Prompt a confirmation message
     if (this.gameSequence.moves.length <= 0) {
       alert("There are no moves to undo");
@@ -384,7 +415,8 @@ export class MyGameOrchestrator {
     var lastMove = this.gameSequence.undo();
 
     // If a checker was selected, unset it
-    if (this.gameState.checker != null) this.gameState.checker.unsetSelected();
+    if (this.gameState.checker != null)
+      this.gameState.checker.unsetSelected();
 
     // Unset tiles that were available
     this.unsetAvailable(this.lastAvailableTiles);
@@ -409,14 +441,13 @@ export class MyGameOrchestrator {
 
       if (lastMove.eatenChecker.color == "blue") {
         // Update the scoreboard
-        this.board.player1MarkerNumber =
-          lastMove.oldBoard.player1MarkerNumber - 1;
+        this.board.player1MarkerNumber = lastMove.oldBoard.player1MarkerNumber - 1;
 
         // Remove the checker from the eaten checkers array
         this.player1Eat.pop();
       } else if (lastMove.eatenChecker.color == "red") {
         // Update the scoreboard
-        this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber;
+        this.board.player2MarkerNumber = lastMove.oldBoard.player2MarkerNumber - 1;
 
         // Remove the checker from the eaten checkers array
         this.player2Eat.pop();
@@ -509,6 +540,8 @@ export class MyGameOrchestrator {
         i++;
       }
     }
+
+
   }
 
   /**
@@ -538,7 +571,7 @@ export class MyGameOrchestrator {
    * Adds a light to the scene
    * @param {Array} target The target position of the light
    */
-  addSpotlight(target){
+  addSpotlight(target) {
     // Get the number of lights
     var i = this.scene.lightsVal.length;
 
@@ -574,7 +607,7 @@ export class MyGameOrchestrator {
 
   }
 
-  deleteSpotlight(){
+  deleteSpotlight() {
     // Get the number of lights
     var i = this.scene.lightsVal.length;
 
@@ -587,7 +620,7 @@ export class MyGameOrchestrator {
     this.scene.lights[i].update();
   }
 
-  updateCheckerAnimationDuration(duration){
+  updateCheckerAnimationDuration(duration) {
     for (var i = 0; i < this.board.checkers.length; i++) {
       this.board.checkers[i].updateAnimationDuration(duration);
     }
