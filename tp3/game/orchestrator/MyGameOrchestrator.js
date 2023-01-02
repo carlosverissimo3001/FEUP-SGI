@@ -311,6 +311,8 @@ export class MyGameOrchestrator {
 
           // The checker that was eaten
           this.eatenChecker = this.player1Eat[i];
+          /* if (this.eatenChecker.isKing)
+            this.board.player1MarkerNumber += 1; */
         }
       }
     }
@@ -320,8 +322,15 @@ export class MyGameOrchestrator {
         if (!this.player2Eat[i].wasEaten) {
           this.player2Eat[i].depositLocation[1] += 0.17 * i;
           this.player2Eat[i].tile.remove();
+
+          // The checker that was eaten
           this.player2Eat[i].wasEaten = true;
+
+          // The checker that was eaten
           this.eatenChecker = this.player2Eat[i];
+
+          /* if (this.eatenChecker.isKing)
+            this.board.player2MarkerNumber += 1; */
         }
       }
     }

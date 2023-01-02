@@ -263,8 +263,9 @@ export class MyChecker extends CGFobject {
 
   /**
    * Computes the checker piece absolute transformations to the deposit location
+   * @param {boolean} isStackedPiece - true if the checker piece is a staked on top of another piece
    */
-  initDepositTransformations() {
+  initDepositTransformations(isStackedPiece) {
     var scaleFactor = 0.4;
     var transf = mat4.create();
 
@@ -273,6 +274,10 @@ export class MyChecker extends CGFobject {
     var x = this.depositLocation[0];
     var y = this.depositLocation[1];
     var z = this.depositLocation[2];
+
+    if (isStackedPiece) {
+      y += 0.15;
+    }
 
     // Outer torus
 
@@ -567,9 +572,7 @@ export class MyChecker extends CGFobject {
    * Displays the checker piece, when it is deposited in the eat location
    */
   displayDeposited() {
-    var transformations = this.initDepositTransformations();
-
-    /* console.log(this.depositLocation[1]) */
+    var transformations = this.initDepositTransformations(false);
 
     for (var i = 0; i < this.components.length; i++) {
       this.scene.pushMatrix();
@@ -577,6 +580,17 @@ export class MyChecker extends CGFobject {
       this.components[i].display();
       this.scene.popMatrix();
     }
+
+    /* if (this.isKing){
+      transformations = this.initDepositTransformations(true);
+
+      for (var i = 0; i < this.components.length; i++) {
+        this.scene.pushMatrix();
+        this.scene.multMatrix(transformations[i]);
+        this.components[i].display();
+        this.scene.popMatrix();
+      }
+    } */
   }
 
   /**
