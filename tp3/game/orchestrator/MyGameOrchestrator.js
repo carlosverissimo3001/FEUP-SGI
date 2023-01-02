@@ -14,6 +14,7 @@ export class MyGameOrchestrator {
 
     // Set the board
     this.board = new MyBoard(scene, 8);
+    this.originalBoard = new MyBoard(scene, 8);
 
     // Scene graph
     this.theme = null;
@@ -179,8 +180,7 @@ export class MyGameOrchestrator {
   /**
    * Changes the player turn
    */
-  changePlayerTurn() {
-
+  changePlayerTurn(restart = false) {
     if (this.turn == "Player 1"){
       this.state = "Player 2 Turn";
       this.turn = "Player 2"
@@ -205,6 +205,12 @@ export class MyGameOrchestrator {
         else
           this.scene.updateCamera(this.player2Camera);
       }
+    }
+
+    // If the game is restarting, set the state to player 1 turn
+    if (restart){
+      this.turn = "Player 1";
+      this.state = "Player 1 Turn";
     }
 
     // Update interface
@@ -386,7 +392,7 @@ export class MyGameOrchestrator {
     }
   }
 
-  undo(isMovie) {
+  undo() {
     if (this.eatenChecker != null && this.eatenChecker.isMoving_eat) {
       alert("Please wait for the checker to finish moving");
       return;
@@ -465,14 +471,21 @@ export class MyGameOrchestrator {
     }
   }
 
-  restart() {
-    // Prompt a confirmation message
-    var confirmation = confirm(
-      "Are you sure you want to restart the game? This action cannot be undone"
-    );
-    if (!confirmation) return;
+  restart(isMovie) {
+    // Prompt a confirmation message, if the restart is not being called by a movie
+    if (!isMovie){
+      var confirmation = confirm(
+        "Are you sure you want to restart the game? This action cannot be undone"
+      );
+      if (!confirmation) return;
+    }
 
-    this.board.initialized = false;
+    /* var isEqual = this.equalBoards(this.board.board, this.originalBoard.board);
+    console.log("isEqual: " + isEqual); */
+
+    // If the board is equal to the original board, do nothing
+    if(this.equalBoards(this.board.board, this.originalBoard.board))
+      return
 
     // Reset the board
     this.board = new MyBoard(this.scene, 8);
@@ -489,8 +502,8 @@ export class MyGameOrchestrator {
     this.player1Eat = [];
     this.player2Eat = [];
 
-    // Reset the turn
-    this.turn = "Player 1";
+    // Change the player turn
+    this.changePlayerTurn(true);
 
     // Reset the game state
     this.gameState = new MyGameStateTurn(this.scene, this, this.board);
@@ -505,10 +518,26 @@ export class MyGameOrchestrator {
     );
     if (!confirmation) return;
 
-    // Keep popping moves until there are no more
-    while (this.gameSequence.moves.length > 0) {
-      this.undo(true);
+    this.state = "Movie";
+    this.updateInterface();
+
+    // In order to save the state of the game, we need create a copy of the board
+    this.boardCopy = this.board;
+
+    /*
+      - We need to essentially restart the game, but we need to keep the state of the game, so we can go back to it
+    */
+
+    this.restart(true);
+
+    // Create a copy of the game sequence
+    this.gameSequenceCopy = this.gameSequence;
+
+    // In the movie, we start by the first move
+    for (var i = 0; i < this.gameSequenceCopy.moves.length; i++) {
+      this.gameSequenceCopy.moves[i].isMovie = true;
     }
+
   }
 
   /**
@@ -633,5 +662,16 @@ export class MyGameOrchestrator {
 
   updateInterface(){
     this.scene.interface.gui.updateDisplay();
+  }
+
+  equalBoards(board1, board2) {
+    for (var i = 0; i < board1.length; i++) {
+      for (var j = 0; j < board1[i].length; j++) {
+        // If one has a checker and the other doesn't, return false
+        if (board1[i][j].hasChecker ^ board2[i][j].hasChecker)
+          return false;
+      }
+    }
+    return true;
   }
 }
