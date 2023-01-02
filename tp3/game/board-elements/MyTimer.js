@@ -184,7 +184,7 @@ export class MyTimer extends CGFobject {
   }
 
   update() {
-    if(this.msec == 0) {
+    if(this.msec <= 0) {
       if(this.sec == 0) {
         if(this.min > 0) {
           this.min = this.min - 1;
@@ -198,10 +198,10 @@ export class MyTimer extends CGFobject {
       }
     }
     else {
-        this.msec = this.msec - 1;
+        this.msec = this.msec - 5;
     }
     if(this.turn == 2) {
-      if(this.player1MSec == 0) {
+      if(this.player1MSec <= 0) {
         if(this.player1Sec == 0) {
           if(this.player1Min > 0) {
             this.player1Min = this.player1Min - 1;
@@ -215,9 +215,10 @@ export class MyTimer extends CGFobject {
         }
       }
       else {
-          this.player1MSec = this.player1MSec - 1;
+          this.player1MSec = this.player1MSec - 5;
       }
-    } if(this.player2MSec == 0) {
+    } else {
+    if(this.player2MSec <= 0) {
       if(this.player2Sec == 0) {
         if(this.player2Min > 0) {
           this.player2Min = this.player2Min - 1;
@@ -232,8 +233,9 @@ export class MyTimer extends CGFobject {
       }
     }
     else {
-        this.player2MSec = this.player2MSec - 1;
+        this.player2MSec = this.player2MSec - 5;
     }
+  }
   }
 
   updateTimeToMakeMove(duration) {

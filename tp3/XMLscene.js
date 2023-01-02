@@ -511,10 +511,6 @@ export class XMLscene extends CGFscene {
 
       if(!this.gameOrchestrator.gameEnded){
         this.gameOrchestrator.board.timer.update();
-        this.gameOrchestrator.board.timer.update();
-        this.gameOrchestrator.board.timer.update();
-        this.gameOrchestrator.board.timer.update();
-        this.gameOrchestrator.board.timer.update();
       }
 
 
