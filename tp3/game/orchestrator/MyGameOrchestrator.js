@@ -233,7 +233,7 @@ export class MyGameOrchestrator {
         this.gameState.destinationTile = null;
         return;
       }
-    }
+    }2.
   }
 
   eatCheckers() {

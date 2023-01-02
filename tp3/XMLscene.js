@@ -179,6 +179,23 @@ export class XMLscene extends CGFscene {
     this.gray.setDiffuse(62/255,58/255,68/255,1);
     this.gray.setShininess(100);
 
+    this.video_game_text = new CGFtexture(this, "scenes/images/textures/retro_game.jpg");
+
+    this.green = new CGFappearance(this);
+    this.green.setAmbient(46/255, 204/255, 113/255,1.00);
+    this.green.setDiffuse(46/255, 204/255, 113/255,1);
+    this.green.setShininess(100);
+    this.green.setTexture(this.video_game_text);
+    this.green.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.pink = new CGFappearance(this);
+    this.pink.setAmbient(219/255, 10/255, 91/255, 1.00);
+    this.pink.setDiffuse(219/255, 10/255, 91/255, 1);
+    this.pink.setShininess(100);
+    this.pink.setTexture(this.video_game_text);
+    this.pink.setTextureWrap('REPEAT', 'REPEAT');
+
+
 
   }
 
@@ -485,6 +502,8 @@ export class XMLscene extends CGFscene {
 
       /* Update game orchestrator */
       this.gameOrchestrator.update(elapsed / 1000);
+
+      this.gameOrchestrator.board.timer.update();
     }
   }
 

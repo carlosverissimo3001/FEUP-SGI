@@ -1,4 +1,4 @@
-import {CGFobject, CGFappearance, CGFtexture} from '../../lib/CGF.js';
+import {CGFobject, CGFappearance, CGFtexture} from "../../../lib/CGF.js";
 import { MyRectangle } from '../../primitives/MyRectangle.js';
 
 export class MyWin extends CGFobject {
@@ -20,13 +20,13 @@ export class MyWin extends CGFobject {
    */
   initBuffers() {
     
-    this.w = new MyRectangle(scene, "none", 0, 1, 0, 1);
-    this.i = new MyRectangle(scene, "none", 0, 1, 0, 1);
-    this.n = new MyRectangle(scene, "none", 0, 1, 0, 1);
+    this.w = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
+    this.i = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
+    this.n = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
 
-    this.appearance = new CGFappearance(scene);
+    this.appearance = new CGFappearance(this.scene);
 
-    this.fontTexture = new CGFtexture(scene, "scenes/images/textures/oolite-font.trans.png");
+    this.fontTexture = new CGFtexture(this.scene, "scenes/images/textures/oolite-font.trans.png");
     this.appearance.setTexture(this.fontTexture);
 
   }

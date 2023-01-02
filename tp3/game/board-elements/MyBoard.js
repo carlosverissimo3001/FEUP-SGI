@@ -3,6 +3,7 @@ import { MyChecker } from "./MyChecker.js";
 import { MyTile } from "./MyTile.js";
 import { MyRectangle } from "../../primitives/MyRectangle.js";
 import { CGFtexture, CGFappearance } from "../../../lib/CGF.js";
+import { MyTimer } from "./MyTimer.js";
 
 export class MyBoard {
   constructor(scene, size) {
@@ -17,6 +18,9 @@ export class MyBoard {
     this.player2CaptureZone = new MyCube(scene);
     this.player1MarkerZone = new MyCube(scene);
     this.player2MarkerZone = new MyCube(scene);
+    this.timerZone1 = new MyCube(scene);
+    this.timerZone2 = new MyCube(scene);
+    this.timer = new MyTimer(scene);
     this.player1Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
     this.player2Marker = new MyRectangle(scene, "none", 0, 1, 0, 1);
 
@@ -330,6 +334,20 @@ export class MyBoard {
     // reactivate default shader
     this.scene.setActiveShader(this.scene.defaultShader);
     this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x + 9, this.y, this.z  );
+    this.scene.scale(1, 0.15, 4)
+    this.player2CaptureZoneMaterial.apply();
+    this.timerZone1.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(this.x + 9, this.y, this.z + 4  );
+    this.scene.scale(1, 0.15, 4);
+    this.player1CaptureZoneMaterial.apply();
+    this.timerZone2.display();
+    this.scene.popMatrix();
   }
 
   displayBorder(){
@@ -368,6 +386,8 @@ export class MyBoard {
    * */
   display() {
     this.displayBorder();
+    this.timer.display();
+
 
     var id = 1;
     for (let i = 0; i < this.board.length; i++) {
