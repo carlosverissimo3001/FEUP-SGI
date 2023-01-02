@@ -60,6 +60,8 @@ export class MyGameOrchestrator {
     this.movingCheckers = [];
 
     this.hasEatenCheckerFinished = false;
+
+    this.gameEnded = false;
   }
 
   /** Initializes the scene graph
@@ -180,10 +182,19 @@ export class MyGameOrchestrator {
 
     }
 
-    this.board.timer.playerMin = this.board.timer.timeToMakeMoveMin;
-    console.log("print: " + this.board.timer.timeToMakeMoveSec);
-    this.board.timer.playerSec = this.board.timer.timeToMakeMoveSec;
-    this.board.timer.turn = this.board.timer.turn == 1 ? 2 : 1;
+    if(this.turn == "Player 1") {
+      this.board.timer.player2Min = this.board.timer.timeToMakeMoveMin;
+      this.board.timer.player2Sec = this.board.timer.timeToMakeMoveSec;
+      this.board.timer.turn = 1;
+      this.board.timer.player1Min = 0;
+      this.board.timer.player1Sec = 0;
+    } else {
+      this.board.timer.player1Min = this.board.timer.timeToMakeMoveMin;
+      this.board.timer.player1Sec = this.board.timer.timeToMakeMoveSec;
+      this.board.timer.turn = 2;
+      this.board.timer.player2Min = 0;
+      this.board.timer.player2Sec = 0;
+    }    
   }
 
   clearPicked() {
@@ -205,75 +216,83 @@ export class MyGameOrchestrator {
       this.players[this.turn].color
     );
 
-    // Sets the available checkers, with a light color
-    this.setAvailable(availableCheckers);
-
-    if (this.gameState.checker != null) {
-      // If a checker is selected, get the available tiles for it
-      this.availableTiles = this.board.validCheckerPosition(
-        this.gameState.checker,
-        this.players[this.turn].color
-      );
-
-      // If no tiles are available, the checker cannot move
-      if (this.availableTiles.length == 0) {
-        alert("This checker cannot move");
-        this.gameState.checker = null;
-        return;
-      }
-
-      if (this.gameState.isNewChecker) {
-        // Unsets the last available tiles -> the checker has changed
-        this.unsetAvailable(this.lastAvailableTiles);
-
-        // Sets the new avaliable tiles, with a light color
-        this.setAvailable(this.availableTiles);
-      }
-
-      // Assume a double click in the same checker as an unselect
-      else {
-        this.gameState.checker.unsetSelected();
-        this.gameState.checker = null;
-        this.unsetAvailable(this.availableTiles);
-        return;
-      }
-
-      // Creates a copy of the available tiles
-      this.lastAvailableTiles = this.availableTiles;
-
-      // Sets the selected checker, with a green hue
-      this.gameState.checker.setSelected();
+    if(availableCheckers == []) {
+      this.gameEnded = true;
+      this.board.winDisplay.n = this.turn == 1 ? 2 : 1;
+      this.board.winDisplay.display();
     }
 
-    if (this.gameState.destinationTile != null) {
-      // If a tile has been picked, check if it is valid
-      if (this.availableTiles.includes(this.gameState.destinationTile)) {
-        // Check if this move involves eating a checker
-        this.eatCheckers();
+    if(!this.gameEnded) {
+      // Sets the available checkers, with a light color
+      this.setAvailable(availableCheckers);
 
-        // Move the checker to the tile
-        this.gameState.moveChecker(this.eatenChecker);
+      if (this.gameState.checker != null) {
+        // If a checker is selected, get the available tiles for it
+        this.availableTiles = this.board.validCheckerPosition(
+          this.gameState.checker,
+          this.players[this.turn].color
+        );
 
-        // Get the lights that were turned on
-        this.getTurnedOnLights();
+        // If no tiles are available, the checker cannot move
+        if (this.availableTiles.length == 0) {
+          alert("This checker cannot move");
+          this.gameState.checker = null;
+          return;
+        }
 
-        // Turn off the lights
-        this.turnOffLights();
+        if (this.gameState.isNewChecker) {
+          // Unsets the last available tiles -> the checker has changed
+          this.unsetAvailable(this.lastAvailableTiles);
 
-        // Unset the avaliable tiles and checkers
-        this.unsetAvailable(availableCheckers);
-        this.unsetAvailable(this.availableTiles);
+          // Sets the new avaliable tiles, with a light color
+          this.setAvailable(this.availableTiles);
+        }
 
-        // Change the player turn
-        this.changePlayerTurn();
+        // Assume a double click in the same checker as an unselect
+        else {
+          this.gameState.checker.unsetSelected();
+          this.gameState.checker = null;
+          this.unsetAvailable(this.availableTiles);
+          return;
+        }
+
+        // Creates a copy of the available tiles
+        this.lastAvailableTiles = this.availableTiles;
+
+        // Sets the selected checker, with a green hue
+        this.gameState.checker.setSelected();
       }
-      // If the tile is not valid, alert the player
-      else {
-        alert("This tile is not available");
-        this.gameState.destinationTile = null;
-        return;
+
+      if (this.gameState.destinationTile != null) {
+        // If a tile has been picked, check if it is valid
+        if (this.availableTiles.includes(this.gameState.destinationTile)) {
+          // Check if this move involves eating a checker
+          this.eatCheckers();
+
+          // Move the checker to the tile
+          this.gameState.moveChecker(this.eatenChecker);
+
+          // Get the lights that were turned on
+          this.getTurnedOnLights();
+
+          // Turn off the lights
+          this.turnOffLights();
+
+          // Unset the avaliable tiles and checkers
+          this.unsetAvailable(availableCheckers);
+          this.unsetAvailable(this.availableTiles);
+
+          // Change the player turn
+          this.changePlayerTurn();
+        }
+        // If the tile is not valid, alert the player
+        else {
+          alert("This tile is not available");
+          this.gameState.destinationTile = null;
+          return;
+        }
       }
-    }2.
+  }
   }
 
   eatCheckers() {

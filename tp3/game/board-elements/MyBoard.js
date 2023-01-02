@@ -4,6 +4,7 @@ import { MyTile } from "./MyTile.js";
 import { MyRectangle } from "../../primitives/MyRectangle.js";
 import { CGFtexture, CGFappearance } from "../../../lib/CGF.js";
 import { MyTimer } from "./MyTimer.js";
+import { MyWin } from "./MyWin.js";
 
 export class MyBoard {
   constructor(scene, size) {
@@ -13,6 +14,7 @@ export class MyBoard {
     this.size = size;
 
     this.captureZone = new MyCube(scene);
+    this.winDisplay = new MyWin(scene);
 
     this.player1CaptureZone = new MyCube(scene);
     this.player2CaptureZone = new MyCube(scene);
@@ -478,7 +480,7 @@ export class MyBoard {
   }
 
   /**
-   * Gets the checerks that have more than 1 available jump
+   * Gets the checerks that have ate least 1 available jump
    */
   getCheckers(color) {
     let checkers = [];

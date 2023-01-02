@@ -61,32 +61,10 @@ export class MyTimer extends CGFobject {
     this.secp22_square = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
     this.point2_square = new MyRectangle(this.scene, "none", 0, 1, 0, 1);
 
-    //this.pl1Checker = new MyChecker();
-
     this.appearance = new CGFappearance(this.scene);
 
     this.fontTexture = new CGFtexture(this.scene, "scenes/images/textures/oolite-font.trans.png");
     this.appearance.setTexture(this.fontTexture);
-
-    this.components1 = [];
-    // Outer torus
-    this.components1.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
-    // Whole sphere
-    this.components1.push(new MySphere(this.scene, "none", 1, 40, 40));
-    // Inner torus
-    this.components1.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
-    // Inner sphere
-    this.components1.push(new MySphere(this.scene, "none", 1, 40, 40));
-
-    this.components2 = [];
-    // Outer torus
-    this.components2.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
-    // Whole sphere
-    this.components2.push(new MySphere(this.scene, "none", 1, 40, 40));
-    // Inner torus
-    this.components2.push(new MyTorus(this.scene, "none", 0.1, 1, 40, 40));
-    // Inner sphere
-    this.components2.push(new MySphere(this.scene, "none", 1, 40, 40));
 
     // Blue material for the checker
     this.blueMaterial = new CGFappearance(this.scene);
@@ -131,15 +109,15 @@ export class MyTimer extends CGFobject {
     this.miniTimerBox.display();
     this.scene.popMatrix();
 
-    this.displayLetter(Math.floor(this.min/10),3,this.min1_square,this.x + 8.5, this.y+1, this.z+3.3,1, 2, 1 );
-    this.displayLetter(this.min%10,3,this.min2_square,this.x + 8.5, this.y+1, this.z+3.7,1, 2, 1 );
-    this.displayLetter(10,3,this.point_square,this.x + 8.5, this.y+1, this.z+4.1,1, 2, 1 );
-    this.displayLetter(Math.floor(this.sec/10),3,this.sec1_square,this.x + 8.5, this.y+1, this.z+4.5,1, 2, 1 );
-    this.displayLetter(this.sec%10,3,this.sec2_square,this.x + 8.5, this.y+1, this.z+4.9,1, 2, 1 );
+    this.displayLetter(Math.floor(this.min/10),3,this.min1_square,this.x + 8.5, this.y+0.8, this.z+3,1, 2, 1 );
+    this.displayLetter(this.min%10,3,this.min2_square,this.x + 8.5, this.y+0.8, this.z+3.4,1, 2, 1 );
+    this.displayLetter(10,3,this.point_square,this.x + 8.5, this.y+0.8, this.z+3.8,1, 2, 1 );
+    this.displayLetter(Math.floor(this.sec/10),3,this.sec1_square,this.x + 8.5, this.y+0.8, this.z+4.2,1, 2, 1 );
+    this.displayLetter(this.sec%10,3,this.sec2_square,this.x + 8.5, this.y+0.8, this.z+4.6,1, 2, 1 );
 
     this.displayPlayerTimers();
 
-    this.displayCheckers();
+    this.displayCrowns();
 
 
   }
@@ -178,19 +156,14 @@ export class MyTimer extends CGFobject {
     this.scene.setActiveShader(this.scene.defaultShader);
   }
 
-  displayCheckers() {
+  displayCrowns() {
     this.scene.pushMatrix();
     if(this.turn == 1) {
       this.lightRedMaterial.apply();
     }else {
       this.redMaterial.apply();
     }
-    // for (var i = 0; i < this.components1.length; i++) {
-    //   this.scene.pushMatrix();
-    //   this.components1[i].display();
-    //   this.scene.popMatrix();
-    // }
-    this.scene.translate(this.x + 11, this.y + 3.1, this.z + 6.5);
+    this.scene.translate(this.x + 10, this.y + 3.1, this.z + 6.8);
     this.scene.scale(0.01,0.01,0.01);
     this.crown1.display();
     this.scene.popMatrix();
@@ -201,15 +174,7 @@ export class MyTimer extends CGFobject {
     }else {
       this.blueMaterial.apply();
     }
-    // for (var i = 0; i < this.components2.length; i++) {
-    //   this.scene.pushMatrix();
-    //   this.scene.translate(this.x + 9, this.y + 3.1, this.z);
-    //   this.scene.rotate(Math.PI, 0, 0, 1);
-    //   this.scene.scale(1.2,1.2,1);
-    //   this.components2[i].display();
-    //   this.scene.popMatrix();
-    // }
-    this.scene.translate(this.x + 11, this.y + 3.1, this.z + 0.5);
+    this.scene.translate(this.x + 10, this.y + 3.1, this.z + 0.8);
     this.scene.scale(0.01,0.01,0.01);
     this.crown2.display();
     this.scene.popMatrix();
@@ -220,22 +185,31 @@ export class MyTimer extends CGFobject {
         if(this.min > 0) {
           this.min = this.min - 1;
           this.sec = 59;
-          if (this.turn == 2) {
-            this.player1Min = this.player1Min -1;
-            this.player1Sec = 59;
-          }else {
-            this.player2Min = this.player2Min -1;
-            this.player2Sec = 59;
-          }
         }
     }
     else {
         this.sec = this.sec - 1;
-        if (this.turn == 2) {
+    }
+    if(this.turn == 2) {
+      if(this.player1Sec == 0) {
+        if(this.player1Min > 0) {
+          this.player1Min = this.player1Min - 1;
           this.player1Sec = 59;
-        }else {
+        }
+      }
+      else {
+        this.player1Sec = this.player1Sec - 1;
+      }
+    } else {
+      if(this.player2Sec == 0) {
+        if(this.player2Min > 0) {
+          this.player2Min = this.player2Min - 1;
           this.player2Sec = 59;
         }
+      }
+      else {
+        this.player2Sec = this.player2Sec - 1;
+      }
     }
   }
 
