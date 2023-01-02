@@ -68,73 +68,173 @@ export class MyGameStateTurn extends MyGameState {
   }
 
   checkEatenCheckers(checker, destination, eaten, player, color) {
-    var diagonalTiles = this.board.getDiagonalTiles(
-      checker.row,
-      checker.col,
-      color
-    );
-    if (
-      diagonalTiles["left"] == destination ||
-      diagonalTiles["right"] == destination
-    ) {
-      if (player == "Player 1") {
-        for (let i = 0; i < eaten.length; i++) {
-          this.orchestrator.player1Eat.push(eaten[i]);
+    // Get the diagonal tiles of the origin checker
+    var diagonalTiles = this.board.getDiagonalTiles(checker.row, checker.col, color);
+
+    // Is the atacker checker a king?
+    if (!checker.isKing){
+      if (diagonalTiles["left"] == destination || diagonalTiles["right"] == destination) {
+        if (player == "Player 1") {
+          for (let i = 0; i < eaten.length; i++) {
+            this.orchestrator.player1Eat.push(eaten[i]);
+          }
         }
-      } else {
-        for (let i = 0; i < eaten.length; i++) {
-          this.orchestrator.player2Eat.push(eaten[i]);
+        else {
+          for (let i = 0; i < eaten.length; i++) {
+            this.orchestrator.player2Eat.push(eaten[i]);
+          }
+        }
+        return true;
+      }
+      else {
+        if (diagonalTiles["left"] && diagonalTiles["left"].hasChecker && diagonalTiles["left"].checker.color != color) {
+          var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["left"].checker.row, diagonalTiles["left"].checker.col, color);
+
+          if(diagonalTiles["left"].checker.isKing){
+            if ((nextDiagonal["down left"] && !nextDiagonal["down left"].hasChecker) || (nextDiagonal["down right"] && !nextDiagonal["down right"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["left"].checker);
+              return this.checkEatenCheckers(diagonalTiles["left"].checker, destination, eat, player, color);
+            }
+          }
+
+          else{
+            if ((nextDiagonal["left"] && !nextDiagonal["left"].hasChecker) || (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["left"].checker);
+              return this.checkEatenCheckers(diagonalTiles["left"].checker, destination, eat, player, color);
+            }
+          }
+        }
+        else if (diagonalTiles["right"] && diagonalTiles["right"].hasChecker && diagonalTiles["right"].checker.color != color) {
+          var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["right"].checker.row, diagonalTiles["right"].checker.col, color);
+
+          if(diagonalTiles["right"].checker.isKing){
+            if ((nextDiagonal["down right"] && !nextDiagonal["down right"].hasChecker) || (nextDiagonal["down left"] && !nextDiagonal["down left"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["right"].checker);
+              return this.checkEatenCheckers(diagonalTiles["right"].checker, destination, eat, player, color);
+            }
+          }
+          else{
+            if ((nextDiagonal["right"] && !nextDiagonal["right"].hasChecker) || (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["right"].checker);
+              return this.checkEatenCheckers(diagonalTiles["right"].checker, destination, eat, player, color);
+            }
+          }
         }
       }
-      return true;
-    } else {
-      if (
-        diagonalTiles["left"] &&
-        diagonalTiles["left"].hasChecker &&
-        diagonalTiles["left"].checker.color != color
-      ) {
-        var nextDiagonal = this.board.getDiagonalTiles(
-          diagonalTiles["left"].checker.row,
-          diagonalTiles["left"].checker.col,
-          color
-        );
-        if (
-          (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker) ||
-          (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)
-        ) {
-          let eat = eaten;
-          eat.push(diagonalTiles["left"].checker);
-          return this.checkEatenCheckers(
-            diagonalTiles["left"].checker,
-            destination,
-            eat,
-            player,
-            color
-          );
+    }
+
+    else {
+      if (diagonalTiles["up left"] == destination || diagonalTiles["up right"] == destination || diagonalTiles["down left"] == destination || diagonalTiles["down right"] == destination) {
+        if (player == "Player 1") {
+          for (let i = 0; i < eaten.length; i++) {
+            this.orchestrator.player1Eat.push(eaten[i]);
+          }
         }
-      } else if (
-        diagonalTiles["right"] &&
-        diagonalTiles["right"].hasChecker &&
-        diagonalTiles["right"].checker.color != color
-      ) {
-        var nextDiagonal = this.board.getDiagonalTiles(
-          diagonalTiles["right"].checker.row,
-          diagonalTiles["right"].checker.col,
-          color
-        );
-        if (
-          (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker) ||
-          (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)
-        ) {
-          let eat = eaten;
-          eat.push(diagonalTiles["right"].checker);
-          return this.checkEatenCheckers(
-            diagonalTiles["right"].checker,
-            destination,
-            eat,
-            player,
-            color
-          );
+        else {
+          for (let i = 0; i < eaten.length; i++) {
+            this.orchestrator.player2Eat.push(eaten[i]);
+          }
+        }
+        return true;
+      }
+
+      else {
+        // DOWN LEFT
+        if (diagonalTiles["down left"] && diagonalTiles["down left"].hasChecker && diagonalTiles["down left"].checker.color != color) {
+          var deltaZ = diagonalTiles["down left"].row - checker.row
+          var color = (deltaZ < 0) ? "red" : "blue"
+
+          var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["down left"].checker.row, diagonalTiles["down left"].checker.col, color);
+
+          if (diagonalTiles["down left"].checker.isKing) {
+           if((nextDiagonal["down left"] && !nextDiagonal["down left"].hasChecker) || (nextDiagonal["up right"] && !nextDiagonal["up right"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["down left"].checker);
+              return this.checkEatenCheckers(diagonalTiles["down left"].checker, destination, eat, player, color);
+            }
+          }
+
+          else{
+            if ((nextDiagonal["left"] && !nextDiagonal["left"].hasChecker) || (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["down left"].checker);
+              return this.checkEatenCheckers(diagonalTiles["down left"].checker, destination, eat, player, color);
+            }
+          }
+        }
+
+        // DOWN RIGHT
+        else if (diagonalTiles["down right"] && diagonalTiles["down right"].hasChecker && diagonalTiles["down right"].checker.color != color) {
+          var deltaZ = diagonalTiles["down right"].row - checker.row
+          var color = (deltaZ < 0) ? "red" : "blue"
+
+          var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["down right"].checker.row, diagonalTiles["down right"].checker.col, color);
+
+          if (diagonalTiles["down right"].checker.isKing) {
+            if((nextDiagonal["down right"] && !nextDiagonal["down right"].hasChecker) || (nextDiagonal["up left"] && !nextDiagonal["up left"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["down right"].checker);
+              return this.checkEatenCheckers(diagonalTiles["down right"].checker, destination, eat, player, color);
+            }
+          }
+
+          else{
+            if ((nextDiagonal["right"] && !nextDiagonal["right"].hasChecker) || (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["down right"].checker);
+              return this.checkEatenCheckers(diagonalTiles["down right"].checker, destination, eat, player, color);
+            }
+          }
+        }
+
+        // UP LEFT
+        else if (diagonalTiles["up left"] && diagonalTiles["up left"].hasChecker && diagonalTiles["up left"].checker.color != color) {
+          var deltaZ = diagonalTiles["up left"].row - checker.row
+          var color = (deltaZ < 0) ? "red" : "blue"
+          var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["up left"].checker.row, diagonalTiles["up left"].checker.col, color);
+
+          if (diagonalTiles["up left"].checker.isKing) {
+            if((nextDiagonal["up left"] && !nextDiagonal["up left"].hasChecker) || (nextDiagonal["up right"] && !nextDiagonal["up right"].hasChecker)){
+              let eat = eaten;
+              eat.push(diagonalTiles["up left"].checker);
+              return this.checkEatenCheckers(diagonalTiles["up left"].checker, destination, eat, player, color);
+            }
+          }
+          else{
+            if ((nextDiagonal["left"] && !nextDiagonal["left"].hasChecker) || (nextDiagonal["right"] && !nextDiagonal["right"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["up left"].checker);
+              return this.checkEatenCheckers(diagonalTiles["up left"].checker, destination, eat, player, color);
+            }
+          }
+        }
+
+        // UP RIGHT
+        else if (diagonalTiles["up right"] && diagonalTiles["up right"].hasChecker && diagonalTiles["up right"].checker.color != color) {
+          var deltaZ = diagonalTiles["up right"].row - checker.row
+          var color = (deltaZ < 0) ? "red" : "blue"
+
+          var nextDiagonal = this.board.getDiagonalTiles(diagonalTiles["up right"].checker.row, diagonalTiles["up right"].checker.col, color);
+
+          if (diagonalTiles["up right"].checker.isKing) {
+            if((nextDiagonal["up right"] && !nextDiagonal["up right"].hasChecker) || (nextDiagonal["up left"] && !nextDiagonal["up left"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["up right"].checker);
+              return this.checkEatenCheckers(diagonalTiles["up right"].checker, destination, eat, player, color);
+            }
+          }
+
+          else{
+            if ((nextDiagonal["right"] && !nextDiagonal["right"].hasChecker) || (nextDiagonal["left"] && !nextDiagonal["left"].hasChecker)) {
+              let eat = eaten;
+              eat.push(diagonalTiles["up right"].checker);
+              return this.checkEatenCheckers(diagonalTiles["up right"].checker, destination, eat, player, color);
+            }
+          }
         }
       }
     }
@@ -179,6 +279,13 @@ export class MyGameStateTurn extends MyGameState {
     this.checker.startAnimation(this.destinationTile, eatenChecker != null);
 
     // NOTE: There's no need to update the checker position, since, by setting the checker to the destination tile, the checker's "position" is updated automatically
+
+    // Check if the checker became a king
+    if (this.checker.color == "red" && this.destinationTile.row == 0) {
+      this.checker.setKing();
+    } else if (this.checker.color == "blue" && this.destinationTile.row == 7) {
+      this.checker.setKing();
+    }
 
     // Update the checker's tile
     this.checker.tile = this.destinationTile;

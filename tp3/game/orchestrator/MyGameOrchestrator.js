@@ -155,12 +155,10 @@ export class MyGameOrchestrator {
 
 
   changePlayerTurn() {
-    // Only change the turn if a checker was not eaten
-    if (!this.eatenChecker) {
-      this.turn == "Player 1"
-        ? (this.turn = "Player 2")
-        : (this.turn = "Player 1");
-    }
+
+    this.turn == "Player 1"
+      ? (this.turn = "Player 2")
+      : (this.turn = "Player 1");
 
     // Change the camera, if auto rotate is on
     if (this.autoRotate) {
