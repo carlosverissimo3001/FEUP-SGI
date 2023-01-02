@@ -349,7 +349,14 @@ export class MyGameOrchestrator {
         return;
       }
     }
-}
+    }
+
+    else{
+      if (this.scene.cameraID != "Game Over"){
+        this.scene.updateCamera("Game Over");
+        this.updateInterface();
+      }
+    }
   }
 
 
