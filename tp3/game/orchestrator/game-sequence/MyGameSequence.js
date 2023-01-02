@@ -4,6 +4,7 @@ export class MyGameSequence {
     constructor(scene) {
         this.scene = scene;
 
+        // Array of moves My
         this.moves = [];
     }
 

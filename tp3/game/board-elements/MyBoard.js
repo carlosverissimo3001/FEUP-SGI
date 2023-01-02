@@ -82,7 +82,7 @@ export class MyBoard {
   }
 
   /**
-   * Initializes the board
+   * Creates the tiles for the board
    * Alternates between light and dark tiles, starting with light
    */
   initBoard() {
@@ -104,8 +104,10 @@ export class MyBoard {
       col = 0;
     }
 
+    // Initialize the board with the tiles in the correct order
     this.initTiles(this.tiles);
 
+    // Initialize the checkers
     this.initCheckers();
 
     this.initialized = true;
@@ -134,23 +136,14 @@ export class MyBoard {
         /* Row 3 and 4 are empty */
         if (row < 3 || row > 4) {
           /* Checkers are placed with a distance of 1 between them */
-          if (
-            (col % 2 == 0 && row % 2 != 0) ||
-            (col % 2 != 0 && row % 2 == 0)
-          ) {
-            var color = "blue";
-            if (row >= 3) {
-              var color = "red";
-            }
+          if ((col % 2 == 0 && row % 2 != 0) || (col % 2 != 0 && row % 2 == 0)) {
+            // Checkers are blue in rows 0, 1, 2 and red in rows 5, 6, 7
+            var color = (row >= 3) ? "red" : "blue";
 
-            let checker = new MyChecker(
-              this.scene,
-              color,
-              row,
-              col,
-              this,
-              row + "," + col
-            );
+            // Create the checker
+            let checker = new MyChecker(this.scene, color, row, col, this, row + "," + col);
+
+            // Add the checker to the board
             this.addChecker(row + "," + col, checker);
           }
         }
@@ -376,10 +369,12 @@ export class MyBoard {
 
   /**
    * Displays the board
-   * */
+   **/
   display() {
+    // Display the border
     this.displayBorder();
 
+    // Display the tiles and subsquent checkers, with picking id set
     var id = 1;
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
@@ -392,6 +387,7 @@ export class MyBoard {
     // disable picking
     this.scene.clearPickRegistration();
 
+    // Display the capture zone
     this.displayCaptureZone();
   }
 
@@ -481,8 +477,6 @@ export class MyBoard {
 
     // A tile is deemed avaliable if it is empty, or if a move to it, involves eating a checker
     var availableTiles = [];
-
-
 
     // If the checker is not a king, it can only move forward or backwards, not both
     if (!checker.isKing) {

@@ -11,35 +11,49 @@ export class MyViewAnimation {
     constructor(scene, initialView, finalView, duration){
         this.scene = scene;
 
+        // Initial and final views
         this.initialView = initialView;
         this.finalView = finalView;
 
+        // Duration of the animation
         this.duration = duration;
+
+        // Current time
         this.currTime = 0;
+
+        // Is the animation active?
         this.active = true;
 
+        // Initial View Parameters
         this.initialViewTarget = initialView.target;
         this.initialViewFOV = initialView.fov;
         this.initialViewPosition = initialView.position;
         this.initialViewNear = initialView.near;
         this.initialViewFar = initialView.far;
 
+        // Final View Parameters
         this.finalViewTarget = finalView.target;
         this.finalViewFOV = finalView.fov;
         this.finalViewPosition = finalView.position;
         this.finalViewNear = finalView.near;
         this.finalViewFar = finalView.far;
 
+        // Current camera is the initial view, in the beginning
         this.currCamera = this.initialView;
     }
 
 
+    /*
+    * @param {integer} t - elapsed time since last call
+    */
     update(t) {
         this.currTime += t;
 
+        // If the animation is not active, return
         if (!this.active)
             return 0;
 
+        // If the animation is active, update the camera
         if (this.currTime <= this.duration) {
             // Time percentage
             var timePercentage = (this.duration - this.currTime) / this.duration;
