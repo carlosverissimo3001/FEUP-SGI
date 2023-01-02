@@ -479,6 +479,7 @@ export class MyBoard {
     return tiles;
   }
 
+
   /**
    * Gets the checerks that have ate least 1 available jump
    */
@@ -691,3 +692,4 @@ export class MyBoard {
     return availableTiles;
   }
 }
+
