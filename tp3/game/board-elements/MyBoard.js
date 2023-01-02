@@ -485,9 +485,9 @@ export class MyBoard {
 
     // If the checker is not a king, it can only move forward or backwards, not both
     if (!checker.isKing) {
-      if (checker.selected) {
+      /* if (checker.selected) {
         console.log(availableTiles);
-      }
+      } */
 
       var tile = diagonalTiles["left"];
       if (tile != null) {

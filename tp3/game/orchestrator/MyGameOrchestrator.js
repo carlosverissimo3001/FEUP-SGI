@@ -27,6 +27,8 @@ export class MyGameOrchestrator {
     this.audio.volume = 1;
     this.audioActive = false;
 
+    this.pieceAnimationDuration = 1
+
     // Game state
     this.gameState = new MyGameStateTurn(scene, this, this.board);
 
@@ -559,5 +561,11 @@ export class MyGameOrchestrator {
 
     // Update the light
     this.scene.lights[i].update();
+  }
+
+  updateCheckerAnimationDuration(duration){
+    for (var i = 0; i < this.board.checkers.length; i++) {
+      this.board.checkers[i].updateAnimationDuration(duration);
+    }
   }
 }

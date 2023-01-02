@@ -97,6 +97,8 @@ export class MyInterface extends CGFinterface {
 
         viewsFolder.add(this.scene, "cameraID", cameraNames).onChange(val => this.scene.updateCamera(val)).name("View");
 
+        viewsFolder.add(this.scene, "cameraTransition", 0.5, 5, 0.5).name("Duration Rot.")
+
         viewsFolder.open();
     }
 
@@ -118,5 +120,6 @@ export class MyInterface extends CGFinterface {
         gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
         gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');
         gameFolder.add(this.scene.gameOrchestrator, 'autoRotate').name('Auto Rotate');
+        gameFolder.add(this.scene.gameOrchestrator, 'pieceAnimationDuration').name('Piece Animation Duration').min(0.1).max(5).step(0.1).onChange(this.scene.gameOrchestrator.updateCheckerAnimationDuration.bind(this.scene.gameOrchestrator));
     }
 }

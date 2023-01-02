@@ -686,4 +686,8 @@ export class MyChecker extends CGFobject {
   setKing(){
     this.isKing = true;
   }
+
+  updateAnimationDuration(duration){
+    this.animDuration = duration;
+  }
 }

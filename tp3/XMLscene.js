@@ -72,6 +72,7 @@ export class XMLscene extends CGFscene {
     this.cameraID;
     this.intermediateCamera = null;
     this.initCameras();
+    this.cameraTransition = 2;
 
     /* ************************************************** */
 
@@ -274,7 +275,7 @@ export class XMLscene extends CGFscene {
       this,
       this.camera,
       nextCamera,
-      2
+      this.cameraTransition
     );
 
     // Set the new camera and its id, and update the interface
