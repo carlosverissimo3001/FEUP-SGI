@@ -545,6 +545,23 @@ export class MyChecker extends CGFobject {
         this.components[i].display();
         this.scene.popMatrix();
       }
+
+      if (this.isKing){
+        transformations = this.initRelativeTransformations(true);
+
+        for (var i = 0; i < this.components.length; i++) {
+          this.scene.pushMatrix();
+
+          // Applies the animation
+          this.scene.multMatrix(this.animation.getMatrix());
+
+          // Puts the piece in the correct position
+          this.scene.multMatrix(transformations[i]);
+
+          this.components[i].display();
+          this.scene.popMatrix();
+        }
+      }
     }
     this.scene.popMatrix();
   }
