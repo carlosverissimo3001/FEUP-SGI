@@ -57,8 +57,8 @@ export class XMLscene extends CGFscene {
     this.gameOrchestrator = new MyGameOrchestrator(this);
 
     // Themes
-    this.themes = ["Day", "Desert", "UnderSea", "Space"];
-    this.theme = "Day";
+    this.themes = ["Pool", "Desert", "UnderSea", "Space"];
+    this.theme = "Pool";
     this.loadedThemes = 1;
     this.graphs = [];
 
@@ -209,9 +209,9 @@ export class XMLscene extends CGFscene {
     /* Create scene graphs
       - Note that MySceneGraph appends the graph to the XMLscene's graphs array, so we don't need to do it here
     */
-    if(this.theme == "Day") {
+    if(this.theme == "Pool") {
       this.graphs = [];
-      var day = new MySceneGraph("themes/pool_day.xml", this);
+      var day = new MySceneGraph("themes/pool.xml", this);
     } else if(this.theme == "Desert") {
       this.graphs = [];
       var desert = new MySceneGraph("themes/desert.xml", this);
@@ -489,10 +489,10 @@ export class XMLscene extends CGFscene {
         this.intermediateCamera.update(elapsed / 1000);
 
       /* Update pool shader */
-      this.poolShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+      this.poolShader.setUniformsValues({ timeFactor: (t / 300) % 100 });
 
       /* Update pulse shader */
-      this.pulseShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
+      this.pulseShader.setUniformsValues({ timeFactor: (t / 300) % 100 });
 
       this.surfaceShader.setUniformsValues({ timeFactor: (t / 100) % 100 });
 
