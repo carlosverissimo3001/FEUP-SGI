@@ -116,6 +116,7 @@ export class MyInterface extends CGFinterface {
         // Open the folder
         gameFolder.open();
 
+        gameFolder.add(this.scene.gameOrchestrator, 'state').name('State');
         gameFolder.add(this.scene.gameOrchestrator, 'undo').name('Undo');
         gameFolder.add(this.scene.gameOrchestrator, 'restart').name('Restart');
         gameFolder.add(this.scene.gameOrchestrator, 'movie').name('Movie');

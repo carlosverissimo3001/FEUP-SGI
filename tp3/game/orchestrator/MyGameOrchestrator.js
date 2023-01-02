@@ -27,6 +27,9 @@ export class MyGameOrchestrator {
     this.audio.volume = 1;
     this.audioActive = false;
 
+    // Game state
+    this.state = "Player 1 Turn";
+
     this.pieceAnimationDuration = 1
 
     // Game state
@@ -178,9 +181,14 @@ export class MyGameOrchestrator {
    */
   changePlayerTurn() {
 
-    this.turn == "Player 1"
-      ? (this.turn = "Player 2")
-      : (this.turn = "Player 1");
+    if (this.turn == "Player 1"){
+      this.state = "Player 2 Turn";
+      this.turn = "Player 2"
+    }
+    else{
+      this.state = "Player 1 Turn";
+      this.turn = "Player 1"
+    }
 
     // Change the camera, if auto rotate is on
     if (this.autoRotate) {
@@ -199,7 +207,9 @@ export class MyGameOrchestrator {
       }
     }
 
-    /*  */
+    // Update interface
+    this.updateInterface();
+
   }
 
   clearPicked() {
@@ -376,7 +386,7 @@ export class MyGameOrchestrator {
     }
   }
 
-  undo() {
+  undo(isMovie) {
     if (this.eatenChecker != null && this.eatenChecker.isMoving_eat) {
       alert("Please wait for the checker to finish moving");
       return;
@@ -388,10 +398,13 @@ export class MyGameOrchestrator {
       return;
     }
 
-    var confirmation = confirm(
-      "Are you sure you want to undo the last move? This action cannot be undone"
-    );
-    if (!confirmation) return;
+    // Only ask for confirmation if the undo is not being called by a movie
+    if (!isMovie){
+      var confirmation = confirm(
+        "Are you sure you want to undo the last move? This action cannot be undone"
+      );
+      if (!confirmation) return;
+    }
 
     // Get the last move's board
     var lastMove = this.gameSequence.undo();
@@ -464,6 +477,11 @@ export class MyGameOrchestrator {
     // Reset the board
     this.board = new MyBoard(this.scene, 8);
 
+    // SET THE ORCHESTRATOR FOR THE CHECKERS
+    for (var i = 0; i < this.board.checkers.length; i++) {
+      this.board.checkers[i].setOrchestrator(this);
+    }
+
     // Reset the game sequence
     this.gameSequence = new MyGameSequence();
 
@@ -486,6 +504,11 @@ export class MyGameOrchestrator {
       "Are you sure you want to watch the movie of the game? The state of the game will be preserved"
     );
     if (!confirmation) return;
+
+    // Keep popping moves until there are no more
+    while (this.gameSequence.moves.length > 0) {
+      this.undo(true);
+    }
   }
 
   /**
@@ -606,5 +629,9 @@ export class MyGameOrchestrator {
     for (var i = 0; i < this.board.checkers.length; i++) {
       this.board.checkers[i].updateAnimationDuration(duration);
     }
+  }
+
+  updateInterface(){
+    this.scene.interface.gui.updateDisplay();
   }
 }
