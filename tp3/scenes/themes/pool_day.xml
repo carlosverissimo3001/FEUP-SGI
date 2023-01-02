@@ -26,7 +26,7 @@
     </ambient>
 
     <lights>
-        <omni id="omniLight" enabled="false">
+        <omni id="omniLight" enabled="true">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -34,7 +34,7 @@
             <attenuation quadratic="1.0" linear="0.0" constant="0.0" />
         </omni>
 
-        <omni id="boardLight" enabled="false" angle="-45.0" exponent="2">
+        <omni id="boardLight" enabled="true" angle="-45.0" exponent="2">
             <location x="14.75" y="5" z="46" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />

@@ -47,7 +47,7 @@ export class MyChecker extends CGFobject {
     this.stackDelta = 2.075;
 
     // If the checker is a king, it can move backwards and forwards. It will be represented by two checkers on top of each other
-    this.isKing = (this.id == "5,4" || this.id == "2,3") ? true : false;
+    this.isKing = false;
 
     this.transformations = [];
 
@@ -108,15 +108,9 @@ export class MyChecker extends CGFobject {
 
     // Location of the deposit where the piece will be placed when it is eaten. Only the y coordinate will change, depending on the number of pieces already in the deposit
     this.depositLocation =
-<<<<<<< HEAD
       this.color == "blue"
         ? [9.27, this.y_eat_ini, 49.5]
         : [9.27, this.y_eat_ini, 42.5];
-=======
-    this.color == "blue"
-      ? [20.27, this.y_eat_ini, 49.5]
-      : [9.27, this.y_eat_ini, 42.5];
->>>>>>> main
 
     // As this matrix is fixed (the deposits are always in the same place), it will be initialized only once, in the constructor
     this.depositTransformations = [];

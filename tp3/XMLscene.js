@@ -509,7 +509,7 @@ export class XMLscene extends CGFscene {
       /* Update game orchestrator */
       this.gameOrchestrator.update(elapsed / 1000);
 
-      this.gameOrchestrator.board.timer.update();
+      if(t %30 == 0) this.gameOrchestrator.board.timer.update();
     }
   }
 

@@ -179,6 +179,11 @@ export class MyGameOrchestrator {
       }
 
     }
+
+    this.board.timer.playerMin = this.board.timer.timeToMakeMoveMin;
+    console.log("print: " + this.board.timer.timeToMakeMoveSec);
+    this.board.timer.playerSec = this.board.timer.timeToMakeMoveSec;
+    this.board.timer.turn = this.board.timer.turn == 1 ? 2 : 1;
   }
 
   clearPicked() {
