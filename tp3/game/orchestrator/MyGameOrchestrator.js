@@ -561,6 +561,9 @@ export class MyGameOrchestrator {
 
     // Available tiles
     this.lastAvailableTiles = [];
+    
+    this.board.player1MarkerNumber = 0;
+    this.board.player2MarkerNumber = 0;
   }
 
   // Not developed
