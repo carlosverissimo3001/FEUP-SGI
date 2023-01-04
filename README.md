@@ -6,6 +6,12 @@
 | Carlos Veríssimo | 201907716 | up201907716@up.pt |
 | Miguel Amorim    | 201907756 | up201907756@up.pt |
 
+## Grades
+
+| Practical Work 1 | Practical Work 2 | Practical Work 3 | Final Grade
+| -- | -- | -- | -- |
+| 19.9 | 19.4 | | 
+
 ----
 
 ## Projects
