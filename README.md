@@ -1,4 +1,4 @@
-# SGI 2022/2023
+# Interactive Graphic Systems - 2022/2023 @FEUP
 
 ## Group T03G10
 | Name             | Number    | E-Mail             |
